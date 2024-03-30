@@ -1,5 +1,5 @@
-package ru.tinkoff.phobos.akka_http
-import ru.tinkoff.phobos.Namespace
+package phobos.akka_http
+import phobos.Namespace
 
 case class soapenv()
 

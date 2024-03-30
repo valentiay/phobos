@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos.ast.impl
+package phobos.ast.impl
 
-import ru.tinkoff.phobos.ast._
+import phobos.ast._
 
 sealed trait XmlBuildingBlock
 class AttrName(private val name: String) extends AnyVal {

@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
 sealed trait ParamCategory
 

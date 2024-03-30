@@ -1,11 +1,11 @@
-package ru.tinkoff.phobos.traverse
+package phobos.traverse
 
 import cats.syntax.traverse._
 import cats.instances.either._
 import cats.instances.list._
 import com.fasterxml.aalto.AsyncXMLStreamReader
-import ru.tinkoff.phobos.ast._
-import ru.tinkoff.phobos.decoding.{Cursor, DecodingError, ElementDecoder, TextDecoder}
+import phobos.ast._
+import phobos.decoding.{Cursor, DecodingError, ElementDecoder, TextDecoder}
 import scala.annotation.tailrec
 import scala.util.Try
 import GenericElementDecoder.DecoderState

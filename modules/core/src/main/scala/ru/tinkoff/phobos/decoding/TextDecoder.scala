@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
 import java.time._
 import java.util.{Base64, UUID}
 import javax.xml.stream.XMLStreamConstants
-import ru.tinkoff.phobos.decoding.TextDecoder.{EMappedDecoder, MappedDecoder}
+import phobos.decoding.TextDecoder.{EMappedDecoder, MappedDecoder}
 
 import java.time.format.DateTimeFormatter
 import scala.annotation.tailrec

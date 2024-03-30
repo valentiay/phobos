@@ -1,3 +1,3 @@
-package ru.tinkoff.phobos
+package phobos
 
 object akka_stream extends ops.AkkaStreamOps

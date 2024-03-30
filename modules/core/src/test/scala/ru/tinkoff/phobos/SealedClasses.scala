@@ -1,11 +1,11 @@
-package ru.tinkoff.phobos
+package phobos
 
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.configured.naming._
-import ru.tinkoff.phobos.decoding.ElementDecoder
-import ru.tinkoff.phobos.derivation.semiauto._
-import ru.tinkoff.phobos.encoding.ElementEncoder
-import ru.tinkoff.phobos.syntax.discriminator
+import phobos.configured.ElementCodecConfig
+import phobos.configured.naming._
+import phobos.decoding.ElementDecoder
+import phobos.derivation.semiauto._
+import phobos.encoding.ElementEncoder
+import phobos.syntax.discriminator
 
 object SealedClasses {
   sealed trait Foo
@@ -52,7 +52,7 @@ object SealedClasses {
   case class Baz3(c: Double) extends Baz
 
   object Baz {
-    val config                                     = ElementCodecConfig.default.withDiscriminator("discriminator", Some("https://tinkoff.ru"))
+    val config                                     = ElementCodecConfig.default.withDiscriminator("discriminator", Some("https://example.org"))
     implicit val baz1Encoder: ElementEncoder[Baz1] = deriveElementEncoder
     implicit val baz2Encoder: ElementEncoder[Baz2] = deriveElementEncoder
     implicit val baz3Encoder: ElementEncoder[Baz3] = deriveElementEncoder

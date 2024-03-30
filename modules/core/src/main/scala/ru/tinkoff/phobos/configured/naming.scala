@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.configured
+package phobos.configured
 
 object naming {
   val camelCase: String => String = _.capitalize

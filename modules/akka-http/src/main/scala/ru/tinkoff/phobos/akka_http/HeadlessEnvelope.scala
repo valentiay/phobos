@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.akka_http
+package phobos.akka_http
 
-import ru.tinkoff.phobos.decoding.{ElementDecoder, XmlDecoder}
-import ru.tinkoff.phobos.derivation.semiauto._
-import ru.tinkoff.phobos.encoding.{ElementEncoder, XmlEncoder}
-import ru.tinkoff.phobos.syntax.xmlns
+import phobos.decoding.{ElementDecoder, XmlDecoder}
+import phobos.derivation.semiauto._
+import phobos.encoding.{ElementEncoder, XmlEncoder}
+import phobos.syntax.xmlns
 
 final case class HeadlessEnvelope[Body](@xmlns(soapenv) Body: Body)
 

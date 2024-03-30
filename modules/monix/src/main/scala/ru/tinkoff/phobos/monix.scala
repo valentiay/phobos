@@ -1,5 +1,5 @@
-package ru.tinkoff.phobos
+package phobos
 
-import ru.tinkoff.phobos.ops.MonixOps
+import phobos.ops.MonixOps
 
 object monix extends MonixOps

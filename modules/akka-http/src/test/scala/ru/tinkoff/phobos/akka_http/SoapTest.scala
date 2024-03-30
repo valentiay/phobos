@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.akka_http
+package phobos.akka_http
 
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
@@ -7,9 +7,9 @@ class SoapTest extends AnyWordSpec with Matchers {
   "Soap codecs" should {
     "be found for envelope" in {
       """
-       | import ru.tinkoff.phobos.encoding.XmlEncoder
-       | import ru.tinkoff.phobos.decoding.XmlDecoder
-       | import ru.tinkoff.phobos.annotations.ElementCodec
+       | import phobos.encoding.XmlEncoder
+       | import phobos.decoding.XmlDecoder
+       | import phobos.annotations.ElementCodec
        | @ElementCodec
        | case class Header(foo: Int)
        | @ElementCodec
@@ -21,9 +21,9 @@ class SoapTest extends AnyWordSpec with Matchers {
 
     "be found for headless envelope" in {
       """
-       | import ru.tinkoff.phobos.encoding.XmlEncoder
-       | import ru.tinkoff.phobos.decoding.XmlDecoder
-       | import ru.tinkoff.phobos.annotations.ElementCodec
+       | import phobos.encoding.XmlEncoder
+       | import phobos.decoding.XmlDecoder
+       | import phobos.annotations.ElementCodec
        | @ElementCodec
        | case class Body(bar: String)
        | implicitly[XmlEncoder[HeadlessEnvelope[Body]]]

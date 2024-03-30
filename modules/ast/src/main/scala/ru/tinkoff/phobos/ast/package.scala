@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos
+package phobos
 
-import ru.tinkoff.phobos.ast.impl.XmlBuildingBlock
+import phobos.ast.impl.XmlBuildingBlock
 
 package object ast {
 

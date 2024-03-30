@@ -1,8 +1,8 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
-import ru.tinkoff.phobos.decoding.{ElementDecoder, XmlDecoder}
-import ru.tinkoff.phobos.encoding.{ElementEncoder, XmlEncoder}
-import ru.tinkoff.phobos.configured._
+import phobos.decoding.{ElementDecoder, XmlDecoder}
+import phobos.encoding.{ElementEncoder, XmlEncoder}
+import phobos.configured._
 
 package object semiauto {
 
@@ -15,7 +15,7 @@ package object semiauto {
     *   - children elements, if they do not have these annotations (implicit ElementEncoder is infered)
     *
     * Namespaces of elements and attributes are defined with @xmlns(nsi) annotation. In this case "nsi" inside @xmlns
-    * annotation is some case object with existing implicit ru.tinkoff.phobos.Namespace[nsi.type] instance.
+    * annotation is some case object with existing implicit phobos.Namespace[nsi.type] instance.
     */
   def deriveElementEncoder[T]: ElementEncoder[T] = macro EncoderDerivation.element[T]
 
@@ -53,7 +53,7 @@ package object semiauto {
     *   - children elements, if they do not have these annotations (implicit ElementDecoder is infered)
     *
     * Namespaces of elements and attributes are defined with @xmlns(nsi) annotation. In this case "nsi" inside @xmlns
-    * annotation is some case object with existing implicit ru.tinkoff.phobos.Namespace[nsi.type] instance.
+    * annotation is some case object with existing implicit phobos.Namespace[nsi.type] instance.
     */
   def deriveElementDecoder[T]: ElementDecoder[T] = macro DecoderDerivation.element[T]
 

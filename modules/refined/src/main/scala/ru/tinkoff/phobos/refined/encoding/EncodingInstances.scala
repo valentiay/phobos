@@ -1,7 +1,7 @@
-package ru.tinkoff.phobos.refined.encoding
+package phobos.refined.encoding
 
 import eu.timepit.refined.api.RefType
-import ru.tinkoff.phobos.encoding._
+import phobos.encoding._
 
 trait EncodingInstances {
 

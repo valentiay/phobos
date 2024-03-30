@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos.ast.util
+package phobos.ast.util
 
-import ru.tinkoff.phobos.ast._
+import phobos.ast._
 
 object AstTransformer {
   def sortNodeValues(xmlEntry: XmlEntry): XmlEntry = xmlEntry match {

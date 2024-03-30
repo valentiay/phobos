@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.ast
+package phobos.ast
 
-import ru.tinkoff.phobos.ast.impl.{Attr, NodePair, XmlBuildingBlock}
-import ru.tinkoff.phobos.decoding.{AttributeDecoder, ElementDecoder}
-import ru.tinkoff.phobos.encoding.{AttributeEncoder, ElementEncoder, TextEncoder}
-import ru.tinkoff.phobos.traverse.GenericElementDecoder
+import phobos.ast.impl.{Attr, NodePair, XmlBuildingBlock}
+import phobos.decoding.{AttributeDecoder, ElementDecoder}
+import phobos.encoding.{AttributeEncoder, ElementEncoder, TextEncoder}
+import phobos.traverse.GenericElementDecoder
 
 /** Base type for XML nodes, elements and attributes values
   */

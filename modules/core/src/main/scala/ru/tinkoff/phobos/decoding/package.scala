@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos
+package phobos
 
 import com.fasterxml.aalto.{AsyncByteArrayFeeder, AsyncXMLStreamReader}
 

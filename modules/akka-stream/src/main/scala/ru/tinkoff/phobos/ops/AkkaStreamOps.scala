@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.ops
+package phobos.ops
 
 import akka.NotUsed
 import akka.stream.scaladsl.{Flow, Keep, Sink}
 import javax.xml.stream.XMLStreamConstants
-import ru.tinkoff.phobos.decoding._
+import phobos.decoding._
 import scala.concurrent.Future
 
 private[phobos] trait AkkaStreamOps {

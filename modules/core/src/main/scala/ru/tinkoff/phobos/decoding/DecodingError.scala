@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
 case class DecodingError(text: String, history: List[String], cause: Option[Throwable])
     extends Exception(cause.orNull) {

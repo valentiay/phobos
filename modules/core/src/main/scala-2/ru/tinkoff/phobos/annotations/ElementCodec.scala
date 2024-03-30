@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos.annotations
+package phobos.annotations
 
-import ru.tinkoff.phobos.configured.ElementCodecConfig
+import phobos.configured.ElementCodecConfig
 
 import scala.annotation.nowarn
 import scala.annotation.{StaticAnnotation, compileTimeOnly}
@@ -15,7 +15,7 @@ private final class ElementCodecImpl(ctx: blackbox.Context) extends CodecAnnotat
   import c.universe._
 
   def instances(typ: Tree): Seq[Tree] = {
-    val pkg = q"ru.tinkoff.phobos"
+    val pkg = q"phobos"
 
     @nowarn("msg=not.*?exhaustive")
     val config = c.prefix.tree match {

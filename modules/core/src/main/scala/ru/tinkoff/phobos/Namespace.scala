@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos
+package phobos
 
 /** Typeclass for defining XML namespaces.
   *

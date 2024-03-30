@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.test
+package phobos.test
 
 import akka.actor.ActorSystem
 import akka.stream.scaladsl.{Sink, Source}
@@ -7,12 +7,12 @@ import akka.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.wordspec.AsyncWordSpecLike
-import ru.tinkoff.phobos.akka_stream._
-import ru.tinkoff.phobos.decoding.ElementDecoder
-import ru.tinkoff.phobos.decoding.XmlDecoder
-import ru.tinkoff.phobos.derivation.semiauto.deriveElementDecoder
-import ru.tinkoff.phobos.derivation.semiauto.deriveXmlDecoder
-import ru.tinkoff.phobos.syntax.text
+import phobos.akka_stream._
+import phobos.decoding.ElementDecoder
+import phobos.decoding.XmlDecoder
+import phobos.derivation.semiauto.deriveElementDecoder
+import phobos.derivation.semiauto.deriveXmlDecoder
+import phobos.syntax.text
 
 import scala.concurrent.duration._
 

@@ -1,7 +1,7 @@
-package ru.tinkoff.phobos.refined.decoding
+package phobos.refined.decoding
 
 import eu.timepit.refined.api.{RefType, Validate}
-import ru.tinkoff.phobos.decoding._
+import phobos.decoding._
 import scala.reflect.runtime.universe.TypeTag
 
 trait DecodingInstances {

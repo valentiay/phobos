@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.encoding
+package phobos.encoding
 
 import com.fasterxml.aalto.out._
 

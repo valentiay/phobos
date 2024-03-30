@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.encoding
+package phobos.encoding
 
 private[encoding] trait TextLiteralInstances {
   implicit def literalEncoder[A, L <: A](implicit encoder: TextEncoder[A], valueOfL: ValueOf[L]): TextEncoder[L] =

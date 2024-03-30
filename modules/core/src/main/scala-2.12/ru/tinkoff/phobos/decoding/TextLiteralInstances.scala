@@ -1,3 +1,3 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
 private[decoding] trait TextLiteralInstances

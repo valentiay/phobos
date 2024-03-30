@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos.configured
+package phobos.configured
 
-import ru.tinkoff.phobos.Namespace
+import phobos.Namespace
 
 /** Config, that can modify the behaviour of derived element decoders and encoders.
   *

@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.ast
+package phobos.ast
 
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Properties
-import ru.tinkoff.phobos.decoding.XmlDecoder
-import ru.tinkoff.phobos.encoding.XmlEncoder
+import phobos.decoding.XmlDecoder
+import phobos.encoding.XmlEncoder
 import org.scalacheck.{Arbitrary, Gen}
 
 class CodecProperties extends Properties("Ast codecs") {

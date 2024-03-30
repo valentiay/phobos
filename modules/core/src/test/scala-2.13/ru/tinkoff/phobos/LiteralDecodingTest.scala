@@ -1,11 +1,11 @@
-package ru.tinkoff.phobos
+package phobos
 
 import org.scalatest.Assertion
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import ru.tinkoff.phobos.annotations.XmlCodec
-import ru.tinkoff.phobos.decoding.{DecodingError, XmlDecoder}
-import ru.tinkoff.phobos.syntax.{attr, text}
+import phobos.annotations.XmlCodec
+import phobos.decoding.{DecodingError, XmlDecoder}
+import phobos.syntax.{attr, text}
 
 class LiteralDecodingTest extends AnyWordSpec with Matchers {
   def pure(str: String): List[Array[Byte]] =

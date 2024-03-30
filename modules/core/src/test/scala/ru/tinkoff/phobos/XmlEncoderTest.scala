@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos
+package phobos
 
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
-import ru.tinkoff.phobos.derivation.semiauto.deriveXmlEncoder
-import ru.tinkoff.phobos.encoding.XmlEncoder
+import phobos.derivation.semiauto.deriveXmlEncoder
+import phobos.encoding.XmlEncoder
 
 class XmlEncoderTest extends AnyWordSpec with Matchers {
   "XmlEncoder with config" should {

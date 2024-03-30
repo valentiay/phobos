@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
 /*
  * Copy-pasted from https://github.com/propensive/magnolia

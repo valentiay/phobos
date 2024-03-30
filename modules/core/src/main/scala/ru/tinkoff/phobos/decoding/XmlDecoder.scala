@@ -1,11 +1,11 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
 import javax.xml.stream.XMLStreamConstants
 import com.fasterxml.aalto.AsyncByteArrayFeeder
 import com.fasterxml.aalto.async.{AsyncByteArrayScanner, AsyncStreamReaderImpl}
 import com.fasterxml.aalto.stax.InputFactoryImpl
-import ru.tinkoff.phobos.Namespace
-import ru.tinkoff.phobos.decoding.XmlDecoder.createStreamReader
+import phobos.Namespace
+import phobos.decoding.XmlDecoder.createStreamReader
 
 /** Typeclass for decoding XML document to an A value.
   *
@@ -13,7 +13,7 @@ import ru.tinkoff.phobos.decoding.XmlDecoder.createStreamReader
   *
   * XmlDecoder instance can be created
   *   - from ElementDecoder using functions in XmlDecoder object
-  *   - by macros from ru.tinkoff.phobos.derivation.semiauto package
+  *   - by macros from phobos.derivation.semiauto package
   *
   * This typeclass wraps ElementDecoder[A] and provides element name and Cursor.
   */

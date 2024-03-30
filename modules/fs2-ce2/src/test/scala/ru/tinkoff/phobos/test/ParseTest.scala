@@ -1,14 +1,14 @@
-package ru.tinkoff.phobos.test
+package phobos.test
 
 import org.scalatest.wordspec.AsyncWordSpec
-import ru.tinkoff.phobos.decoding.XmlDecoder
-import ru.tinkoff.phobos.syntax.text
-import ru.tinkoff.phobos.fs2._
+import phobos.decoding.XmlDecoder
+import phobos.syntax.text
+import phobos.fs2._
 import fs2.Stream
 import cats.effect.IO
 import org.scalatest.Inspectors
-import ru.tinkoff.phobos.decoding.DecodingError
-import ru.tinkoff.phobos.derivation.semiauto.deriveXmlDecoder
+import phobos.decoding.DecodingError
+import phobos.derivation.semiauto.deriveXmlDecoder
 
 class ParseTest extends AsyncWordSpec with Inspectors {
 

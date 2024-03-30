@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.encoding
+package phobos.encoding
 
 import java.math.BigInteger
 import javax.xml.namespace.{NamespaceContext, QName}

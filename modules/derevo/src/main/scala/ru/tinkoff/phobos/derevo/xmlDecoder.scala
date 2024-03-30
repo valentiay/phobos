@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.derevo
+package phobos.derevo
 
 import derevo.{Derevo, Derivation, delegating}
-import ru.tinkoff.phobos.decoding.XmlDecoder
+import phobos.decoding.XmlDecoder
 
-@delegating("ru.tinkoff.phobos.derivation.semiauto.deriveXmlDecoder")
+@delegating("phobos.derivation.semiauto.deriveXmlDecoder")
 object xmlDecoder extends Derivation[XmlDecoder] {
 
   def apply[A](arg: String): XmlDecoder[A] = macro Derevo.delegateParam[XmlDecoder, A, String]

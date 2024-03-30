@@ -1,10 +1,10 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
-import ru.tinkoff.phobos.Namespace
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.syntax.*
-import ru.tinkoff.phobos.encoding.*
-import ru.tinkoff.phobos.derivation.common.*
+import phobos.Namespace
+import phobos.configured.ElementCodecConfig
+import phobos.syntax.*
+import phobos.encoding.*
+import phobos.derivation.common.*
 
 import scala.annotation.nowarn
 import scala.compiletime.*

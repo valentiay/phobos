@@ -1,8 +1,8 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
-import ru.tinkoff.phobos.Namespace
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.syntax.*
+import phobos.Namespace
+import phobos.configured.ElementCodecConfig
+import phobos.syntax.*
 
 import scala.quoted.*
 import scala.compiletime.*

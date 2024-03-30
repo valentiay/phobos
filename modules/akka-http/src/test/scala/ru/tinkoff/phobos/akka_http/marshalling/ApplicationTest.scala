@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.akka_http.marshalling
+package phobos.akka_http.marshalling
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -9,8 +9,8 @@ class ApplicationTest extends AnyWordSpec with Matchers {
       """
        | import akka.http.scaladsl.unmarshalling.FromRequestUnmarshaller
        | import akka.http.scaladsl.marshalling.ToResponseMarshaller
-       | import ru.tinkoff.phobos.akka_http.marshalling.application._
-       | import ru.tinkoff.phobos.annotations.XmlCodec
+       | import phobos.akka_http.marshalling.application._
+       | import phobos.annotations.XmlCodec
        | @XmlCodec("request")
        | case class Body(bar: String)
        | implicitly[FromRequestUnmarshaller[Body]]

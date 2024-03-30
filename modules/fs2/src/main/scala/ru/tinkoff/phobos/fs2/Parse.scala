@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.fs2
+package phobos.fs2
 
 import cats.data.NonEmptyList
 import cats.effect.Sync
 import fs2._
-import ru.tinkoff.phobos.decoding._
+import phobos.decoding._
 import com.fasterxml.aalto.AsyncXMLStreamReader.EVENT_INCOMPLETE
 import javax.xml.stream.XMLStreamConstants._
 import scala.annotation.tailrec

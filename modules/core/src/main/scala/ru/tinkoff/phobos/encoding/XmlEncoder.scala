@@ -1,12 +1,12 @@
-package ru.tinkoff.phobos.encoding
+package phobos.encoding
 
 import java.io.{ByteArrayOutputStream, StringReader, StringWriter}
 import javax.xml.transform._
 import javax.xml.transform.stream._
 import com.fasterxml.aalto.stax.OutputFactoryImpl
 import org.codehaus.stax2.XMLStreamWriter2
-import ru.tinkoff.phobos.Namespace
-import ru.tinkoff.phobos.encoding.XmlEncoder.XmlEncoderConfig
+import phobos.Namespace
+import phobos.encoding.XmlEncoder.XmlEncoderConfig
 
 /** Typeclass for encoding XML document to an A value.
   *
@@ -14,7 +14,7 @@ import ru.tinkoff.phobos.encoding.XmlEncoder.XmlEncoderConfig
   *
   * XmlEncoder instance can be created
   *   - from ElementEncoder using functions in XmlEncoder object
-  *   - by macros from ru.tinkoff.phobos.derivation.semiauto package
+  *   - by macros from phobos.derivation.semiauto package
   *
   * This typeclass wraps ElementEncoder[A] and provides element name and StreamWriter.
   */
