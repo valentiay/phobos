@@ -1,16 +1,16 @@
-package ru.tinkoff.phobos.refined
+package phobos.refined
 
 import eu.timepit.refined.api.Refined
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import ru.tinkoff.phobos.annotations.{ElementCodec, XmlCodec}
+import phobos.annotations.{ElementCodec, XmlCodec}
 import eu.timepit.refined.refineMV
 import eu.timepit.refined.string.MatchesRegex
 import eu.timepit.refined.types.numeric.NonNegLong
-import ru.tinkoff.phobos.encoding.XmlEncoder
-import ru.tinkoff.phobos.syntax.{attr, text}
+import phobos.encoding.XmlEncoder
+import phobos.syntax.{attr, text}
 import shapeless.{Witness => W}
-import ru.tinkoff.phobos.testString._
+import phobos.testString._
 
 class RefinedEncodersTest extends AnyWordSpec with Matchers {
   type NumericAtLeastTwo = MatchesRegex[W.`"[0-9]{2,}"`.T]

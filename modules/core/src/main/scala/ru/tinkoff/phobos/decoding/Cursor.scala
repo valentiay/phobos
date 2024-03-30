@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
 import java.io.Writer
 import java.math.{BigDecimal, BigInteger}

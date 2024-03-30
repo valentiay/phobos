@@ -1,14 +1,14 @@
-package ru.tinkoff.phobos.test
+package phobos.test
 
 import org.scalatest.wordspec.AsyncWordSpec
-import ru.tinkoff.phobos.decoding.XmlDecoder
-import ru.tinkoff.phobos.syntax.text
-import ru.tinkoff.phobos.fs2._
+import phobos.decoding.XmlDecoder
+import phobos.syntax.text
+import phobos.fs2._
 import fs2.Stream
 import cats.effect.IO
-import ru.tinkoff.phobos.decoding.ElementDecoder
-import ru.tinkoff.phobos.derivation.semiauto.deriveElementDecoder
-import ru.tinkoff.phobos.derivation.semiauto.deriveXmlDecoder
+import phobos.decoding.ElementDecoder
+import phobos.derivation.semiauto.deriveElementDecoder
+import phobos.derivation.semiauto.deriveXmlDecoder
 
 import scala.annotation.nowarn
 

@@ -1,14 +1,14 @@
-package ru.tinkoff.phobos.enumeratum
+package phobos.enumeratum
 
 import enumeratum._
 import org.scalatest.Assertion
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
-import ru.tinkoff.phobos.annotations.XmlCodec
-import ru.tinkoff.phobos.decoding.XmlDecoder
-import ru.tinkoff.phobos.encoding.XmlEncoder
-import ru.tinkoff.phobos.syntax._
-import ru.tinkoff.phobos.testString._
+import phobos.annotations.XmlCodec
+import phobos.decoding.XmlDecoder
+import phobos.encoding.XmlEncoder
+import phobos.syntax._
+import phobos.testString._
 
 class EnumeratumTest extends AnyWordSpec with Matchers {
   "Enum codecs" should {

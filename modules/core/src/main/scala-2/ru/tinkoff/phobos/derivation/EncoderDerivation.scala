@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
-import ru.tinkoff.phobos.Namespace
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.derivation.CompileTimeState.{CoproductType, ProductType, Stack}
-import ru.tinkoff.phobos.encoding.{AttributeEncoder, ElementEncoder, TextEncoder}
+import phobos.Namespace
+import phobos.configured.ElementCodecConfig
+import phobos.derivation.CompileTimeState.{CoproductType, ProductType, Stack}
+import phobos.encoding.{AttributeEncoder, ElementEncoder, TextEncoder}
 
 import scala.collection.mutable.ListBuffer
 import scala.reflect.macros.blackbox
@@ -52,10 +52,10 @@ class EncoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
     q"""
       ..$preAssignments
 
-      new _root_.ru.tinkoff.phobos.encoding.ElementEncoder[$classType] {
+      new _root_.phobos.encoding.ElementEncoder[$classType] {
         def encodeAsElement(
           a: $classType,
-          sw: _root_.ru.tinkoff.phobos.encoding.PhobosStreamWriter,
+          sw: _root_.phobos.encoding.PhobosStreamWriter,
           localName: $javaPkg.String,
           namespaceUri: $scalaPkg.Option[$javaPkg.String],
           preferredNamespacePrefix: $scalaPkg.Option[$javaPkg.String],
@@ -129,10 +129,10 @@ class EncoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
     q"""
      ..$preAssignments
 
-     new _root_.ru.tinkoff.phobos.encoding.ElementEncoder[$classType] {
+     new _root_.phobos.encoding.ElementEncoder[$classType] {
        def encodeAsElement(
          a: $classType,
-         sw: _root_.ru.tinkoff.phobos.encoding.PhobosStreamWriter,
+         sw: _root_.phobos.encoding.PhobosStreamWriter,
          localName: $javaPkg.String,
          namespaceUri: $scalaPkg.Option[$javaPkg.String],
          preferredNamespacePrefix: $scalaPkg.Option[$javaPkg.String],
@@ -162,7 +162,7 @@ class EncoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
     xmlConfigured[T](localName, defaultConfig)
 
   def xmlConfigured[T: c.WeakTypeTag](localName: Tree, config: Expr[ElementCodecConfig]): Tree =
-    q"""_root_.ru.tinkoff.phobos.encoding.XmlEncoder.fromElementEncoder[${weakTypeOf[
+    q"""_root_.phobos.encoding.XmlEncoder.fromElementEncoder[${weakTypeOf[
         T,
       ]}]($localName)(${elementConfigured[T](config)})"""
 
@@ -177,7 +177,7 @@ class EncoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
     val nsInstance = Option(c.inferImplicitValue(appliedType(weakTypeOf[Namespace[_]], weakTypeOf[NS])))
       .filter(_.nonEmpty)
       .getOrElse(error(s"Could not find Namespace instance for $ns"))
-    q"""_root_.ru.tinkoff.phobos.encoding.XmlEncoder.fromElementEncoderNs[${weakTypeOf[T]}, ${weakTypeOf[
+    q"""_root_.phobos.encoding.XmlEncoder.fromElementEncoderNs[${weakTypeOf[T]}, ${weakTypeOf[
         NS,
       ]}]($localName, $ns)(${elementConfigured[T](config)}, $nsInstance)"""
   }

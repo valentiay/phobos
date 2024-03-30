@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
 private[decoding] trait ElementLiteralInstances {
   implicit def literalDecoder[A, L <: A](implicit decoder: ElementDecoder[A], valueOfL: ValueOf[L]): ElementDecoder[L] =

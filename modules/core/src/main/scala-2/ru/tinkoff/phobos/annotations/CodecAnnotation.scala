@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos.annotations
+package phobos.annotations
 
-import ru.tinkoff.phobos.configured.ElementCodecConfig
+import phobos.configured.ElementCodecConfig
 import scala.reflect.macros.blackbox
 
 private[phobos] abstract class CodecAnnotation(val c: blackbox.Context) {

@@ -1,10 +1,10 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
-import ru.tinkoff.phobos.Namespace
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.derivation.CompileTimeState.{ChainedImplicit, Stack}
-import ru.tinkoff.phobos.derivation.Derivation.DirectlyReentrantException
-import ru.tinkoff.phobos.syntax.{xmlns, default, attr, renamed, text, discriminator}
+import phobos.Namespace
+import phobos.configured.ElementCodecConfig
+import phobos.derivation.CompileTimeState.{ChainedImplicit, Stack}
+import phobos.derivation.Derivation.DirectlyReentrantException
+import phobos.syntax.{xmlns, default, attr, renamed, text, discriminator}
 
 import scala.annotation.nowarn
 import scala.reflect.macros.blackbox
@@ -58,7 +58,7 @@ private[phobos] abstract class Derivation(val c: blackbox.Context) {
     val searchType = appliedType(typeConstructor, genericType)
     val deferredRef = for (methodName <- stack find searchType) yield {
       val methodAsString = methodName.decodedName.toString
-      q"_root_.ru.tinkoff.phobos.derivation.Deferred.apply[$searchType]($methodAsString)"
+      q"_root_.phobos.derivation.Deferred.apply[$searchType]($methodAsString)"
     }
 
     deferredRef.getOrElse {
@@ -96,7 +96,7 @@ private[phobos] abstract class Derivation(val c: blackbox.Context) {
 
     val expandDeferred = new Transformer {
       override def transform(tree: Tree) = tree match {
-        case q"_root_.ru.tinkoff.phobos.derivation.Deferred.apply[$_](${Literal(Constant(method: String))})" =>
+        case q"_root_.phobos.derivation.Deferred.apply[$_](${Literal(Constant(method: String))})" =>
           q"${TermName(method)}"
         case _ =>
           super.transform(tree)
@@ -218,7 +218,7 @@ private[phobos] abstract class Derivation(val c: blackbox.Context) {
 
     val result = stack
       .find(searchType)
-      .map(enclosingRef => q"_root_.ru.tinkoff.phobos.derivation.Deferred[$searchType](${enclosingRef.toString})")
+      .map(enclosingRef => q"_root_.phobos.derivation.Deferred[$searchType](${enclosingRef.toString})")
       .getOrElse(inferCodec)
 
     if (stack.nonEmpty) result

@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos.ast
+package phobos.ast
 
-import ru.tinkoff.phobos.traverse.DecodingTraversalLogic
+import phobos.traverse.DecodingTraversalLogic
 import AstTraversalLogic._
 import scala.collection.mutable
 

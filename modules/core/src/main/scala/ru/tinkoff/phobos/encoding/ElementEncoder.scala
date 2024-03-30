@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.encoding
+package phobos.encoding
 
 import java.time._
 import java.util.{Base64, UUID}
@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter
   *
   * ElementEncoder instance can be created
   *   - from existing instance by using .contramap (mostly used for "simple" types);
-  *   - by macros from ru.tinkoff.phobos.derivation.semiauto package (for case classes and sealed traits).
+  *   - by macros from phobos.derivation.semiauto package (for case classes and sealed traits).
   *
   * This typeclass describes process of encoding some A value to XML document. Name of the element is not defined in
   * typeclass, it should be passed in encodeAsElement method.

@@ -1,7 +1,7 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
-import ru.tinkoff.phobos.decoding.ElementDecoder
-import ru.tinkoff.phobos.encoding.ElementEncoder
+import phobos.decoding.ElementDecoder
+import phobos.encoding.ElementEncoder
 
 package object auto {
   inline implicit def deriveExportedEncoder[A]: Exported[ElementEncoder[A]] =

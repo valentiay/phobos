@@ -1,12 +1,12 @@
-package ru.tinkoff.phobos.ast
+package phobos.ast
 
 import com.softwaremill.diffx.generic.auto._
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher
 import org.scalatest.EitherValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import ru.tinkoff.phobos.Namespace
-import ru.tinkoff.phobos.decoding.{DecodingError, XmlDecoder}
+import phobos.Namespace
+import phobos.decoding.{DecodingError, XmlDecoder}
 import cats.syntax.either._
 
 class XmlEntryElementDecoderTest extends AnyWordSpec with Matchers with DiffShouldMatcher with EitherValues {
@@ -21,15 +21,15 @@ class XmlEntryElementDecoderTest extends AnyWordSpec with Matchers with DiffShou
     }
 
     "decodes complicated Xml into ast correctly" in {
-      case object tinkoff {
-        type ns = tinkoff.type
-        implicit val ns: Namespace[tinkoff.type] = Namespace.mkInstance("https://tinkoff.ru")
+      case object example {
+        type ns = example.type
+        implicit val ns: Namespace[example.type] = Namespace.mkInstance("https://example.org")
       }
 
       val sampleXml =
-        """<?xml version='1.0' encoding='UTF-8'?><ans1:ast xmlns:ans1="https://tinkoff.ru" foo="5"><bar>bazz</bar><array foo2="true" foo3="false"><elem>11111111111111</elem><elem>11111111111112</elem></array><nested><scala>2.13</scala><dotty>0.13</dotty><scala-4/></nested></ans1:ast>"""
+        """<?xml version='1.0' encoding='UTF-8'?><ans1:ast xmlns:ans1="https://example.org" foo="5"><bar>bazz</bar><array foo2="true" foo3="false"><elem>11111111111111</elem><elem>11111111111112</elem></array><nested><scala>2.13</scala><dotty>0.13</dotty><scala-4/></nested></ans1:ast>"""
 
-      val decodedAst = XmlDecoder.fromElementDecoderNs[XmlEntry, tinkoff.ns]("ast").decode(sampleXml)
+      val decodedAst = XmlDecoder.fromElementDecoderNs[XmlEntry, example.ns]("ast").decode(sampleXml)
       val expectedResult: XmlEntry = xml(attr("foo") := 5)(
         node("bar") := "bazz",
         node("array") := xml(
@@ -58,7 +58,7 @@ class XmlEntryElementDecoderTest extends AnyWordSpec with Matchers with DiffShou
           ),
       )
 
-      val encoded = ru.tinkoff.phobos.encoding.XmlEncoder.fromElementEncoder[XmlEntry]("ast").encode(n)
+      val encoded = phobos.encoding.XmlEncoder.fromElementEncoder[XmlEntry]("ast").encode(n)
 
       val result = encoded.flatMap(XmlDecoder.fromElementDecoder[XmlEntry]("ast").decode(_))
 

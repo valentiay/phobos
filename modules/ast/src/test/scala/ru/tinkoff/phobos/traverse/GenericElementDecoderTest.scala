@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.traverse
+package phobos.traverse
 
 import cats.syntax.either._
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher
@@ -6,8 +6,8 @@ import com.softwaremill.diffx.generic.auto._
 import org.scalatest.EitherValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import ru.tinkoff.phobos.ast.XmlLeaf
-import ru.tinkoff.phobos.decoding.{DecodingError, ElementDecoder, XmlDecoder}
+import phobos.ast.XmlLeaf
+import phobos.decoding.{DecodingError, ElementDecoder, XmlDecoder}
 
 class GenericElementDecoderTest extends AnyWordSpec with Matchers with DiffShouldMatcher with EitherValues {
   import GenericElementDecoderTest._
@@ -18,7 +18,7 @@ class GenericElementDecoderTest extends AnyWordSpec with Matchers with DiffShoul
         .fromElementDecoder[Acc]("ast")
 
       val sampleXml =
-        """<?xml version='1.0' encoding='UTF-8'?><ans1:ast xmlns:ans1="https://tinkoff.ru" foo="5"><bar>bazz</bar><array foo2="true" foo3="false"><elem>11111111111111</elem><elem>11111111111112</elem></array><nested x="2.0"><scala>2.13</scala><dotty>0.13</dotty><scala-4/></nested></ans1:ast>"""
+        """<?xml version='1.0' encoding='UTF-8'?><ans1:ast xmlns:ans1="https://example.org" foo="5"><bar>bazz</bar><array foo2="true" foo3="false"><elem>11111111111111</elem><elem>11111111111112</elem></array><nested x="2.0"><scala>2.13</scala><dotty>0.13</dotty><scala-4/></nested></ans1:ast>"""
 
       val expectedResult0 = Acc(
         Map(
@@ -32,7 +32,7 @@ class GenericElementDecoderTest extends AnyWordSpec with Matchers with DiffShoul
       xmlDecoder.decode(sampleXml) shouldMatchTo (expectedResult0.asRight[DecodingError])
 
       val xmlWithoutAttrs =
-        """<?xml version='1.0' encoding='UTF-8'?><ans1:ast xmlns:ans1="https://tinkoff.ru"><bar>bazz</bar><array><elem>11111111111111</elem><elem>11111111111112</elem></array><nested><scala>2.13</scala><dotty>0.13</dotty><scala-4/></nested></ans1:ast>"""
+        """<?xml version='1.0' encoding='UTF-8'?><ans1:ast xmlns:ans1="https://example.org"><bar>bazz</bar><array><elem>11111111111111</elem><elem>11111111111112</elem></array><nested><scala>2.13</scala><dotty>0.13</dotty><scala-4/></nested></ans1:ast>"""
 
       val expectedResult1 = Acc(Map.empty)
 

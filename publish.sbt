@@ -1,8 +1,9 @@
 import Publish._
+//import xerial.sbt.Sonatype.sonatypeCentralHost
 
 publishVersion := "0.21.0"
 
-ThisBuild / organization := "ru.tinkoff"
+ThisBuild / organization := "dev.valentiay"
 ThisBuild / version := {
   val branch = git.gitCurrentBranch.value
   if (branch == "master") publishVersion.value
@@ -10,7 +11,7 @@ ThisBuild / version := {
 }
 
 ThisBuild / publishMavenStyle := true
-
+//ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 ThisBuild / publishTo :=
   (if (!isSnapshot.value) {
      sonatypePublishToBundle.value
@@ -20,8 +21,8 @@ ThisBuild / publishTo :=
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
-    url("https://github.com/Tinkoff/phobos"),
-    "git@github.com:Tinkoff/phobos",
+    url("https://github.com/valentiay/phobos"),
+    "git@github.com:valentiay/phobos",
   ),
 )
 
@@ -29,14 +30,14 @@ ThisBuild / developers := List(
   Developer(
     id = "valentiay",
     name = "Alexander Valentinov",
-    email = "a.valentinov@tinkoff.ru",
+    email = "valentiay@yandex.ru",
     url = url("https://github.com/valentiay"),
   ),
 )
 
 ThisBuild / description := "Fast xml data binding library"
 ThisBuild / licenses    := List("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt"))
-ThisBuild / homepage    := Some(url("https://github.com/Tinkoff/phobos"))
+ThisBuild / homepage    := Some(url("https://github.com/valentiay/phobos"))
 
 // Remove all additional repository other than Maven Central from POM
 ThisBuild / pomIncludeRepository := { _ => false }

@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
-import ru.tinkoff.phobos.Namespace
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.decoding.{ElementDecoder, XmlDecoder}
-import ru.tinkoff.phobos.encoding.{ElementEncoder, XmlEncoder}
+import phobos.Namespace
+import phobos.configured.ElementCodecConfig
+import phobos.decoding.{ElementDecoder, XmlDecoder}
+import phobos.encoding.{ElementEncoder, XmlEncoder}
 
 package object semiauto {
   inline def deriveElementEncoder[T]: ElementEncoder[T] =

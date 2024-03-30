@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.refined
+package phobos.refined
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.refineMV
@@ -6,10 +6,10 @@ import eu.timepit.refined.string.MatchesRegex
 import eu.timepit.refined.types.numeric.NonNegLong
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import ru.tinkoff.phobos.annotations.{XmlCodec, ElementCodec}
-import ru.tinkoff.phobos.decoding.XmlDecoder
-import ru.tinkoff.phobos.syntax.{text, attr}
-import ru.tinkoff.phobos.testString._
+import phobos.annotations.{XmlCodec, ElementCodec}
+import phobos.decoding.XmlDecoder
+import phobos.syntax.{text, attr}
+import phobos.testString._
 import shapeless.{Witness => W}
 
 import scala.annotation.nowarn

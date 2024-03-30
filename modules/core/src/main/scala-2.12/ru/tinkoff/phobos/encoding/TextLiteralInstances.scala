@@ -1,3 +1,3 @@
-package ru.tinkoff.phobos.encoding
+package phobos.encoding
 
 private[encoding] trait TextLiteralInstances

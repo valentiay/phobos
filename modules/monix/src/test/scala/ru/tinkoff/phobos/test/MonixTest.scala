@@ -1,14 +1,14 @@
-package ru.tinkoff.phobos.test
+package phobos.test
 
 import java.util.concurrent.Executors
 import monix.execution.Scheduler
 import monix.reactive.Observable
 import org.scalatest.wordspec.AsyncWordSpec
-import ru.tinkoff.phobos.decoding.ElementDecoder
-import ru.tinkoff.phobos.decoding.XmlDecoder
-import ru.tinkoff.phobos.derivation.semiauto._
-import ru.tinkoff.phobos.syntax.text
-import ru.tinkoff.phobos.monix._
+import phobos.decoding.ElementDecoder
+import phobos.decoding.XmlDecoder
+import phobos.derivation.semiauto._
+import phobos.syntax.text
+import phobos.monix._
 
 import scala.annotation.nowarn
 

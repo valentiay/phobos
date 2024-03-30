@@ -1,8 +1,8 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.derivation.decoder
-import ru.tinkoff.phobos.derivation.LazySummon
+import phobos.configured.ElementCodecConfig
+import phobos.derivation.decoder
+import phobos.derivation.LazySummon
 import scala.deriving.Mirror
 
 private[decoding] trait DerivedElement {

@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos
+package phobos
 
 object testString {
   implicit class StringOps(str: String) {

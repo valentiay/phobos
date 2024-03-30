@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos.annotations
+package phobos.annotations
 
-import ru.tinkoff.phobos.configured.ElementCodecConfig
+import phobos.configured.ElementCodecConfig
 
 import scala.annotation.nowarn
 import scala.annotation.{StaticAnnotation, compileTimeOnly}
@@ -15,7 +15,7 @@ private final class XmlCodecImpl(ctx: blackbox.Context) extends CodecAnnotation(
   import c.universe._
 
   def instances(typ: Tree): Seq[Tree] = {
-    val pkg = q"ru.tinkoff.phobos"
+    val pkg = q"phobos"
     val (localName, config) = (c.prefix.tree: @nowarn("msg=not.*?exhaustive")) match {
       case q"new XmlCodec($localName)"          => (localName, defaultConfig.tree)
       case q"new XmlCodec($localName, $config)" => (localName, config)

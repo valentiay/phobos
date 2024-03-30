@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.encoding
+package phobos.encoding
 
 import com.fasterxml.aalto.out.WriterConfig
 import org.scalatest.matchers.should.Matchers

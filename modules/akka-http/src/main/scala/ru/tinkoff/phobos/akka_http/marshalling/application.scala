@@ -1,10 +1,10 @@
-package ru.tinkoff.phobos.akka_http.marshalling
+package phobos.akka_http.marshalling
 
 import akka.http.scaladsl.marshalling.{Marshaller, ToEntityMarshaller}
 import akka.http.scaladsl.model.{HttpCharsets, HttpEntity, MediaTypes}
 import akka.http.scaladsl.unmarshalling.{FromEntityUnmarshaller, Unmarshaller}
-import ru.tinkoff.phobos.decoding.XmlDecoder
-import ru.tinkoff.phobos.encoding.XmlEncoder
+import phobos.decoding.XmlDecoder
+import phobos.encoding.XmlEncoder
 
 object application {
   implicit def soapApplicationXmlMarshaller[T](implicit encoder: XmlEncoder[T]): ToEntityMarshaller[T] =

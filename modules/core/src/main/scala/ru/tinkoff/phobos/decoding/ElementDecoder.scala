@@ -1,11 +1,11 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
 import java.time._
 import java.util.{Base64, UUID}
 
 import com.fasterxml.aalto.AsyncXMLStreamReader
 import javax.xml.stream.XMLStreamConstants
-import ru.tinkoff.phobos.decoding.ElementDecoder.{EMappedDecoder, MappedDecoder}
+import phobos.decoding.ElementDecoder.{EMappedDecoder, MappedDecoder}
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter
   *
   * ElementDecoder instance can be created
   *   - from existing instance by using .map or .emap method (mostly used for "simple" types);
-  *   - by macros from ru.tinkoff.phobos.derivation.semiauto package (for case classes and sealed traits).
+  *   - by macros from phobos.derivation.semiauto package (for case classes and sealed traits).
   *
   * This typeclass describes process of decoding some element to an A value. Name of the element is not defined in
   * typeclass, it should be passed in decodeAsElement method.

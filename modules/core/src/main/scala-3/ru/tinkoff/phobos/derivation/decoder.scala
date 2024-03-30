@@ -1,13 +1,13 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
 import com.fasterxml.aalto.AsyncXMLStreamReader
-import ru.tinkoff.phobos.Namespace
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.decoding.*
-import ru.tinkoff.phobos.decoding.ElementDecoder.{ConstDecoder, FailedDecoder}
-import ru.tinkoff.phobos.derivation.common.*
-import ru.tinkoff.phobos.derivation.decoder.DecoderState.IgnoringElement
-import ru.tinkoff.phobos.syntax.*
+import phobos.Namespace
+import phobos.configured.ElementCodecConfig
+import phobos.decoding.*
+import phobos.decoding.ElementDecoder.{ConstDecoder, FailedDecoder}
+import phobos.derivation.common.*
+import phobos.derivation.decoder.DecoderState.IgnoringElement
+import phobos.syntax.*
 
 import scala.annotation.nowarn
 import scala.annotation.tailrec

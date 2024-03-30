@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos
+package phobos
 
-import ru.tinkoff.phobos.refined.decoding.DecodingInstances
-import ru.tinkoff.phobos.refined.encoding.EncodingInstances
+import phobos.refined.decoding.DecodingInstances
+import phobos.refined.encoding.EncodingInstances
 
 package object refined extends DecodingInstances with EncodingInstances

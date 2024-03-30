@@ -1,7 +1,7 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
-import ru.tinkoff.phobos.encoding.ElementEncoder
-import ru.tinkoff.phobos.decoding.ElementDecoder
+import phobos.encoding.ElementEncoder
+import phobos.decoding.ElementDecoder
 
 /** Importing contents of this package will provide ElementEncoder / ElementDecoder instances for any case class. It may
   * be useful while researching, however do not use this in production, because automatic derivation is less performant

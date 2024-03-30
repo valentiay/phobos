@@ -1,8 +1,8 @@
-package ru.tinkoff.phobos.raw
+package phobos.raw
 
-import ru.tinkoff.phobos.ast._
-import ru.tinkoff.phobos.decoding.ElementDecoder
-import ru.tinkoff.phobos.traverse.GenericElementDecoder
+import phobos.ast._
+import phobos.decoding.ElementDecoder
+import phobos.traverse.GenericElementDecoder
 
 /** Data type containing pairs of the element name and it's text.
   */

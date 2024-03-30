@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos.traverse
+package phobos.traverse
 
-import ru.tinkoff.phobos.ast.XmlLeaf
+import phobos.ast.XmlLeaf
 
 /** Abstraction allowing to traverse arbitrary XML node(s). Works with both mutable and immutable accumulators
   *

@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.ops
+package phobos.ops
 
 import javax.xml.stream.XMLStreamConstants
 import monix.eval.Task
 import monix.reactive.Observable
-import ru.tinkoff.phobos.decoding.{Cursor, ElementDecoder, XmlDecoder, XmlStreamReader}
+import phobos.decoding.{Cursor, ElementDecoder, XmlDecoder, XmlStreamReader}
 
 private[phobos] trait MonixOps {
   implicit def DecoderOps[A](xmlDecoder: XmlDecoder[A]): DecoderOps[A] = new DecoderOps[A](xmlDecoder)

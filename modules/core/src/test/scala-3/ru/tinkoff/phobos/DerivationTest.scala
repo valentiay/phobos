@@ -1,20 +1,20 @@
-package ru.tinkoff.phobos
+package phobos
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import ru.tinkoff.phobos.decoding._
-import ru.tinkoff.phobos.encoding._
-import ru.tinkoff.phobos.testString._
-import ru.tinkoff.phobos.syntax.discriminator
-import ru.tinkoff.phobos.syntax.text
-import ru.tinkoff.phobos.syntax.attr
-import ru.tinkoff.phobos.SealedClasses.Animal.animalDecoder
-import ru.tinkoff.phobos.derivation.LazySummon
+import phobos.decoding._
+import phobos.encoding._
+import phobos.testString._
+import phobos.syntax.discriminator
+import phobos.syntax.text
+import phobos.syntax.attr
+import phobos.SealedClasses.Animal.animalDecoder
+import phobos.derivation.LazySummon
 import scala.reflect.TypeTest
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.derivation.common.extractSumTypeChild
-import ru.tinkoff.phobos.derivation.semiauto.deriveXmlEncoder
-import ru.tinkoff.phobos.derivation.encoder.deriveElementEncoder
+import phobos.configured.ElementCodecConfig
+import phobos.derivation.common.extractSumTypeChild
+import phobos.derivation.semiauto.deriveXmlEncoder
+import phobos.derivation.encoder.deriveElementEncoder
 import scala.deriving.Mirror
 import scala.annotation.nowarn
 

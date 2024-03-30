@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos
+package phobos
 
-import ru.tinkoff.phobos.testString._
+import phobos.testString._
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -8,10 +8,10 @@ class AutoDerivationTest extends AnyWordSpec with Matchers {
   "Automatic derivation" should {
     "derive codecs" in {
       """
-         import ru.tinkoff.phobos.encoding._
-         import ru.tinkoff.phobos.decoding._
-         import ru.tinkoff.phobos.syntax._
-         import ru.tinkoff.phobos.derivation.auto._
+         import phobos.encoding._
+         import phobos.decoding._
+         import phobos.syntax._
+         import phobos.derivation.auto._
 
          case class Foo(@attr bar: Int, @attr baz: Double, @text txt: String)
          case class Bar(@attr quxx: Float, foo: Foo, qux: Byte)
@@ -23,8 +23,8 @@ class AutoDerivationTest extends AnyWordSpec with Matchers {
 
     "not derive encoder if not imported" in {
       """
-         import ru.tinkoff.phobos.encoding._
-         import ru.tinkoff.phobos.syntax._
+         import phobos.encoding._
+         import phobos.syntax._
          case class Foo(@attr bar: Int, @attr baz: Double, @text txt: String)
          case class Bar(@attr quxx: Float, foo: Foo, qux: Byte)
 
@@ -34,8 +34,8 @@ class AutoDerivationTest extends AnyWordSpec with Matchers {
 
     "not derive decoder if not imported" in {
       """
-         import ru.tinkoff.phobos.decoding._
-         import ru.tinkoff.phobos.syntax._
+         import phobos.decoding._
+         import phobos.syntax._
 
          case class Foo(@attr bar: Int, @attr baz: Double, @text txt: String)
          case class Bar(@attr quxx: Float, foo: Foo, qux: Byte)
@@ -45,10 +45,10 @@ class AutoDerivationTest extends AnyWordSpec with Matchers {
     }
 
     "derive codecs correctly" in {
-      import ru.tinkoff.phobos.syntax._
-      import ru.tinkoff.phobos.decoding._
-      import ru.tinkoff.phobos.encoding._
-      import ru.tinkoff.phobos.derivation.auto._
+      import phobos.syntax._
+      import phobos.decoding._
+      import phobos.encoding._
+      import phobos.derivation.auto._
 
       case class Foo(@attr bar: Int, @attr baz: Double, @text txt: String)
       case class Bar(foo: Float)

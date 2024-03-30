@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
 /** Defining givens of such type in companion objects of ElementEncoder and ElementDecoder allows to summon instances of
   * these typeclasses for every child of a sum type (sealed trait or enum), e.g. like this:

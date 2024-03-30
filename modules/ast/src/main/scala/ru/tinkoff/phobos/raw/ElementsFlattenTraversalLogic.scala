@@ -1,8 +1,8 @@
-package ru.tinkoff.phobos.raw
+package phobos.raw
 
-import ru.tinkoff.phobos.ast.XmlLeaf
-import ru.tinkoff.phobos.raw.ElementsFlattenTraversalLogic.Accumulator
-import ru.tinkoff.phobos.traverse.DecodingTraversalLogic
+import phobos.ast.XmlLeaf
+import phobos.raw.ElementsFlattenTraversalLogic.Accumulator
+import phobos.traverse.DecodingTraversalLogic
 import scala.collection.mutable.ListBuffer
 
 class ElementsFlattenTraversalLogic private () extends DecodingTraversalLogic[Accumulator, ElementsFlatten] {

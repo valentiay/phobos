@@ -1,8 +1,8 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import ru.tinkoff.phobos.derivation.semiauto.deriveXmlDecoder
+import phobos.derivation.semiauto.deriveXmlDecoder
 
 import java.time.OffsetDateTime
 

@@ -1,10 +1,10 @@
-package ru.tinkoff.phobos
+package phobos
 
 import org.scalatest.wordspec.AnyWordSpec
-import ru.tinkoff.phobos.annotations.XmlCodec
-import ru.tinkoff.phobos.encoding.XmlEncoder
-import ru.tinkoff.phobos.syntax.{attr, text}
-import ru.tinkoff.phobos.testString._
+import phobos.annotations.XmlCodec
+import phobos.encoding.XmlEncoder
+import phobos.syntax.{attr, text}
+import phobos.testString._
 
 class LiteralEncodingTest extends AnyWordSpec {
   "Literal encoders" should {

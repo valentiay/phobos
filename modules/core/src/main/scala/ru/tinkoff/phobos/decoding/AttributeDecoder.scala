@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
 import java.time._
 import java.time.format.DateTimeFormatter

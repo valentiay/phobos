@@ -1,4 +1,4 @@
-package ru.tinkoff.phobos.decoding
+package phobos.decoding
 
 private[decoding] trait AttributeLiteralInstances {
   implicit def literalDecoder[A, L <: A](

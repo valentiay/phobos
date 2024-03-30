@@ -1,6 +1,6 @@
-package ru.tinkoff.phobos.ast
+package phobos.ast
 
-import ru.tinkoff.phobos.encoding.{ElementEncoder, PhobosStreamWriter}
+import phobos.encoding.{ElementEncoder, PhobosStreamWriter}
 
 private[phobos] object XmlEntryElementEncoder extends ElementEncoder[XmlEntry] {
 

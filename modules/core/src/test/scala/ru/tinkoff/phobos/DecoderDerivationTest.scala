@@ -1,14 +1,14 @@
-package ru.tinkoff.phobos
+package phobos
 
 import org.scalatest.Assertion
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
-import ru.tinkoff.phobos.SealedClasses.{Animal, Cat, Cow, Dog}
-import ru.tinkoff.phobos.decoding.{AttributeDecoder, DecodingError, ElementDecoder, TextDecoder, XmlDecoder}
-import ru.tinkoff.phobos.syntax._
-import ru.tinkoff.phobos.configured.naming._
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.derivation.semiauto._
+import phobos.SealedClasses.{Animal, Cat, Cow, Dog}
+import phobos.decoding.{AttributeDecoder, DecodingError, ElementDecoder, TextDecoder, XmlDecoder}
+import phobos.syntax._
+import phobos.configured.naming._
+import phobos.configured.ElementCodecConfig
+import phobos.derivation.semiauto._
 
 import scala.annotation.nowarn
 
@@ -879,7 +879,7 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       val string4 = """<?xml version='1.0' encoding='UTF-8'?>
                       | <quux>
                       |   <d>d value</d>
-                      |   <baz xmlns:ans1="https://tinkoff.ru" ans1:discriminator="Baz1">
+                      |   <baz xmlns:ans1="https://example.org" ans1:discriminator="Baz1">
                       |     <a>string</a>
                       |   </baz>
                       |   <e>k</e>
@@ -888,7 +888,7 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       val string5 = """<?xml version='1.0' encoding='UTF-8'?>
                       | <quux>
                       |   <d>d value</d>
-                      |   <baz xmlns:ans1="https://tinkoff.ru" ans1:discriminator="Baz2">
+                      |   <baz xmlns:ans1="https://example.org" ans1:discriminator="Baz2">
                       |     <b>1</b>
                       |   </baz>
                       |   <e>e</e>
@@ -897,7 +897,7 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       val string6 = """<?xml version='1.0' encoding='UTF-8'?>
                       | <quux>
                       |   <d>another one value</d>
-                      |   <baz xmlns:ans1="https://tinkoff.ru" ans1:discriminator="Baz3">
+                      |   <baz xmlns:ans1="https://example.org" ans1:discriminator="Baz3">
                       |     <c>1.1234</c>
                       |   </baz>
                       |   <e>v</e>
@@ -1073,26 +1073,26 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
   "Decoder derivation with namespaces" should {
 
     def decodeSimpleCaseClasses(toList: String => List[Array[Byte]]): Assertion = {
-      object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
 
       case class Foo(
-          @xmlns(tkf) a: Int,
-          @xmlns(tkf) b: String,
-          @xmlns(tkf) c: Double,
+          @xmlns(org) a: Int,
+          @xmlns(org) b: String,
+          @xmlns(org) c: Double,
       )
       case class Bar(
-          @xmlns(tkf) d: String,
-          @xmlns(tkf) foo: Foo,
-          @xmlns(tkf) e: Char,
+          @xmlns(org) d: String,
+          @xmlns(org) foo: Foo,
+          @xmlns(org) e: Char,
       )
 
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoder
-      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoder("bar", tkf)
+      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoder("bar", org)
 
       val bar = Bar("d value", Foo(1, "b value", 3.0), 'e')
       val string = """<?xml version='1.0' encoding='UTF-8'?>
-                     | <ans1:bar xmlns:ans1="tinkoff.ru">
+                     | <ans1:bar xmlns:ans1="example.org">
                      |   <ans1:d>d value</ans1:d>
                      |   <ans1:foo>
                      |     <ans1:a>1</ans1:a>
@@ -1111,26 +1111,26 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
     "decode simple case classes async" in decodeSimpleCaseClasses(fromIterable)
 
     def decodeAttributes(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
 
       case class Foo(
-          @xmlns(tkf) a: Int,
-          @xmlns(tkf) @attr b: String,
-          @xmlns(tkf) c: Double,
+          @xmlns(org) a: Int,
+          @xmlns(org) @attr b: String,
+          @xmlns(org) c: Double,
       )
       case class Bar(
-          @xmlns(tkf) d: String,
-          @xmlns(tkf) foo: Foo,
-          @xmlns(tkf) @attr e: Char,
+          @xmlns(org) d: String,
+          @xmlns(org) foo: Foo,
+          @xmlns(org) @attr e: Char,
       )
 
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoder
-      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoder("bar", tkf)
+      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoder("bar", org)
 
       val bar = Bar("d value", Foo(1, "b value", 3.0), 'e')
       val string = """<?xml version='1.0' encoding='UTF-8'?>
-                     | <ans1:bar xmlns:ans1="tinkoff.ru" ans1:e="e">
+                     | <ans1:bar xmlns:ans1="example.org" ans1:e="e">
                      |   <ans1:d>d value</ans1:d>
                      |   <ans1:foo ans1:b="b value">
                      |     <ans1:a>1</ans1:a>
@@ -1148,16 +1148,16 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
     "decode attributes async" in decodeAttributes(fromIterable)
 
     def decodeNestedNamespaces(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
       case class Foo(
-          @xmlns(tkf) a: Int,
+          @xmlns(org) a: Int,
           @attr b: String,
-          @xmlns(tkf) c: Double,
+          @xmlns(org) c: Double,
       )
       case class Bar(
           d: String,
-          @xmlns(tkf) foo: Foo,
+          @xmlns(org) foo: Foo,
           @attr e: Char,
       )
 
@@ -1168,7 +1168,7 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       val string = """<?xml version='1.0' encoding='UTF-8'?>
                      | <bar e="e">
                      |   <d>d value</d>
-                     |   <ans1:foo xmlns:ans1="tinkoff.ru" b="b value">
+                     |   <ans1:foo xmlns:ans1="example.org" b="b value">
                      |     <ans1:a>1</ans1:a>
                      |     <ans1:c>3.0</ans1:c>
                      |   </ans1:foo>
@@ -1183,30 +1183,30 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
     "decode nested namespaces async" in decodeNestedNamespaces(fromIterable)
 
     def decodeMultipleNamespaces(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
-      case object tcs
-      implicit val tcsNs: Namespace[tcs.type] = Namespace.mkInstance("tcsbank.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
+      case object com
+      implicit val comNs: Namespace[com.type] = Namespace.mkInstance("example.com")
 
       case class Foo(
-          @xmlns(tkf) a: Int,
+          @xmlns(org) a: Int,
           @attr b: String,
-          @xmlns(tkf) c: Double,
+          @xmlns(org) c: Double,
       )
       case class Bar(
-          @xmlns(tcs) d: String,
-          @xmlns(tkf) foo: Foo,
+          @xmlns(com) d: String,
+          @xmlns(org) foo: Foo,
           @attr e: Char,
       )
 
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoder
-      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoder("bar", tcs)
+      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoder("bar", com)
 
       val bar = Bar("d value", Foo(1, "b value", 3.0), 'e')
       val string = """<?xml version='1.0' encoding='UTF-8'?>
-                     | <ans1:bar xmlns:ans1="tcsbank.ru" e="e">
+                     | <ans1:bar xmlns:ans1="example.com" e="e">
                      |   <ans1:d>d value</ans1:d>
-                     |   <ans2:foo xmlns:ans2="tinkoff.ru" b="b value">
+                     |   <ans2:foo xmlns:ans2="example.org" b="b value">
                      |     <ans2:a>1</ans2:a>
                      |     <ans2:c>3.0</ans2:c>
                      |   </ans2:foo>
@@ -1223,24 +1223,24 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
 
     def decodeCamelCase(toList: String => List[Array[Byte]]): Assertion = {
       val camelCaseConfig = ElementCodecConfig.default.withFieldNamesTransformed(camelCase)
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
       case class Foo(
-          @xmlns(tkf) someName: Int,
-          @xmlns(tkf) someOtherName: String,
-          @xmlns(tkf) c: Double,
+          @xmlns(org) someName: Int,
+          @xmlns(org) someOtherName: String,
+          @xmlns(org) c: Double,
       )
       case class Bar(
-          @xmlns(tkf) someTopName: String,
-          @xmlns(tkf) someFoo: Foo,
+          @xmlns(org) someTopName: String,
+          @xmlns(org) someFoo: Foo,
       )
 
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoderConfigured(camelCaseConfig)
-      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("Bar", tkf, camelCaseConfig)
+      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("Bar", org, camelCaseConfig)
 
       val bar = Bar("d value", Foo(1, "b value", 3.0))
       val string = """<?xml version='1.0' encoding='UTF-8'?>
-                     | <ans1:Bar xmlns:ans1="tinkoff.ru">
+                     | <ans1:Bar xmlns:ans1="example.org">
                      |   <ans1:SomeTopName>d value</ans1:SomeTopName>
                      |   <ans1:SomeFoo>
                      |     <ans1:SomeName>1</ans1:SomeName>
@@ -1259,25 +1259,25 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
 
     def decodeSnakeCase(toList: String => List[Array[Byte]]): Assertion = {
       val snakeCaseConfig = ElementCodecConfig.default.withFieldNamesTransformed(snakeCase)
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
 
       case class Foo(
-          @xmlns(tkf) someName: Int,
-          @xmlns(tkf) someOtherName: String,
-          @xmlns(tkf) c: Double,
+          @xmlns(org) someName: Int,
+          @xmlns(org) someOtherName: String,
+          @xmlns(org) c: Double,
       )
       case class Bar(
-          @xmlns(tkf) someTopName: String,
-          @xmlns(tkf) someFoo: Foo,
+          @xmlns(org) someTopName: String,
+          @xmlns(org) someFoo: Foo,
       )
 
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoderConfigured(snakeCaseConfig)
-      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("bar", tkf, snakeCaseConfig)
+      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("bar", org, snakeCaseConfig)
 
       val bar = Bar("d value", Foo(1, "b value", 3.0))
       val string = """<?xml version='1.0' encoding='UTF-8'?>
-                     | <ans1:bar xmlns:ans1="tinkoff.ru">
+                     | <ans1:bar xmlns:ans1="example.org">
                      |   <ans1:some_top_name>d value</ans1:some_top_name>
                      |   <ans1:some_foo>
                      |     <ans1:some_name>1</ans1:some_name>
@@ -1295,20 +1295,20 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
     "decode snake_case async" in decodeSnakeCase(fromIterable)
 
     def decodeWithDefaultElementNamespaces(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
 
-      val defaultNamespaceConfig = ElementCodecConfig.default.withElementsDefaultNamespace(tkf)
+      val defaultNamespaceConfig = ElementCodecConfig.default.withElementsDefaultNamespace(org)
       case class Foo(a: Int, b: String, c: Double)
       case class Bar(@attr d: String, foo: Foo, e: Char)
 
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoder
-      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("bar", tkf, defaultNamespaceConfig)
+      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("bar", org, defaultNamespaceConfig)
 
       val bar = Bar("d value", Foo(1, "b value", 3.0), 'e')
       val string =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <ans1:bar xmlns:ans1="tinkoff.ru" d="d value">
+          | <ans1:bar xmlns:ans1="example.org" d="d value">
           |   <ans1:foo>
           |     <a>1</a>
           |     <b>b value</b>
@@ -1326,23 +1326,23 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
     "decode with default element namespaces async" in decodeWithDefaultElementNamespaces(fromIterable)
 
     def overrideDefaultElementNamespaceWithNamespaceFromAnnotation(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
-      case object tcs
-      implicit val tcsNs: Namespace[tcs.type] = Namespace.mkInstance("tcsbank.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
+      case object com
+      implicit val comNs: Namespace[com.type] = Namespace.mkInstance("example.com")
 
-      val defaultNamespaceConfig = ElementCodecConfig.default.withElementsDefaultNamespace(tkf)
+      val defaultNamespaceConfig = ElementCodecConfig.default.withElementsDefaultNamespace(org)
       case class Foo(a: Int, b: String, c: Double)
-      case class Bar(@attr d: String, @xmlns(tcs) foo: Foo, e: Char)
+      case class Bar(@attr d: String, @xmlns(com) foo: Foo, e: Char)
 
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoder
-      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("bar", tkf, defaultNamespaceConfig)
+      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("bar", org, defaultNamespaceConfig)
 
       val bar = Bar("d value", Foo(1, "b value", 3.0), 'e')
       val string =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <ans1:bar xmlns:ans1="tinkoff.ru" d="d value">
-          |   <ans2:foo xmlns:ans2="tcsbank.ru">
+          | <ans1:bar xmlns:ans1="example.org" d="d value">
+          |   <ans2:foo xmlns:ans2="example.com">
           |     <a>1</a>
           |     <b>b value</b>
           |     <c>3.0</c>
@@ -1362,20 +1362,20 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       overrideDefaultElementNamespaceWithNamespaceFromAnnotation(fromIterable)
 
     def decodeWithDefaultAttributeNamespaces(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
 
-      val defaultNamespaceConfig = ElementCodecConfig.default.withAttributesDefaultNamespace(tkf)
+      val defaultNamespaceConfig = ElementCodecConfig.default.withAttributesDefaultNamespace(org)
       case class Foo(a: Int, b: String, c: Double)
       case class Bar(@attr d: String, foo: Foo, @attr e: Char)
 
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoder
-      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("bar", tkf, defaultNamespaceConfig)
+      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("bar", org, defaultNamespaceConfig)
 
       val bar = Bar("d value", Foo(1, "b value", 3.0), 'e')
       val string =
         """<?xml version='1.0' encoding='UTF-8'?>
-        | <ans1:bar xmlns:ans1="tinkoff.ru" ans1:d="d value" ans1:e="e">
+        | <ans1:bar xmlns:ans1="example.org" ans1:d="d value" ans1:e="e">
         |   <foo>
         |     <a>1</a>
         |     <b>b value</b>
@@ -1392,22 +1392,22 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
     "decode with default attribute namespaces async" in decodeWithDefaultAttributeNamespaces(fromIterable)
 
     def overrideDefaultAttributeNamespaceWithNamespaceFromAnnotation(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
-      case object tcs
-      implicit val tcsNs: Namespace[tcs.type] = Namespace.mkInstance("tcsbank.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
+      case object com
+      implicit val comNs: Namespace[com.type] = Namespace.mkInstance("example.com")
 
-      val defaultNamespaceConfig = ElementCodecConfig.default.withAttributesDefaultNamespace(tkf)
+      val defaultNamespaceConfig = ElementCodecConfig.default.withAttributesDefaultNamespace(org)
       case class Foo(a: Int, b: String, c: Double)
-      case class Bar(@attr d: String, foo: Foo, @attr @xmlns(tcs) e: Char)
+      case class Bar(@attr d: String, foo: Foo, @attr @xmlns(com) e: Char)
 
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoder
-      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("bar", tkf, defaultNamespaceConfig)
+      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoderConfigured("bar", org, defaultNamespaceConfig)
 
       val bar = Bar("d value", Foo(1, "b value", 3.0), 'e')
       val string =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <ans1:bar xmlns:ans1="tinkoff.ru" ans1:d="d value" xmlns:ans2="tcsbank.ru" ans2:e="e">
+          | <ans1:bar xmlns:ans1="example.org" ans1:d="d value" xmlns:ans2="example.com" ans2:e="e">
           |   <foo>
           |     <a>1</a>
           |     <b>b value</b>
@@ -1426,18 +1426,18 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       overrideDefaultAttributeNamespaceWithNamespaceFromAnnotation(fromIterable)
 
     def failWhenElementNameIsIncorrect(toList: String => List[Array[Byte]]): Assertion = {
-      case object tcs
-      implicit val tcsNs: Namespace[tcs.type] = Namespace.mkInstance("tinkoff.ru")
+      case object com
+      implicit val comNs: Namespace[com.type] = Namespace.mkInstance("example.org")
 
       case class Foo(a: Int, b: String, c: Double)
       case class Bar(@attr d: String, foo: Foo, @attr e: Char)
 
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoder
-      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoder("bar", tcs)
+      implicit val xmlDecoder: XmlDecoder[Bar]     = deriveXmlDecoder("bar", com)
 
       val string1 =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <ans1:wrong xmlns:ans1="tinkoff.ru" d="d value" e="e">
+          | <ans1:wrong xmlns:ans1="example.org" d="d value" e="e">
           |   <foo>
           |     <a>1</a>
           |     <b>b value</b>
@@ -1447,7 +1447,7 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
         """.stripMargin
       val string2 =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <ans1:bar xmlns:ans1="tcsbank.ru" d="d value" e="e">
+          | <ans1:bar xmlns:ans1="example.com" d="d value" e="e">
           |   <foo>
           |     <a>1</a>
           |     <b>b value</b>
@@ -1461,7 +1461,7 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         decoded1 == Left(DecodingError("Invalid local name. Expected 'bar', but found 'wrong'", List("wrong"), None)) &&
           decoded2 == Left(
-            DecodingError("Invalid namespace. Expected 'tinkoff.ru', but found 'tcsbank.ru'", List("bar"), None),
+            DecodingError("Invalid namespace. Expected 'example.org', but found 'example.com'", List("bar"), None),
           ),
       )
     }
@@ -1472,15 +1472,15 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       failWhenElementNameIsIncorrect(fromIterable)
 
     def decodeSealedTraits(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
 
-      case class Aquarium(@xmlns(tkf) fish: List[SealedClasses.Pisces])
+      case class Aquarium(@xmlns(org) fish: List[SealedClasses.Pisces])
       implicit val xmlDecoder: XmlDecoder[Aquarium] =
-        deriveXmlDecoderConfigured("aquarium", ElementCodecConfig.default.withNamespaceDefined(tkf))
+        deriveXmlDecoderConfigured("aquarium", ElementCodecConfig.default.withNamespaceDefined(org))
       val string =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <aquarium xmlns:ans1="tinkoff.ru">
+          | <aquarium xmlns:ans1="example.org">
           |   <ans1:fish xmlns:ans2="http://www.w3.org/2001/XMLSchema-instance" ans2:type="ClownFish">
           |     <name>Marlin</name>
           |     <finNumber>3</finNumber>
@@ -1500,16 +1500,16 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
     "decode sealed traits async" in decodeSealedTraits(fromIterable)
 
     def decodeSealedTraitsUsingElementNamesAsDiscriminators(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
 
-      case class AnimalShelter(@xmlns(tkf) @default animals: List[SealedClasses.Animal])
+      case class AnimalShelter(@xmlns(org) @default animals: List[SealedClasses.Animal])
       implicit val xmlDecoder: XmlDecoder[AnimalShelter] =
-        deriveXmlDecoderConfigured("shelter", ElementCodecConfig.default.withNamespaceDefined(tkf))
+        deriveXmlDecoderConfigured("shelter", ElementCodecConfig.default.withNamespaceDefined(org))
 
       val string =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <shelter xmlns:ans1="tinkoff.ru">
+          | <shelter xmlns:ans1="example.org">
           |   <ans1:cat>
           |     <meow>meow</meow>
           |   </ans1:cat>
@@ -1528,37 +1528,37 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       decodeSealedTraitsUsingElementNamesAsDiscriminators(fromIterable)
 
     def decodeElementsWithScopeNamespaceFromConfig(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
 
-      case object tcs
-      implicit val tcsNs: Namespace[tcs.type] = Namespace.mkInstance("tcsbank.ru")
+      case object com
+      implicit val comNs: Namespace[com.type] = Namespace.mkInstance("example.com")
 
       final case class Qux(g: String, h: Int)
       implicit val quxDecoder: ElementDecoder[Qux] = deriveElementDecoder
 
       final case class Foo(
           d: Int,
-          @xmlns(tcs) e: String,
+          @xmlns(com) e: String,
           f: Double,
           qux: List[Qux],
       )
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoder
 
-      final case class Bar(@xmlns(tcs) a: Int, b: String, c: Double, foo: Foo)
-      val config                               = ElementCodecConfig.default.withScopeDefaultNamespace(tkf)
+      final case class Bar(@xmlns(com) a: Int, b: String, c: Double, foo: Foo)
+      val config                               = ElementCodecConfig.default.withScopeDefaultNamespace(org)
       implicit val barDecoder: XmlDecoder[Bar] = deriveXmlDecoderConfigured("bar", config)
 
       val bar = Bar(123, "b value", 1.234, Foo(321, "e value", 4.321, List(Qux("g value 1", 1), Qux("g value 2", 2))))
       val string1 =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <bar xmlns="tinkoff.ru">
-          |   <ans1:a xmlns:ans1="tcsbank.ru">123</ans1:a>
+          | <bar xmlns="example.org">
+          |   <ans1:a xmlns:ans1="example.com">123</ans1:a>
           |   <b>b value</b>
           |   <c>1.234</c>
           |   <foo>
           |     <d>321</d>
-          |     <ans2:e xmlns:ans2="tcsbank.ru">e value</ans2:e>
+          |     <ans2:e xmlns:ans2="example.com">e value</ans2:e>
           |     <f>4.321</f>
           |     <qux>
           |       <g>g value 1</g>
@@ -1574,7 +1574,7 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
 
       val string2 =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <ans1:bar xmlns:ans1="tinkoff.ru" xmlns:ans2="tcsbank.ru">
+          | <ans1:bar xmlns:ans1="example.org" xmlns:ans2="example.com">
           |   <ans2:a>123</ans2:a>
           |   <ans1:b>b value</ans1:b>
           |   <ans1:c>1.234</ans1:c>
@@ -1602,37 +1602,37 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
     "decode elements with scope namespace from config async" in decodeElementsWithScopeNamespaceFromConfig(fromIterable)
 
     def decodeElementsWithNestedScopeNamespacesFromConfig(toList: String => List[Array[Byte]]): Assertion = {
-      case object tkf
-      implicit val tkfNs: Namespace[tkf.type] = Namespace.mkInstance("tinkoff.ru")
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org")
 
-      case object tcs
-      implicit val tcsNs: Namespace[tcs.type] = Namespace.mkInstance("tcsbank.ru")
+      case object com
+      implicit val comNs: Namespace[com.type] = Namespace.mkInstance("example.com")
 
       case object xmp
       implicit val xmlNs: Namespace[xmp.type] = Namespace.mkInstance("example.org")
 
       final case class Foo(
           d: Int,
-          @xmlns(tcs) e: String,
+          @xmlns(com) e: String,
           f: Double,
       )
       val fooConfig                                = ElementCodecConfig.default.withScopeDefaultNamespace(xmp)
       implicit val fooDecoder: ElementDecoder[Foo] = deriveElementDecoderConfigured(fooConfig)
 
-      final case class Bar(@xmlns(tcs) a: Int, b: String, c: Double, foo: Foo)
-      val barConfig                            = ElementCodecConfig.default.withScopeDefaultNamespace(tkf)
+      final case class Bar(@xmlns(com) a: Int, b: String, c: Double, foo: Foo)
+      val barConfig                            = ElementCodecConfig.default.withScopeDefaultNamespace(org)
       implicit val barDecoder: XmlDecoder[Bar] = deriveXmlDecoderConfigured("bar", barConfig)
 
       val bar = Bar(123, "b value", 1.234, Foo(321, "e value", 4.321))
       val string1 =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <bar xmlns="tinkoff.ru">
-          |   <ans1:a xmlns:ans1="tcsbank.ru">123</ans1:a>
+          | <bar xmlns="example.org">
+          |   <ans1:a xmlns:ans1="example.com">123</ans1:a>
           |   <b>b value</b>
           |   <c>1.234</c>
           |   <foo xmlns="example.org">
           |     <d>321</d>
-          |     <ans2:e xmlns:ans2="tcsbank.ru">e value</ans2:e>
+          |     <ans2:e xmlns:ans2="example.com">e value</ans2:e>
           |     <f>4.321</f>
           |   </foo>
           | </bar>
@@ -1640,7 +1640,7 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
 
       val string2 =
         """<?xml version='1.0' encoding='UTF-8'?>
-          | <ans1:bar xmlns:ans1="tinkoff.ru" xmlns:ans2="tcsbank.ru">
+          | <ans1:bar xmlns:ans1="example.org" xmlns:ans2="example.com">
           |   <ans2:a>123</ans2:a>
           |   <ans1:b>b value</ans1:b>
           |   <ans1:c>1.234</ans1:c>

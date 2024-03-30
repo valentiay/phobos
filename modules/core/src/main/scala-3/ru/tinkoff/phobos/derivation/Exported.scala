@@ -1,3 +1,3 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
 class Exported[T](val value: T)

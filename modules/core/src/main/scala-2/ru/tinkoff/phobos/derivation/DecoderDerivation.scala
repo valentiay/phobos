@@ -1,9 +1,9 @@
-package ru.tinkoff.phobos.derivation
+package phobos.derivation
 
-import ru.tinkoff.phobos.Namespace
-import ru.tinkoff.phobos.configured.ElementCodecConfig
-import ru.tinkoff.phobos.decoding.{AttributeDecoder, ElementDecoder, TextDecoder}
-import ru.tinkoff.phobos.derivation.CompileTimeState.{CoproductType, ProductType, Stack}
+import phobos.Namespace
+import phobos.configured.ElementCodecConfig
+import phobos.decoding.{AttributeDecoder, ElementDecoder, TextDecoder}
+import phobos.derivation.CompileTimeState.{CoproductType, ProductType, Stack}
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -14,8 +14,8 @@ class DecoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
 
   def searchType[T: c.WeakTypeTag]: Type = appliedType(c.typeOf[ElementDecoder[_]], c.weakTypeOf[T])
 
-  val derivationPkg = q"_root_.ru.tinkoff.phobos.derivation"
-  val decodingPkg   = q"_root_.ru.tinkoff.phobos.decoding"
+  val derivationPkg = q"_root_.phobos.derivation"
+  val decodingPkg   = q"_root_.phobos.decoding"
   val scalaPkg      = q"_root_.scala"
   val javaPkg       = q"_root_.java.lang"
 
@@ -391,7 +391,7 @@ class DecoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
     xmlConfigured[T](localName, defaultConfig)
 
   def xmlConfigured[T: c.WeakTypeTag](localName: Tree, config: Expr[ElementCodecConfig]): Tree =
-    q"""_root_.ru.tinkoff.phobos.decoding.XmlDecoder.fromElementDecoder[${weakTypeOf[
+    q"""_root_.phobos.decoding.XmlDecoder.fromElementDecoder[${weakTypeOf[
         T,
       ]}]($localName)(${elementConfigured[T](config)})"""
 
@@ -406,7 +406,7 @@ class DecoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
     val nsInstance = Option(c.inferImplicitValue(appliedType(weakTypeOf[Namespace[_]], weakTypeOf[NS])))
       .filter(_.nonEmpty)
       .getOrElse(error(s"Could not find Namespace instance for $ns"))
-    q"""_root_.ru.tinkoff.phobos.decoding.XmlDecoder.fromElementDecoderNs[${weakTypeOf[T]}, ${weakTypeOf[
+    q"""_root_.phobos.decoding.XmlDecoder.fromElementDecoderNs[${weakTypeOf[T]}, ${weakTypeOf[
         NS,
       ]}]($localName, $ns)(${elementConfigured[T](config)}, $nsInstance)"""
   }
