@@ -92,9 +92,9 @@ object XmlEntry extends impl.CatsInstances {
       final override val companion = Bool
     }
 
-    case object True extends Bool(true)
+    case object True extends Bool(value = true)
 
-    case object False extends Bool(false)
+    case object False extends Bool(value = false)
 
     final case class Node(
         attributes: List[(String, Leaf)],

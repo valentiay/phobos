@@ -5,7 +5,7 @@ import phobos.derivation.decoder
 import phobos.derivation.LazySummon
 import scala.deriving.Mirror
 
-private[decoding] trait DerivedElement {
+private[decoding] trait ElementDerivedInstances {
   inline def derived[T]: ElementDecoder[T] =
     decoder.deriveElementDecoder[T](ElementCodecConfig.default)
 

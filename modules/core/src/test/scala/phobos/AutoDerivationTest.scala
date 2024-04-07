@@ -70,6 +70,8 @@ class AutoDerivationTest extends AnyWordSpec with Matchers {
        | </baz>
        |""".stripMargin
 
+      implicitly[Auto[ElementEncoder[Foo]]]
+      implicitly[Auto[ElementEncoder[Baz]]]
       val encoder = XmlEncoder.fromElementEncoder[Baz]("baz")
       assert(encoder.encode(baz) == Right(bazXml.minimized))
 

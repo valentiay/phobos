@@ -1,11 +1,12 @@
 package phobos.encoding
 
 import phobos.configured.ElementCodecConfig
-import phobos.derivation.encoder
-import scala.deriving.Mirror
-import phobos.derivation.LazySummon
+import phobos.derivation.auto.Auto
+import phobos.derivation.{LazySummon, encoder}
 
-private[encoding] trait DerivedElement {
+import scala.deriving.Mirror
+
+private[encoding] trait ElementDerivedInstances {
   inline def derived[T]: ElementEncoder[T] =
     encoder.deriveElementEncoder[T](ElementCodecConfig.default)
 

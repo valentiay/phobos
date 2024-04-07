@@ -5,6 +5,7 @@ import phobos.configured.ElementCodecConfig
 import phobos.derivation.CompileTimeState.{ChainedImplicit, Stack}
 import phobos.derivation.Derivation.DirectlyReentrantException
 import phobos.syntax.{xmlns, default, attr, renamed, text, discriminator}
+import phobos.derivation.auto.Auto
 
 import scala.annotation.nowarn
 import scala.reflect.macros.blackbox
@@ -45,10 +46,10 @@ private[phobos] abstract class Derivation(val c: blackbox.Context) {
     q"lazy val $name: $tpe = $rhs"
   }
 
-  def exportedTypecclass(searchType: Type): Option[Tree] =
-    Option(c.inferImplicitValue(appliedType(typeOf[Exported[_]], searchType)))
+  def autoTypecclass(searchType: Type): Option[Tree] =
+    Option(c.inferImplicitValue(appliedType(typeOf[Auto[_]], searchType)))
       .filterNot(_.isEmpty)
-      .map(exported => q"$exported.value")
+      .map(auto => q"$auto.value")
 
   def typeclassTree(stack: Stack[c.type])(genericType: Type, typeConstructor: Type): Tree = {
     val prefixType   = c.prefix.tree.tpe
@@ -67,7 +68,7 @@ private[phobos] abstract class Derivation(val c: blackbox.Context) {
       stack.recurse(frame, searchType) {
         Option(c.inferImplicitValue(searchType))
           .filterNot(_.isEmpty)
-          .orElse(exportedTypecclass(searchType))
+          .orElse(autoTypecclass(searchType))
           .getOrElse {
             val missingType   = stack.top.fold(searchType)(_.searchType)
             val typeClassName = s"${missingType.typeSymbol.name.decodedName}"

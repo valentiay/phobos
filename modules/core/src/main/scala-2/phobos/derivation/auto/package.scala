@@ -8,9 +8,11 @@ import phobos.decoding.ElementDecoder
   * than semiautomatic. It also has some issues when deriving codecs in complicated cases.
   */
 package object auto {
-  implicit def deriveExportedEncoder[A]: Exported[ElementEncoder[A]] = macro ExportMacro.exportEncoder[A]
-  implicit def exportEncoder[A](implicit exported: Exported[ElementEncoder[A]]): ElementEncoder[A] = exported.value
+  implicit def deriveAutoEncoder[A]: Auto[ElementEncoder[A]] = macro AutoMacro.autoEncoder[A]
+  // Would not work for scala 2 if placed in ElementEncoderAutoInstances, unlike scala 3
+  implicit def autoEncoder[A](implicit auto: Auto[ElementEncoder[A]]): ElementEncoder[A] = auto.value
 
-  implicit def deriveExportedDecoder[A]: Exported[ElementDecoder[A]] = macro ExportMacro.exportDecoder[A]
-  implicit def exportDecoder[A](implicit exported: Exported[ElementDecoder[A]]): ElementDecoder[A] = exported.value
+  implicit def deriveAutoDecoder[A]: Auto[ElementDecoder[A]] = macro AutoMacro.autoDecoder[A]
+  // Would not work for scala 2 if placed in ElementDecoderAutoInstances, unlike scala 3
+  implicit def autoDecoder[A](implicit auto: Auto[ElementDecoder[A]]): ElementDecoder[A] = auto.value
 }

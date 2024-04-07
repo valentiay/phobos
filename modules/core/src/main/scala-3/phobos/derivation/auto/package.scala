@@ -4,11 +4,9 @@ import phobos.decoding.ElementDecoder
 import phobos.encoding.ElementEncoder
 
 package object auto {
-  inline implicit def deriveExportedEncoder[A]: Exported[ElementEncoder[A]] =
-    Exported(semiauto.deriveElementEncoder[A])
-  implicit def exportEncoder[A](implicit exported: Exported[ElementEncoder[A]]): ElementEncoder[A] = exported.value
+  inline implicit def deriveAutoEncoder[A]: Auto[ElementEncoder[A]] =
+    Auto(semiauto.deriveElementEncoder[A])
 
-  inline implicit def deriveExportedDecoder[A]: Exported[ElementDecoder[A]] =
-    Exported(semiauto.deriveElementDecoder[A])
-  implicit def exportDecoder[A](implicit exported: Exported[ElementDecoder[A]]): ElementDecoder[A] = exported.value
+  inline implicit def deriveAutoDecoder[A]: Auto[ElementDecoder[A]] =
+    Auto(semiauto.deriveElementDecoder[A])
 }

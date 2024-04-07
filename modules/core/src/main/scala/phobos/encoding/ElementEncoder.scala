@@ -3,6 +3,7 @@ package phobos.encoding
 import java.time._
 import java.util.{Base64, UUID}
 import java.time.format.DateTimeFormatter
+import phobos.derivation.auto.ElementEncoderAutoInstances
 
 /** Warning! This is an internal API which may change in future. Do not implement or use this trait directly unless you
   * know what you are doing.
@@ -40,7 +41,7 @@ trait ElementEncoder[A] { self =>
     }
 }
 
-object ElementEncoder extends ElementLiteralInstances with DerivedElement {
+object ElementEncoder extends ElementLiteralInstances with ElementDerivedInstances with ElementEncoderAutoInstances {
 
   def apply[A](implicit instance: ElementEncoder[A]) = instance
 

@@ -3,14 +3,12 @@ package phobos.fs2
 import org.scalatest.wordspec.AsyncWordSpec
 import phobos.decoding.XmlDecoder
 import phobos.syntax.text
-import phobos.fs2._
 import fs2.Stream
 import cats.effect.IO
 import cats.effect.unsafe.{IORuntimeConfig, Scheduler, IORuntime}
 import phobos.decoding.ElementDecoder
 import phobos.derivation.semiauto.deriveElementDecoder
 import phobos.derivation.semiauto.deriveXmlDecoder
-
 import scala.annotation.nowarn
 
 @nowarn("msg=is never used")

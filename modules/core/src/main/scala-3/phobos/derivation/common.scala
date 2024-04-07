@@ -111,7 +111,7 @@ object common {
     val names = Varargs(traitSymbol.children.map { childInfoSymbol =>
       extractChildXmlName(using q)(config, traitSymbol, childInfoSymbol)
     })
-    '{ List($names: _*) }
+    '{ List($names*) }
   }
 
   private def extractFieldCategory(using Quotes)(
