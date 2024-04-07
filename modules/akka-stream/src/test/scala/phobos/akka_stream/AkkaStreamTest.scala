@@ -7,7 +7,6 @@ import akka.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.wordspec.AsyncWordSpecLike
-import phobos.akka_stream._
 import phobos.decoding.ElementDecoder
 import phobos.decoding.XmlDecoder
 import phobos.derivation.semiauto.deriveElementDecoder

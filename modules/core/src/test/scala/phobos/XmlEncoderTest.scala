@@ -27,7 +27,8 @@ class XmlEncoderTest extends AnyWordSpec with Matchers {
       final case class Foo(a: Int, b: String, c: Double)
       implicit val fooEncoder: XmlEncoder[Foo] = deriveXmlEncoder("Foo")
 
-      XmlEncoder[Foo].encodeWithConfig(Foo(1, "abc", 1.0), XmlEncoder.XmlEncoderConfig("UTF-16", "1.1", true)) shouldBe
+      XmlEncoder[Foo]
+        .encodeWithConfig(Foo(1, "abc", 1.0), XmlEncoder.XmlEncoderConfig("UTF-16", "1.1", writeProlog = true)) shouldBe
         Right("<?xml version='1.1' encoding='UTF-16'?><Foo><a>1</a><b>abc</b><c>1.0</c></Foo>")
     }
   }

@@ -6,6 +6,7 @@ import java.util.{Base64, UUID}
 import com.fasterxml.aalto.AsyncXMLStreamReader
 import javax.xml.stream.XMLStreamConstants
 import phobos.decoding.ElementDecoder.{EMappedDecoder, MappedDecoder}
+import phobos.derivation.auto.ElementDecoderAutoInstances
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
@@ -35,7 +36,7 @@ trait ElementDecoder[A] { self =>
   def emap[B](f: (List[String], A) => Either[DecodingError, B]): ElementDecoder[B] = new EMappedDecoder(self, f)
 }
 
-object ElementDecoder extends ElementLiteralInstances with DerivedElement {
+object ElementDecoder extends ElementLiteralInstances with ElementDerivedInstances with ElementDecoderAutoInstances {
 
   def apply[A](implicit instance: ElementDecoder[A]) = instance
 

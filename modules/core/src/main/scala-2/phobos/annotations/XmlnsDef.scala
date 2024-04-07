@@ -26,8 +26,6 @@ private final class XmlnsDefImpl(ctx: blackbox.Context) extends CodecAnnotation(
       typ match {
         case tq"$name.type" => name.toString
         case tq"$name"      => name.toString
-        case _ =>
-          c.abort(c.enclosingPosition, "Namespace must be represented with class or object")
       }
     Seq(
       q"""implicit val $instanceName: $pkg.Namespace[$typ] =

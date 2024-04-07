@@ -10,7 +10,7 @@ ThisBuild / version := {
   else s"${publishVersion.value}-$branch-SNAPSHOT"
 }
 
-ThisBuild / publishMavenStyle := true
+ThisBuild / publishMavenStyle      := true
 //ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 ThisBuild / publishTo :=
   (if (!isSnapshot.value) {
