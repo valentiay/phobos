@@ -55,6 +55,9 @@ import phobos.Namespace
   *   the tuple is URL, second - optional preferred prefix of the namespace. The namespaces are only declared, but are
   *   not assigned to any elements or attributes. These declarations may be used by nested elements. This setting helps
   *   to avoid duplicate namespace declarations. No namespaces are defined by default.
+  *
+  * @param ignoreNamespaces
+  *   Affects only decoders. Ignore all namespaces in xml
   */
 final case class ElementCodecConfig(
     transformAttributeNames: String => String,
@@ -67,6 +70,7 @@ final case class ElementCodecConfig(
     elementsDefaultNamespace: Option[String] = None,
     defineNamespaces: List[(String, Option[String])] = Nil,
     scopeDefaultNamespace: Option[String] = None,
+    ignoreNamespaces: Boolean
 ) {
 
   /** See docs for [[transformElementNames]]. */
@@ -144,6 +148,9 @@ final case class ElementCodecConfig(
   /** See docs for [[scopeDefaultNamespace]]. */
   def withScopeDefaultNamespace[NS](namespace: NS)(implicit ns: Namespace[NS]): ElementCodecConfig =
     copy(scopeDefaultNamespace = Some(ns.getNamespace))
+
+  def withIgnoreNamespaces(isIgnoreNamespaces: Boolean = true): ElementCodecConfig =
+    copy(ignoreNamespaces = isIgnoreNamespaces)
 }
 
 object ElementCodecConfig {
@@ -156,5 +163,6 @@ object ElementCodecConfig {
       discriminatorNamespace = Some("http://www.w3.org/2001/XMLSchema-instance"),
       useElementNameAsDiscriminator = false,
       defineNamespaces = Nil,
+      ignoreNamespaces = false
     )
 }

@@ -397,6 +397,7 @@ object decoder {
                       if (c.getScopeDefaultNamespace == namespaceUri) $config.scopeDefaultNamespace
                       else $config.scopeDefaultNamespace.orElse(namespaceUri)
                     $config.scopeDefaultNamespace.foreach(c.setScopeDefaultNamespace)
+                    c.setIgnoreNamespaces($config.ignoreNamespaces)
                     ElementDecoder
                       .errorIfWrongName[T](c, localName, newNamespaceUri.orElse(c.getScopeDefaultNamespace)) match {
                       case None =>
@@ -440,6 +441,7 @@ object decoder {
   ): ElementDecoder[T] = {
     new ElementDecoder[T] {
       def decodeAsElement(c: Cursor, localName: String, namespaceUri: Option[String]): ElementDecoder[T] = {
+        c.setIgnoreNamespaces(config.ignoreNamespaces)
         if (c.getEventType == AsyncXMLStreamReader.EVENT_INCOMPLETE) {
           this
         } else {

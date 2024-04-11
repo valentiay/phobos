@@ -39,6 +39,11 @@ class Cursor(private val sr: XmlStreamReader) {
     scopeDefaultNamespaceStack = uri :: scopeDefaultNamespaceStack
   }
 
+  var ignoreNamespaces: Boolean = false
+  def setIgnoreNamespaces(isIgnoreNamespaces: Boolean): Unit = {
+    ignoreNamespaces = isIgnoreNamespaces
+  }
+
   def getScopeDefaultNamespace: Option[String] =
     scopeDefaultNamespaceStack.headOption
 
@@ -116,7 +121,7 @@ class Cursor(private val sr: XmlStreamReader) {
   def isAttributeSpecified(index: Int): Boolean                          = sr.isAttributeSpecified(index)
   def getNamespaceCount: Int                                             = sr.getNamespaceCount
   def getNamespacePrefix(index: Int): String                             = sr.getNamespacePrefix(index)
-  def getNamespaceURI(index: Int): String                                = sr.getNamespaceURI(index)
+  def getNamespaceURI(index: Int): String                                = if (ignoreNamespaces) "" else sr.getNamespaceURI(index)
   def getNamespaceContext: NamespaceContext                              = sr.getNamespaceContext
   def getEventType: Int                                                  = sr.getEventType
   def getText: String                                                    = sr.getText
@@ -131,7 +136,7 @@ class Cursor(private val sr: XmlStreamReader) {
   def getName: QName                     = sr.getName
   def getLocalName: String               = sr.getLocalName
   def hasName: Boolean                   = sr.hasName
-  def getNamespaceURI: String            = sr.getNamespaceURI
+  def getNamespaceURI: String            = if (ignoreNamespaces) "" else sr.getNamespaceURI
   def getPrefix: String                  = sr.getPrefix
   def getVersion: String                 = sr.getVersion
   def isStandalone: Boolean              = sr.isStandalone
