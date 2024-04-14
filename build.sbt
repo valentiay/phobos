@@ -203,3 +203,5 @@ lazy val phobos = project
     publish / skip     := true,
   )
   .aggregate(modules: _*)
+
+Global / excludeLintKeys := Set(name, pomIncludeRepository, publishMavenStyle)
