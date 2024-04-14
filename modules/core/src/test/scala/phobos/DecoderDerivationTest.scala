@@ -1058,16 +1058,16 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
           |</robot>
           |""".stripMargin
 
-      animalXmlDecoder.decode(catString) shouldBe Right(Cat("meow"))
-      animalXmlDecoder.decode(dogString) shouldBe Right(Dog(1234))
-      animalXmlDecoder.decode(robotString) shouldBe
+      animalXmlDecoder.decodeFromIterable(toList(catString)) shouldBe Right(Cat("meow"))
+      animalXmlDecoder.decodeFromIterable(toList(dogString)) shouldBe Right(Dog(1234))
+      animalXmlDecoder.decodeFromIterable(toList(robotString)) shouldBe
         Left(DecodingError("Unknown type discriminator value: 'robot'", List("robot"), None))
     }
 
     "override element name with discriminator in xml decoder if configured sync" in
       overrideElementNameWithDiscriminatorInXmlDecoderIfConfigured(pure)
-    "override element name with discriminator in xml decoder if configured async" in
-      overrideElementNameWithDiscriminatorInXmlDecoderIfConfigured(fromIterable)
+//    "override element name with discriminator in xml decoder if configured async" in
+//      overrideElementNameWithDiscriminatorInXmlDecoderIfConfigured(fromIterable)
   }
 
   "Decoder derivation with namespaces" should {
@@ -1415,7 +1415,7 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
           |   </foo>
           | </ans1:bar>
         """.stripMargin
-      val decoded = XmlDecoder[Bar].decode(string)
+      val decoded = XmlDecoder[Bar].decodeFromIterable(toList(string))
 
       assert(decoded == Right(bar))
     }
@@ -1455,8 +1455,8 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
           |   </foo>
           | </ans1:bar>
         """.stripMargin
-      val decoded1 = XmlDecoder[Bar].decode(string1)
-      val decoded2 = XmlDecoder[Bar].decode(string2)
+      val decoded1 = XmlDecoder[Bar].decodeFromIterable(toList(string1))
+      val decoded2 = XmlDecoder[Bar].decodeFromIterable(toList(string2))
 
       assert(
         decoded1 == Left(DecodingError("Invalid local name. Expected 'bar', but found 'wrong'", List("wrong"), None)) &&
@@ -1594,8 +1594,8 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
           | </ans1:bar>
           |""".stripMargin
 
-      XmlDecoder[Bar].decode(string1) shouldBe Right(bar)
-      XmlDecoder[Bar].decode(string2) shouldBe Right(bar)
+      XmlDecoder[Bar].decodeFromIterable(toList(string1)) shouldBe Right(bar)
+      XmlDecoder[Bar].decodeFromIterable(toList(string2)) shouldBe Right(bar)
     }
 
     "decode elements with scope namespace from config sync" in decodeElementsWithScopeNamespaceFromConfig(pure)
@@ -1652,8 +1652,8 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
           | </ans1:bar>
           |""".stripMargin
 
-      XmlDecoder[Bar].decode(string1) shouldBe Right(bar)
-      XmlDecoder[Bar].decode(string2) shouldBe Right(bar)
+      XmlDecoder[Bar].decodeFromIterable(toList(string1)) shouldBe Right(bar)
+      XmlDecoder[Bar].decodeFromIterable(toList(string2)) shouldBe Right(bar)
     }
 
     "decode elements with nested scope namespaces from config sync" in

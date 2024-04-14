@@ -7,7 +7,7 @@ ThisBuild / organization := "dev.valentiay"
 ThisBuild / version := {
   val branch = git.gitCurrentBranch.value
   if (branch == "master") publishVersion.value
-  else s"${publishVersion.value}-$branch-SNAPSHOT"
+  else s"${publishVersion.value}-$branch-SNAPSHOT".replace("/", "_")
 }
 
 ThisBuild / publishMavenStyle      := true
