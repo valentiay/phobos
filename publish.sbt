@@ -10,13 +10,13 @@ ThisBuild / version := {
   else s"${publishVersion.value}-$branch-SNAPSHOT".replace("/", "_")
 }
 
-ThisBuild / publishMavenStyle      := true
+ThisBuild / publishMavenStyle := true
 //ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 ThisBuild / publishTo :=
   (if (!isSnapshot.value) {
      sonatypePublishToBundle.value
    } else {
-     Some(Opts.resolver.sonatypeSnapshots)
+     Opts.resolver.sonatypeOssSnapshots.headOption
    })
 
 ThisBuild / scmInfo := Some(
