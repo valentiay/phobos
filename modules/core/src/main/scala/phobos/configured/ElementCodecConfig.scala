@@ -57,7 +57,9 @@ import phobos.Namespace
   *   to avoid duplicate namespace declarations. No namespaces are defined by default.
   *
   * @param removeNamespaces
-  *   Affects only decoders. Remove all namespaces in xml
+  *   Affects only decoders. Remove all namespaces in the node and propagate this to other inner decoders if inner
+  *   decoder hasn't explicitly set this setting to "false". Otherwise node that has explicitly disabled setting will
+  *   stop propagation.
   */
 final case class ElementCodecConfig(
     transformAttributeNames: String => String,
