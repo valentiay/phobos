@@ -1660,6 +1660,61 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       decodeElementsWithNestedScopeNamespacesFromConfig(pure)
     "decode elements with nested scope namespaces from config async" in
       decodeElementsWithNestedScopeNamespacesFromConfig(fromIterable)
+
+    "remove namespaces by configuration" in {
+
+      case class Foo(boo: Int)
+      implicit val xmlFooDecoder: XmlDecoder[Foo] = deriveXmlDecoderConfigured[Foo]("Foo", ElementCodecConfig.default.withRemoveNamespaces)
+
+      case class Baz(a: Int)
+      case class Bar(baz: Baz)
+      implicit val xmlBarDecoder: XmlDecoder[Bar] = deriveXmlDecoderConfigured[Bar]("Bar", ElementCodecConfig.default.withRemoveNamespaces)
+
+      XmlDecoder[Foo].decode("""<Foo xmlns="http://example.com"><boo>1</boo></Foo>""") match {
+        case Left(failure) => fail(s"Decoding result expected, got: ${failure.getMessage}")
+        case Right(value) => value.boo shouldBe 1
+      }
+
+      XmlDecoder[Foo].decode(
+        """
+          |<Foo xmlns="http://example.com" xmlns:a="http://example.com">
+          |  <boo>1</boo>
+          |</Foo>""".stripMargin) match {
+        case Left(failure) => fail(s"Decoding result expected, got: ${failure.getMessage}")
+        case Right(value) => value.boo shouldBe 1
+      }
+
+      XmlDecoder[Foo].decode(
+        """
+          |<Foo xmlns="http://example.com" xmlns:a="http://example.com">
+          |  <boo xmlns="http://example.com">1</boo>
+          |</Foo>""".stripMargin) match {
+        case Left(failure) => fail(s"Decoding result expected, got: ${failure.getMessage}")
+        case Right(value) => value.boo shouldBe 1
+      }
+
+      XmlDecoder[Foo].decode(
+        """
+          |<Foo xmlns="http://example.com" xmlns:a="http://example.com">
+          |  <a:boo xmlns="http://example.com">1</a:boo>
+          |</Foo>""".stripMargin) match {
+        case Left(failure) => fail(s"Decoding result expected, got: ${failure.getMessage}")
+        case Right(value) => value.boo shouldBe 1
+      }
+
+      XmlDecoder[Bar].decode(
+        """
+          |<Bar xmlns="http://example.com">
+          |  <baz xmlns="http://example.com">
+          |    <a>1</a>
+          |  </baz>
+          |</Bar>
+          |""".stripMargin
+      ) match {
+        case Left(failure) => fail(s"Decoding result expected, got: ${failure.getMessage}")
+        case Right(value) => value.baz.a shouldBe 1
+      }
+    }
   }
 
   "Decoder derivation compilation" should {

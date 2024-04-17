@@ -39,16 +39,20 @@ class Cursor(private val sr: XmlStreamReader) {
     scopeDefaultNamespaceStack = uri :: scopeDefaultNamespaceStack
   }
 
-  var ignoreNamespaces: Boolean = false
-  def setIgnoreNamespaces(isIgnoreNamespaces: Boolean): Unit = {
-    ignoreNamespaces = isIgnoreNamespaces
-  }
-
   def getScopeDefaultNamespace: Option[String] =
     scopeDefaultNamespaceStack.headOption
 
   def unsetScopeDefaultNamespace(): Unit = {
     scopeDefaultNamespaceStack = scopeDefaultNamespaceStack.drop(1)
+  }
+
+  var removeNamespaces: List[Boolean] = List.empty
+
+  def setRemoveNamespaces(isRemoveNamespaces: Boolean): Unit =
+    removeNamespaces = isRemoveNamespaces :: removeNamespaces
+
+  def unsetRemoveNamespaces(): Unit = {
+    removeNamespaces = removeNamespaces.drop(1)
   }
 
   def getAttributeInfo: AttributeInfo                         = sr.getAttributeInfo
@@ -105,7 +109,8 @@ class Cursor(private val sr: XmlStreamReader) {
   def getElementText: String = sr.getElementText
 //  def nextTag: Int = sr.nextTag
 
-  def getNamespaceURI(prefix: String): String                            = sr.getNamespaceURI(prefix)
+  def getNamespaceURI(prefix: String): String =
+    if (removeNamespaces.headOption.getOrElse(false)) "" else sr.getNamespaceURI(prefix)
   def isStartElement: Boolean                                            = sr.isStartElement
   def isEndElement: Boolean                                              = sr.isEndElement
   def isCharacters: Boolean                                              = sr.isCharacters
@@ -121,11 +126,12 @@ class Cursor(private val sr: XmlStreamReader) {
   def isAttributeSpecified(index: Int): Boolean                          = sr.isAttributeSpecified(index)
   def getNamespaceCount: Int                                             = sr.getNamespaceCount
   def getNamespacePrefix(index: Int): String                             = sr.getNamespacePrefix(index)
-  def getNamespaceURI(index: Int): String                                = if (ignoreNamespaces) "" else sr.getNamespaceURI(index)
-  def getNamespaceContext: NamespaceContext                              = sr.getNamespaceContext
-  def getEventType: Int                                                  = sr.getEventType
-  def getText: String                                                    = sr.getText
-  def getTextCharacters: Array[Char]                                     = sr.getTextCharacters
+  def getNamespaceURI(index: Int): String =
+    if (removeNamespaces.headOption.getOrElse(false)) "" else sr.getNamespaceURI(index)
+  def getNamespaceContext: NamespaceContext = sr.getNamespaceContext
+  def getEventType: Int                     = sr.getEventType
+  def getText: String                       = sr.getText
+  def getTextCharacters: Array[Char]        = sr.getTextCharacters
   def getTextCharacters(sourceStart: Int, target: Array[Char], targetStart: Int, length: Int): Int =
     sr.getTextCharacters(sourceStart, target, targetStart, length)
   def getTextStart: Int                  = sr.getTextStart
@@ -136,7 +142,7 @@ class Cursor(private val sr: XmlStreamReader) {
   def getName: QName                     = sr.getName
   def getLocalName: String               = sr.getLocalName
   def hasName: Boolean                   = sr.hasName
-  def getNamespaceURI: String            = if (ignoreNamespaces) "" else sr.getNamespaceURI
+  def getNamespaceURI: String            = if (removeNamespaces.headOption.getOrElse(false)) "" else sr.getNamespaceURI
   def getPrefix: String                  = sr.getPrefix
   def getVersion: String                 = sr.getVersion
   def isStandalone: Boolean              = sr.isStandalone
