@@ -37,6 +37,7 @@ object TextEncoder extends TextLiteralInstances {
       def encodeAsText(a: Unit, sw: PhobosStreamWriter): Unit = ()
     }
 
+  implicit val nothingEncoder: TextEncoder[Nothing]                     = unitEncoder.contramap[Nothing](_ => ())
   implicit val booleanEncoder: TextEncoder[Boolean]                     = stringEncoder.contramap(_.toString)
   implicit val javaBooleanEncoder: TextEncoder[java.lang.Boolean]       = booleanEncoder.contramap(_.booleanValue())
   implicit val charEncoder: TextEncoder[Char]                           = stringEncoder.contramap(_.toString)
