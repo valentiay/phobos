@@ -1667,6 +1667,7 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       implicit val xmlFooDecoder: XmlDecoder[Foo] = deriveXmlDecoderConfigured[Foo]("Foo", ElementCodecConfig.default.withRemoveNamespaces)
 
       case class Baz(a: Int)
+      implicit val elementBazDecoder: ElementDecoder[Baz] = deriveElementDecoder
       case class Bar(baz: Baz)
       implicit val xmlBarDecoder: XmlDecoder[Bar] = deriveXmlDecoderConfigured[Bar]("Bar", ElementCodecConfig.default.withRemoveNamespaces)
 
