@@ -71,7 +71,6 @@ Where `<module>` is module name.
 
 | Module name | Functionality  |
 |-------------|----------------|
-| core-3-0    | Core module compiled for Scala 3.0. |
 | ast         | Support for parsing XML into AST |
 | akka-http   | Marshallers and unmarshallers for [akka-http](https://doc.akka.io/docs/akka-http/current/) |
 | akka-stream | Streaming decoding support for [akka-stream](https://doc.akka.io/docs/akka/current/stream/index.html)|
