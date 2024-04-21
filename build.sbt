@@ -8,8 +8,8 @@ lazy val commonDependencies =
   libraryDependencies ++=
     List(
       "com.fasterxml"  % "aalto-xml" % "1.3.2",
-      "org.scalatest" %% "scalatest" % "3.2.17" % "test",
-      "org.scalactic" %% "scalactic" % "3.2.17" % "test",
+      "org.scalatest" %% "scalatest" % "3.2.18" % "test",
+      "org.scalactic" %% "scalactic" % "3.2.18" % "test",
     ) ++
       (CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, 12)) => List(
@@ -85,7 +85,7 @@ lazy val `ast` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "org.scalacheck"         %% "scalacheck"             % "1.17.0" % "test",
+        "org.scalacheck"         %% "scalacheck"             % "1.17.1" % "test",
         "com.softwaremill.diffx" %% "diffx-scalatest-should" % "0.9.0"  % "test",
         "org.typelevel"          %% "cats-core"              % "2.10.0",
       ),
@@ -136,8 +136,8 @@ lazy val `fs2` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "co.fs2" %% "fs2-core" % "3.9.4",
-        "co.fs2" %% "fs2-io"   % "3.9.4" % "test",
+        "co.fs2" %% "fs2-core" % "3.10.2",
+        "co.fs2" %% "fs2-io"   % "3.10.2" % "test",
       ),
     )
     .jvmPlatform(scala3Versions)
