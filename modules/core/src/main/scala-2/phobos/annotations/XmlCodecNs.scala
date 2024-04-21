@@ -1,11 +1,11 @@
 package phobos.annotations
 
-import phobos.Namespace
-import phobos.configured.ElementCodecConfig
-
 import scala.annotation.nowarn
 import scala.annotation.{StaticAnnotation, compileTimeOnly}
 import scala.reflect.macros.blackbox
+
+import phobos.Namespace
+import phobos.configured.ElementCodecConfig
 
 @compileTimeOnly("enable macro paradise to expand macro annotations")
 class XmlCodecNs[T: Namespace](localName: String, namespace: T, config: ElementCodecConfig = ElementCodecConfig.default)

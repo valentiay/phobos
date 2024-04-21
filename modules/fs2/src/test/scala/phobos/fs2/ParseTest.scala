@@ -1,15 +1,16 @@
 package phobos.fs2
 
-import org.scalatest.wordspec.AsyncWordSpec
-import phobos.decoding.XmlDecoder
-import phobos.syntax.text
-import phobos.fs2._
-import fs2.Stream
-import cats.effect.IO
-import cats.effect.unsafe.{IORuntimeConfig, Scheduler, IORuntime}
-import org.scalatest.Inspectors
 import phobos.decoding.DecodingError
+import phobos.decoding.XmlDecoder
 import phobos.derivation.semiauto.deriveXmlDecoder
+import phobos.fs2._
+import phobos.syntax.text
+
+import cats.effect.IO
+import cats.effect.unsafe.{IORuntime, IORuntimeConfig, Scheduler}
+import fs2.Stream
+import org.scalatest.Inspectors
+import org.scalatest.wordspec.AsyncWordSpec
 
 class ParseTest extends AsyncWordSpec with Inspectors {
   val (scheduler, shutdown) = Scheduler.createDefaultScheduler()
@@ -23,51 +24,51 @@ class ParseTest extends AsyncWordSpec with Inspectors {
     val simpleSequential =
       ("root" :: Nil) ->
         """|<root>
-         |  <foo>1</foo>
-         |  <foo>2</foo>
-         |  <foo>3</foo>
-         |  <foo>4</foo>
-         |</root>
-         |""".stripMargin
+           |  <foo>1</foo>
+           |  <foo>2</foo>
+           |  <foo>3</foo>
+           |  <foo>4</foo>
+           |</root>
+           |""".stripMargin
 
     val nestedRepetetive =
       ("root" :: "sub" :: Nil) ->
         """|<root>
-         |  <sub>
-         |    <foo>1</foo>
-         |    <foo>2</foo>
-         |  </sub>
-         |  <sub>
-         |    <foo>3</foo>
-         |    <foo>4</foo>
-         |  </sub>
-         |</root>
-         |""".stripMargin
+           |  <sub>
+           |    <foo>1</foo>
+           |    <foo>2</foo>
+           |  </sub>
+           |  <sub>
+           |    <foo>3</foo>
+           |    <foo>4</foo>
+           |  </sub>
+           |</root>
+           |""".stripMargin
 
     val nestedRepetetiveIcnludingOtherTags =
       ("root" :: "sub" :: Nil) ->
         """|<root>
-         |  <sub>
-         |    <foo>1</foo>
-         |    <!-- skip it -->
-         |    <bar>nope</bar>
-         |    <foo>2</foo>
-         |  </sub>
-         |  <sub>
-         |    <foo>3</foo>
-         |    <foo>4</foo>
-         |  </sub>
-         |  <!-- skip it too -->
-         |  <bar>nope</bar>
-         |  <sub>
-         |    <foo>5</foo>
-         |  </sub>
-         |  <sub>
-         |    <!-- and this one -->
-         |    <bar>nope</bar>
-         |  </sub>
-         |</root>
-         |""".stripMargin
+           |  <sub>
+           |    <foo>1</foo>
+           |    <!-- skip it -->
+           |    <bar>nope</bar>
+           |    <foo>2</foo>
+           |  </sub>
+           |  <sub>
+           |    <foo>3</foo>
+           |    <foo>4</foo>
+           |  </sub>
+           |  <!-- skip it too -->
+           |  <bar>nope</bar>
+           |  <sub>
+           |    <foo>5</foo>
+           |  </sub>
+           |  <sub>
+           |    <!-- and this one -->
+           |    <bar>nope</bar>
+           |  </sub>
+           |</root>
+           |""".stripMargin
 
     val all = simpleSequential :: nestedRepetetive :: nestedRepetetiveIcnludingOtherTags :: Nil
   }

@@ -1,8 +1,8 @@
 package phobos.encoding
 
-import com.fasterxml.aalto.out._
-
 import java.io.OutputStream
+
+import com.fasterxml.aalto.out._
 
 trait EncoderTestBase {
   def buildStreamWriter(wc: WriterConfig, os: OutputStream): PhobosStreamWriter = {

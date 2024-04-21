@@ -1,16 +1,16 @@
 package phobos.decoding
 
 import java.time._
+import java.time.format.DateTimeFormatter
 import java.util.{Base64, UUID}
-
-import com.fasterxml.aalto.AsyncXMLStreamReader
 import javax.xml.stream.XMLStreamConstants
+import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
+
 import phobos.decoding.ElementDecoder.{EMappedDecoder, MappedDecoder}
 import phobos.derivation.auto.ElementDecoderAutoInstances
 
-import scala.annotation.tailrec
-import scala.collection.mutable.ListBuffer
-import java.time.format.DateTimeFormatter
+import com.fasterxml.aalto.AsyncXMLStreamReader
 
 /** Warning! This is a complicated internal API which may change in future. Do not implement or use this trait directly
   * unless you know what you are doing.

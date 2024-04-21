@@ -1,15 +1,15 @@
 package phobos.derivation
 
-import phobos.Namespace
-import phobos.configured.ElementCodecConfig
-import phobos.syntax.*
-import phobos.encoding.*
-import phobos.derivation.common.*
-
 import scala.annotation.nowarn
 import scala.compiletime.*
-import scala.quoted.*
 import scala.deriving.Mirror
+import scala.quoted.*
+
+import phobos.Namespace
+import phobos.configured.ElementCodecConfig
+import phobos.derivation.common.*
+import phobos.encoding.*
+import phobos.syntax.*
 
 @nowarn("msg=Use errorAndAbort")
 object encoder {

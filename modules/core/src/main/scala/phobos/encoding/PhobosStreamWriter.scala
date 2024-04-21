@@ -3,10 +3,11 @@ package phobos.encoding
 import java.math.BigInteger
 import javax.xml.namespace.{NamespaceContext, QName}
 import javax.xml.stream.XMLStreamException
-import org.codehaus.stax2.typed.Base64Variant
-import org.codehaus.stax2.{XMLStreamLocation2, XMLStreamReader2, XMLStreamWriter2}
-import org.codehaus.stax2.validation.{ValidationProblemHandler, XMLValidationSchema, XMLValidator}
+
 import PhobosStreamWriter.prefixBase
+import org.codehaus.stax2.typed.Base64Variant
+import org.codehaus.stax2.validation.{ValidationProblemHandler, XMLValidationSchema, XMLValidator}
+import org.codehaus.stax2.{XMLStreamLocation2, XMLStreamReader2, XMLStreamWriter2}
 
 /** [[PhobosStreamWriter]] implements most methods of [[XMLStreamWriter2]], but it does not extends [[XMLStreamWriter2]]
   *

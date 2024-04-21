@@ -1,11 +1,11 @@
 package phobos.encoding
 
+import java.io.ByteArrayOutputStream
+import java.time.OffsetDateTime
+
 import com.fasterxml.aalto.out.WriterConfig
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-
-import java.io.ByteArrayOutputStream
-import java.time.OffsetDateTime
 
 class TextEncoderTest extends AnyWordSpec with Matchers with EncoderTestBase {
   "TextEncoder instance" should {

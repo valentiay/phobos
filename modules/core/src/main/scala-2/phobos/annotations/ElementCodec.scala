@@ -1,10 +1,10 @@
 package phobos.annotations
 
-import phobos.configured.ElementCodecConfig
-
 import scala.annotation.nowarn
 import scala.annotation.{StaticAnnotation, compileTimeOnly}
 import scala.reflect.macros.blackbox
+
+import phobos.configured.ElementCodecConfig
 
 @compileTimeOnly("enable macro paradise to expand macro annotations")
 final class ElementCodec(config: ElementCodecConfig = ElementCodecConfig.default) extends StaticAnnotation {

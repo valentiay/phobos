@@ -3,10 +3,12 @@ package phobos.encoding
 import java.io.{ByteArrayOutputStream, StringReader, StringWriter}
 import javax.xml.transform._
 import javax.xml.transform.stream._
-import com.fasterxml.aalto.stax.OutputFactoryImpl
-import org.codehaus.stax2.XMLStreamWriter2
+
 import phobos.Namespace
 import phobos.encoding.XmlEncoder.XmlEncoderConfig
+
+import com.fasterxml.aalto.stax.OutputFactoryImpl
+import org.codehaus.stax2.XMLStreamWriter2
 
 /** Typeclass for encoding XML document to an A value.
   *

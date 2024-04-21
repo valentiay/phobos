@@ -1,15 +1,16 @@
 package phobos.fs2
 
-import org.scalatest.wordspec.AsyncWordSpec
-import phobos.decoding.XmlDecoder
-import phobos.syntax.text
-import fs2.Stream
-import cats.effect.IO
+import scala.annotation.nowarn
+
 import phobos.decoding.ElementDecoder
+import phobos.decoding.XmlDecoder
 import phobos.derivation.semiauto.deriveElementDecoder
 import phobos.derivation.semiauto.deriveXmlDecoder
+import phobos.syntax.text
 
-import scala.annotation.nowarn
+import cats.effect.IO
+import fs2.Stream
+import org.scalatest.wordspec.AsyncWordSpec
 
 @nowarn("msg=is never used")
 class Fs2Test extends AsyncWordSpec {

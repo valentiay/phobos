@@ -1,10 +1,11 @@
 package phobos.raw
 
+import phobos.Namespace
+import phobos.ast._
+import phobos.decoding.XmlDecoder
+
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import phobos.Namespace
-import phobos.decoding.XmlDecoder
-import phobos.ast._
 
 class FlattenElementsDecoderTest extends AnyWordSpec with Matchers {
 

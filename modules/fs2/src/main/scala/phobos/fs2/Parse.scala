@@ -1,12 +1,14 @@
 package phobos.fs2
 
-import cats.data.NonEmptyList
-import cats.effect.Sync
-import fs2._
-import phobos.decoding._
-import com.fasterxml.aalto.AsyncXMLStreamReader.EVENT_INCOMPLETE
 import javax.xml.stream.XMLStreamConstants._
 import scala.annotation.tailrec
+
+import phobos.decoding._
+
+import cats.data.NonEmptyList
+import cats.effect.Sync
+import com.fasterxml.aalto.AsyncXMLStreamReader.EVENT_INCOMPLETE
+import fs2._
 
 object Parse {
   def oneDocument(rootElement: String) = OneDocument(NonEmptyList.one(rootElement))

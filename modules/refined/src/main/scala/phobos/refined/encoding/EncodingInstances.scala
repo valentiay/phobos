@@ -1,7 +1,8 @@
 package phobos.refined.encoding
 
-import eu.timepit.refined.api.RefType
 import phobos.encoding._
+
+import eu.timepit.refined.api.RefType
 
 trait EncodingInstances {
 

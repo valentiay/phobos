@@ -1,9 +1,11 @@
 package phobos.monix.ops
 
 import javax.xml.stream.XMLStreamConstants
+
+import phobos.decoding.{Cursor, ElementDecoder, XmlDecoder, XmlStreamReader}
+
 import monix.eval.Task
 import monix.reactive.Observable
-import phobos.decoding.{Cursor, ElementDecoder, XmlDecoder, XmlStreamReader}
 
 private[phobos] trait MonixOps {
   implicit def DecoderOps[A](xmlDecoder: XmlDecoder[A]): DecoderOps[A] = new DecoderOps[A](xmlDecoder)

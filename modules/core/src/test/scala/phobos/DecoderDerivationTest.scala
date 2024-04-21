@@ -1,16 +1,17 @@
 package phobos
 
-import org.scalatest.Assertion
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers
-import phobos.SealedClasses.{Animal, Cat, Cow, Dog}
-import phobos.decoding.{AttributeDecoder, DecodingError, ElementDecoder, TextDecoder, XmlDecoder}
-import phobos.syntax._
-import phobos.configured.naming._
-import phobos.configured.ElementCodecConfig
-import phobos.derivation.semiauto._
-
 import scala.annotation.nowarn
+
+import phobos.SealedClasses.{Animal, Cat, Cow, Dog}
+import phobos.configured.ElementCodecConfig
+import phobos.configured.naming._
+import phobos.decoding.{AttributeDecoder, DecodingError, ElementDecoder, TextDecoder, XmlDecoder}
+import phobos.derivation.semiauto._
+import phobos.syntax._
+
+import org.scalatest.Assertion
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 @nowarn("msg=is never used")
 class DecoderDerivationTest extends AnyWordSpec with Matchers {
@@ -126,9 +127,9 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
                       | <Wrapper/>
                     """.stripMargin
       val string3 = """<?xml version='1.0' encoding='UTF-8'?>
-                       | <Wrapper>
-                       |   <foo b="b"/>
-                       | </Wrapper>
+                      | <Wrapper>
+                      |   <foo b="b"/>
+                      | </Wrapper>
                     """.stripMargin
       val decoded1 = XmlDecoder[Wrapper].decodeFromIterable(toList(string1))
       val decoded2 = XmlDecoder[Wrapper].decodeFromIterable(toList(string2))
@@ -985,17 +986,17 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       val fishDecoder = XmlDecoder.fromElementDecoder[SealedClasses.Pisces]("fish")
 
       val string1 = """<?xml version='1.0' encoding='UTF-8'?>
-                        | <fish xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="ClownFish">
-                        |   <name>Nemo</name>
-                        |   <finNumber>1</finNumber>
-                        | </fish>
+                      | <fish xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="ClownFish">
+                      |   <name>Nemo</name>
+                      |   <finNumber>1</finNumber>
+                      | </fish>
                       """.stripMargin
 
       val string2 = """<?xml version='1.0' encoding='UTF-8'?>
-                        | <fish xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="carcharodon_carcharias">
-                        |   <name>Bill</name>
-                        |   <teethNumber>20000000000</teethNumber>
-                        | </fish>
+                      | <fish xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="carcharodon_carcharias">
+                      |   <name>Bill</name>
+                      |   <teethNumber>20000000000</teethNumber>
+                      | </fish>
                       """.stripMargin
 
       assert(
@@ -1014,20 +1015,20 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       implicit val xmlDecoder: XmlDecoder[Zoo] = deriveXmlDecoder("zoo")
 
       val string = """<?xml version='1.0' encoding='UTF-8'?>
-                      | <zoo>
-                      |   <cow>
-                      |     <moo>12.432</moo>
-                      |   </cow>
-                      |   <cat>
-                      |     <meow>meow</meow>
-                      |   </cat>
-                      |   <dog>
-                      |     <woof>1234</woof>
-                      |   </dog>
-                      |   <cat>
-                      |     <meow>nya</meow>
-                      |   </cat>
-                      | </zoo>
+                     | <zoo>
+                     |   <cow>
+                     |     <moo>12.432</moo>
+                     |   </cow>
+                     |   <cat>
+                     |     <meow>meow</meow>
+                     |   </cat>
+                     |   <dog>
+                     |     <woof>1234</woof>
+                     |   </dog>
+                     |   <cat>
+                     |     <meow>nya</meow>
+                     |   </cat>
+                     | </zoo>
                     """.stripMargin
       val zoo = Zoo(List(Cow(12.432), Cat("meow"), Dog(1234), Cat("nya")))
       XmlDecoder[Zoo].decodeFromIterable(toList(string)) shouldBe Right(zoo)
@@ -1375,13 +1376,13 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
       val bar = Bar("d value", Foo(1, "b value", 3.0), 'e')
       val string =
         """<?xml version='1.0' encoding='UTF-8'?>
-        | <ans1:bar xmlns:ans1="example.org" ans1:d="d value" ans1:e="e">
-        |   <foo>
-        |     <a>1</a>
-        |     <b>b value</b>
-        |     <c>3.0</c>
-        |   </foo>
-        | </ans1:bar>
+          | <ans1:bar xmlns:ans1="example.org" ans1:d="d value" ans1:e="e">
+          |   <foo>
+          |     <a>1</a>
+          |     <b>b value</b>
+          |     <c>3.0</c>
+          |   </foo>
+          | </ans1:bar>
       """.stripMargin
       val decoded = XmlDecoder[Bar].decodeFromIterable(toList(string))
 
@@ -1664,43 +1665,42 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
     "remove namespaces by configuration" in {
 
       case class Foo(boo: Int)
-      implicit val xmlFooDecoder: XmlDecoder[Foo] = deriveXmlDecoderConfigured[Foo]("Foo", ElementCodecConfig.default.withRemoveNamespaces)
+      implicit val xmlFooDecoder: XmlDecoder[Foo] =
+        deriveXmlDecoderConfigured[Foo]("Foo", ElementCodecConfig.default.withRemoveNamespaces)
 
       case class Baz(a: Int)
       implicit val elementBazDecoder: ElementDecoder[Baz] = deriveElementDecoder
       case class Bar(baz: Baz)
-      implicit val xmlBarDecoder: XmlDecoder[Bar] = deriveXmlDecoderConfigured[Bar]("Bar", ElementCodecConfig.default.withRemoveNamespaces)
+      implicit val xmlBarDecoder: XmlDecoder[Bar] =
+        deriveXmlDecoderConfigured[Bar]("Bar", ElementCodecConfig.default.withRemoveNamespaces)
 
       XmlDecoder[Foo].decode("""<Foo xmlns="http://example.com"><boo>1</boo></Foo>""") match {
         case Left(failure) => fail(s"Decoding result expected, got: ${failure.getMessage}")
-        case Right(value) => value.boo shouldBe 1
+        case Right(value)  => value.boo shouldBe 1
       }
 
-      XmlDecoder[Foo].decode(
-        """
-          |<Foo xmlns="http://example.com" xmlns:a="http://example.com">
-          |  <boo>1</boo>
-          |</Foo>""".stripMargin) match {
+      XmlDecoder[Foo].decode("""
+                               |<Foo xmlns="http://example.com" xmlns:a="http://example.com">
+                               |  <boo>1</boo>
+                               |</Foo>""".stripMargin) match {
         case Left(failure) => fail(s"Decoding result expected, got: ${failure.getMessage}")
-        case Right(value) => value.boo shouldBe 1
+        case Right(value)  => value.boo shouldBe 1
       }
 
-      XmlDecoder[Foo].decode(
-        """
-          |<Foo xmlns="http://example.com" xmlns:a="http://example.com">
-          |  <boo xmlns="http://example.com">1</boo>
-          |</Foo>""".stripMargin) match {
+      XmlDecoder[Foo].decode("""
+                               |<Foo xmlns="http://example.com" xmlns:a="http://example.com">
+                               |  <boo xmlns="http://example.com">1</boo>
+                               |</Foo>""".stripMargin) match {
         case Left(failure) => fail(s"Decoding result expected, got: ${failure.getMessage}")
-        case Right(value) => value.boo shouldBe 1
+        case Right(value)  => value.boo shouldBe 1
       }
 
-      XmlDecoder[Foo].decode(
-        """
-          |<Foo xmlns="http://example.com" xmlns:a="http://example.com">
-          |  <a:boo xmlns="http://example.com">1</a:boo>
-          |</Foo>""".stripMargin) match {
+      XmlDecoder[Foo].decode("""
+                               |<Foo xmlns="http://example.com" xmlns:a="http://example.com">
+                               |  <a:boo xmlns="http://example.com">1</a:boo>
+                               |</Foo>""".stripMargin) match {
         case Left(failure) => fail(s"Decoding result expected, got: ${failure.getMessage}")
-        case Right(value) => value.boo shouldBe 1
+        case Right(value)  => value.boo shouldBe 1
       }
 
       XmlDecoder[Bar].decode(
@@ -1710,10 +1710,10 @@ class DecoderDerivationTest extends AnyWordSpec with Matchers {
           |    <a>1</a>
           |  </baz>
           |</Bar>
-          |""".stripMargin
+          |""".stripMargin,
       ) match {
         case Left(failure) => fail(s"Decoding result expected, got: ${failure.getMessage}")
-        case Right(value) => value.baz.a shouldBe 1
+        case Right(value)  => value.baz.a shouldBe 1
       }
     }
   }

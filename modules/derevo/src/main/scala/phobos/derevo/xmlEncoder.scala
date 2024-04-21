@@ -1,7 +1,8 @@
 package phobos.derevo
 
-import derevo.{Derevo, Derivation, delegating}
 import phobos.encoding.XmlEncoder
+
+import derevo.{Derevo, Derivation, delegating}
 
 @delegating("phobos.derivation.semiauto.deriveXmlEncoder")
 object xmlEncoder extends Derivation[XmlEncoder] {

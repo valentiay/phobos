@@ -1,8 +1,10 @@
 package phobos.ast
 
-import phobos.traverse.DecodingTraversalLogic
-import AstTraversalLogic._
 import scala.collection.mutable
+
+import phobos.traverse.DecodingTraversalLogic
+
+import AstTraversalLogic._
 
 class AstTraversalLogic private () extends DecodingTraversalLogic[Accumulator, XmlEntry] {
   override def newAcc(): Accumulator = Accumulator.ParentNode()

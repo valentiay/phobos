@@ -1,16 +1,17 @@
 package phobos
 
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers
-import phobos.SealedClasses.{Animal, Cat, Cow, Dog}
-import phobos.encoding.{AttributeEncoder, ElementEncoder, TextEncoder, XmlEncoder}
-import phobos.testString._
-import phobos.syntax._
-import phobos.configured.naming._
-import phobos.configured.ElementCodecConfig
-import phobos.derivation.semiauto._
-
 import scala.annotation.nowarn
+
+import phobos.SealedClasses.{Animal, Cat, Cow, Dog}
+import phobos.configured.ElementCodecConfig
+import phobos.configured.naming._
+import phobos.derivation.semiauto._
+import phobos.encoding.{AttributeEncoder, ElementEncoder, TextEncoder, XmlEncoder}
+import phobos.syntax._
+import phobos.testString._
+
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 @nowarn("msg=is never used")
 class EncoderDerivationTest extends AnyWordSpec with Matchers {
@@ -28,16 +29,16 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <bar>
-            |   <d>d value</d>
-            |   <foo>
-            |     <a>1</a>
-            |     <b>b value</b>
-            |     <c>3.0</c>
-            |   </foo>
-            |   <e>e</e>
-            | </bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <bar>
+                  |   <d>d value</d>
+                  |   <foo>
+                  |     <a>1</a>
+                  |     <b>b value</b>
+                  |     <c>3.0</c>
+                  |   </foo>
+                  |   <e>e</e>
+                  | </bar>
           """.stripMargin.minimized),
       )
     }
@@ -54,14 +55,14 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <bar e="e">
-            |   <d>d value</d>
-            |   <foo b="b value">
-            |     <a>1</a>
-            |     <c>3.0</c>
-            |   </foo>
-            | </bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <bar e="e">
+                  |   <d>d value</d>
+                  |   <foo b="b value">
+                  |     <a>1</a>
+                  |     <c>3.0</c>
+                  |   </foo>
+                  | </bar>
           """.stripMargin.minimized),
       )
     }
@@ -84,11 +85,11 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         xml ==
           Right("""
-          | <?xml version='1.0' encoding='UTF-8'?>
-          | <qux>
-          |   <str>constant</str>
-          |   <foo bar="a74153b">text</foo>
-          | </qux>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <qux>
+                  |   <str>constant</str>
+                  |   <foo bar="a74153b">text</foo>
+                  | </qux>
           """.stripMargin.minimized),
       )
     }
@@ -105,18 +106,18 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         xml1 ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <Wrapper>
-            |   <foo b="b">
-            |     <a>1</a>
-            |     <c>2.0</c>
-            |   </foo>
-            | </Wrapper>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <Wrapper>
+                  |   <foo b="b">
+                  |     <a>1</a>
+                  |     <c>2.0</c>
+                  |   </foo>
+                  | </Wrapper>
           """.stripMargin.minimized) &&
           xml2 ==
           Right("""
-              | <?xml version='1.0' encoding='UTF-8'?>
-              | <Wrapper/>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <Wrapper/>
             """.stripMargin.minimized),
       )
     }
@@ -142,28 +143,28 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         xml1 ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <foos>
-            |   <foo b="b value">
-            |     <a>1</a>
-            |     <c>3.0</c>
-            |   </foo>
-            |   <foo>
-            |     <a>2</a>
-            |     <c>4.0</c>
-            |   </foo>
-            |   <foo b="It&apos;s three">
-            |     <a>3</a>
-            |   </foo>
-            |   <foo>
-            |     <a>4</a>
-            |   </foo>
-            | </foos>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <foos>
+                  |   <foo b="b value">
+                  |     <a>1</a>
+                  |     <c>3.0</c>
+                  |   </foo>
+                  |   <foo>
+                  |     <a>2</a>
+                  |     <c>4.0</c>
+                  |   </foo>
+                  |   <foo b="It&apos;s three">
+                  |     <a>3</a>
+                  |   </foo>
+                  |   <foo>
+                  |     <a>4</a>
+                  |   </foo>
+                  | </foos>
           """.stripMargin.minimized)
           && xml2 ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <foos/>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <foos/>
           """.stripMargin.minimized),
       )
     }
@@ -178,7 +179,7 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <foo>Zm9vYmFy</foo>
+                  | <foo>Zm9vYmFy</foo>
           """.stripMargin.minimized),
       )
     }
@@ -195,12 +196,12 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <bar>
-            |   <d>d value</d>
-            |   <foo a="1" b="b value">3.0</foo>
-            |   <e>e</e>
-            | </bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <bar>
+                  |   <d>d value</d>
+                  |   <foo a="1" b="b value">3.0</foo>
+                  |   <e>e</e>
+                  | </bar>
           """.stripMargin.minimized),
       )
     }
@@ -221,22 +222,22 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <foo>
-            |    <foo>
-            |        <foo>
-            |            <foo>
-            |               <foo>
-            |                 <das>4</das>
-            |               </foo>
-            |               <das>3</das>
-            |            </foo>
-            |            <das>2</das>
-            |        </foo>
-            |        <das>1</das>
-            |    </foo>
-            |    <das>0</das>
-            | </foo>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <foo>
+                  |    <foo>
+                  |        <foo>
+                  |            <foo>
+                  |               <foo>
+                  |                 <das>4</das>
+                  |               </foo>
+                  |               <das>3</das>
+                  |            </foo>
+                  |            <das>2</das>
+                  |        </foo>
+                  |        <das>1</das>
+                  |    </foo>
+                  |    <das>0</das>
+                  | </foo>
           """.stripMargin.minimized),
       )
     }
@@ -251,8 +252,8 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <foo>Sending item to <count>1</count><buz>Buzz</buz></foo>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <foo>Sending item to <count>1</count><buz>Buzz</buz></foo>
           """.stripMargin.minimized),
       )
     }
@@ -267,10 +268,10 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-             | <?xml version='1.0' encoding='UTF-8'?>
-             | <foo baz="Esca&quot;&apos;&lt;>&amp;pe">
-             |   <bar>Esca"'&lt;>&amp;pe</bar>
-             | </foo>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <foo baz="Esca&quot;&apos;&lt;>&amp;pe">
+                  |   <bar>Esca"'&lt;>&amp;pe</bar>
+                  | </foo>
           """.stripMargin.minimized),
       )
     }
@@ -287,16 +288,16 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <bar>
-            |   <d>d value</d>
-            |   <theFoo>
-            |     <a>1</a>
-            |     <theB>b value</theB>
-            |     <c>3.0</c>
-            |   </theFoo>
-            |   <e>e</e>
-            | </bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <bar>
+                  |   <d>d value</d>
+                  |   <theFoo>
+                  |     <a>1</a>
+                  |     <theB>b value</theB>
+                  |     <c>3.0</c>
+                  |   </theFoo>
+                  |   <e>e</e>
+                  | </bar>
           """.stripMargin.minimized),
       )
     }
@@ -311,11 +312,11 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            |   <foo theB="b value">
-            |     <a>1</a>
-            |     <c>3.0</c>
-            |   </foo>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  |   <foo theB="b value">
+                  |     <a>1</a>
+                  |     <c>3.0</c>
+                  |   </foo>
           """.stripMargin.minimized),
       )
     }
@@ -332,12 +333,12 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <bar>
-            |   <d>d value</d>
-            |   <foo a="1" theB="b value">3.0</foo>
-            |   <e>e</e>
-            | </bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <bar>
+                  |   <d>d value</d>
+                  |   <foo a="1" theB="b value">3.0</foo>
+                  |   <e>e</e>
+                  | </bar>
           """.stripMargin.minimized),
       )
     }
@@ -355,12 +356,12 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            |<?xml version='1.0' encoding='UTF-8'?>
-            | <Bar>
-            |   <SomeTopName>d value</SomeTopName>
-            |   <SomeFoo SomeName="1" SomeOther="b value">3.0</SomeFoo>
-            |   <E>e</E>
-            | </Bar>
+                  |<?xml version='1.0' encoding='UTF-8'?>
+                  | <Bar>
+                  |   <SomeTopName>d value</SomeTopName>
+                  |   <SomeFoo SomeName="1" SomeOther="b value">3.0</SomeFoo>
+                  |   <E>e</E>
+                  | </Bar>
           """.stripMargin.minimized),
       )
     }
@@ -378,12 +379,12 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            |<?xml version='1.0' encoding='UTF-8'?>
-            | <bar>
-            |   <some_top_name>d value</some_top_name>
-            |   <some_foo some_name="1" some_other="b value">3.0</some_foo>
-            |   <e>e</e>
-            | </bar>
+                  |<?xml version='1.0' encoding='UTF-8'?>
+                  | <bar>
+                  |   <some_top_name>d value</some_top_name>
+                  |   <some_foo some_name="1" some_other="b value">3.0</some_foo>
+                  |   <e>e</e>
+                  | </bar>
           """.stripMargin.minimized),
       )
     }
@@ -480,36 +481,36 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string1 ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <bar>
-            |   <d>d value</d>
-            |   <foo xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="Foo1">
-            |     <a>string</a>
-            |   </foo>
-            |   <e>k</e>
-            | </bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <bar>
+                  |   <d>d value</d>
+                  |   <foo xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="Foo1">
+                  |     <a>string</a>
+                  |   </foo>
+                  |   <e>k</e>
+                  | </bar>
           """.stripMargin.minimized) &&
           string2 ==
           Right("""
-              | <?xml version='1.0' encoding='UTF-8'?>
-              | <bar>
-              |   <d>d value</d>
-              |   <foo xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="Foo2">
-              |     <b>1</b>
-              |   </foo>
-              |   <e>e</e>
-              | </bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <bar>
+                  |   <d>d value</d>
+                  |   <foo xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="Foo2">
+                  |     <b>1</b>
+                  |   </foo>
+                  |   <e>e</e>
+                  | </bar>
           """.stripMargin.minimized) &&
           string3 ==
           Right("""
-              | <?xml version='1.0' encoding='UTF-8'?>
-              | <bar>
-              |   <d>another one value</d>
-              |   <foo xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="Foo3">
-              |     <c>1.1234</c>
-              |   </foo>
-              |   <e>v</e>
-              | </bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <bar>
+                  |   <d>another one value</d>
+                  |   <foo xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="Foo3">
+                  |     <c>1.1234</c>
+                  |   </foo>
+                  |   <e>v</e>
+                  | </bar>
           """.stripMargin.minimized),
       )
     }
@@ -532,36 +533,36 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string1 ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <qux>
-            |   <d>d value</d>
-            |   <bar discriminator="Bar1">
-            |     <a>string</a>
-            |   </bar>
-            |   <e>k</e>
-            | </qux>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <qux>
+                  |   <d>d value</d>
+                  |   <bar discriminator="Bar1">
+                  |     <a>string</a>
+                  |   </bar>
+                  |   <e>k</e>
+                  | </qux>
           """.stripMargin.minimized) &&
           string2 ==
           Right("""
-              | <?xml version='1.0' encoding='UTF-8'?>
-              | <qux>
-              |   <d>d value</d>
-              |   <bar discriminator="Bar2">
-              |     <b>1</b>
-              |   </bar>
-              |   <e>e</e>
-              | </qux>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <qux>
+                  |   <d>d value</d>
+                  |   <bar discriminator="Bar2">
+                  |     <b>1</b>
+                  |   </bar>
+                  |   <e>e</e>
+                  | </qux>
           """.stripMargin.minimized) &&
           string3 ==
           Right("""
-              | <?xml version='1.0' encoding='UTF-8'?>
-              | <qux>
-              |   <d>another one value</d>
-              |   <bar discriminator="Bar3">
-              |     <c>1.1234</c>
-              |   </bar>
-              |   <e>v</e>
-              | </qux>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <qux>
+                  |   <d>another one value</d>
+                  |   <bar discriminator="Bar3">
+                  |     <c>1.1234</c>
+                  |   </bar>
+                  |   <e>v</e>
+                  | </qux>
           """.stripMargin.minimized),
       )
 
@@ -582,36 +583,36 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string4 ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <quux>
-            |   <d>d value</d>
-            |   <baz xmlns:ans1="https://example.org" ans1:discriminator="Baz1">
-            |     <a>string</a>
-            |   </baz>
-            |   <e>k</e>
-            | </quux>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <quux>
+                  |   <d>d value</d>
+                  |   <baz xmlns:ans1="https://example.org" ans1:discriminator="Baz1">
+                  |     <a>string</a>
+                  |   </baz>
+                  |   <e>k</e>
+                  | </quux>
           """.stripMargin.minimized) &&
           string5 ==
           Right("""
-              | <?xml version='1.0' encoding='UTF-8'?>
-              | <quux>
-              |   <d>d value</d>
-              |   <baz xmlns:ans1="https://example.org" ans1:discriminator="Baz2">
-              |     <b>1</b>
-              |   </baz>
-              |   <e>e</e>
-              | </quux>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <quux>
+                  |   <d>d value</d>
+                  |   <baz xmlns:ans1="https://example.org" ans1:discriminator="Baz2">
+                  |     <b>1</b>
+                  |   </baz>
+                  |   <e>e</e>
+                  | </quux>
           """.stripMargin.minimized) &&
           string6 ==
           Right("""
-              | <?xml version='1.0' encoding='UTF-8'?>
-              | <quux>
-              |   <d>another one value</d>
-              |   <baz xmlns:ans1="https://example.org" ans1:discriminator="Baz3">
-              |     <c>1.1234</c>
-              |   </baz>
-              |   <e>v</e>
-              | </quux>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <quux>
+                  |   <d>another one value</d>
+                  |   <baz xmlns:ans1="https://example.org" ans1:discriminator="Baz3">
+                  |     <c>1.1234</c>
+                  |   </baz>
+                  |   <e>v</e>
+                  | </quux>
           """.stripMargin.minimized),
       )
     }
@@ -625,21 +626,21 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         animalEncoder.encode(wolf) ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <animal xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="canis_lupus">
-            |   <name>Igor</name>
-            |   <strength>0.2</strength>
-            |   <age>20</age>
-            | </animal>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <animal xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="canis_lupus">
+                  |   <name>Igor</name>
+                  |   <strength>0.2</strength>
+                  |   <age>20</age>
+                  | </animal>
           """.stripMargin.minimized) &&
           animalEncoder.encode(lion) ==
           Right("""
-              | <?xml version='1.0' encoding='UTF-8'?>
-              | <animal xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="panthera_leo">
-              |   <name>Sergey</name>
-              |   <strength>0.75</strength>
-              |   <speed>60.1</speed>
-              | </animal>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <animal xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="panthera_leo">
+                  |   <name>Sergey</name>
+                  |   <strength>0.75</strength>
+                  |   <speed>60.1</speed>
+                  | </animal>
             """.stripMargin.minimized),
       )
     }
@@ -653,19 +654,19 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         insectEncoder.encode(hornet) ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <insect xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="hornet">
-            |   <name>Anton</name>
-            |   <damage>200.123</damage>
-            | </insect>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <insect xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="hornet">
+                  |   <name>Anton</name>
+                  |   <damage>200.123</damage>
+                  | </insect>
           """.stripMargin.minimized) &&
           insectEncoder.encode(cockroach) ==
           Right("""
-              | <?xml version='1.0' encoding='UTF-8'?>
-              | <insect xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="cockroach">
-              |   <name>Dmitriy</name>
-              |   <legsNumber>5</legsNumber>
-              | </insect>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <insect xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="cockroach">
+                  |   <name>Dmitriy</name>
+                  |   <legsNumber>5</legsNumber>
+                  | </insect>
             """.stripMargin.minimized),
       )
     }
@@ -679,19 +680,19 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         fishEncoder.encode(clownFish) ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <fish xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="ClownFish">
-            |   <name>Nemo</name>
-            |   <finNumber>1</finNumber>
-            | </fish>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <fish xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="ClownFish">
+                  |   <name>Nemo</name>
+                  |   <finNumber>1</finNumber>
+                  | </fish>
           """.stripMargin.minimized) &&
           fishEncoder.encode(whiteShark) ==
           Right("""
-              | <?xml version='1.0' encoding='UTF-8'?>
-              | <fish xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="carcharodon_carcharias">
-              |   <name>Bill</name>
-              |   <teethNumber>20000000000</teethNumber>
-              | </fish>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <fish xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="carcharodon_carcharias">
+                  |   <name>Bill</name>
+                  |   <teethNumber>20000000000</teethNumber>
+                  | </fish>
             """.stripMargin.minimized),
       )
     }
@@ -767,16 +768,16 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <ans1:bar xmlns:ans1="example.org">
-            |   <ans1:d>d value</ans1:d>
-            |   <ans1:foo>
-            |     <ans1:a>1</ans1:a>
-            |     <ans1:b>b value</ans1:b>
-            |     <ans1:c>3.0</ans1:c>
-            |   </ans1:foo>
-            |   <ans1:e>e</ans1:e>
-            | </ans1:bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <ans1:bar xmlns:ans1="example.org">
+                  |   <ans1:d>d value</ans1:d>
+                  |   <ans1:foo>
+                  |     <ans1:a>1</ans1:a>
+                  |     <ans1:b>b value</ans1:b>
+                  |     <ans1:c>3.0</ans1:c>
+                  |   </ans1:foo>
+                  |   <ans1:e>e</ans1:e>
+                  | </ans1:bar>
           """.stripMargin.minimized),
       )
     }
@@ -803,14 +804,14 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <ans1:bar xmlns:ans1="example.org" ans1:e="e">
-            |   <ans1:d>d value</ans1:d>
-            |   <ans1:foo ans1:b="b value">
-            |     <ans1:a>1</ans1:a>
-            |     <ans1:c>3.0</ans1:c>
-            |   </ans1:foo>
-            | </ans1:bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <ans1:bar xmlns:ans1="example.org" ans1:e="e">
+                  |   <ans1:d>d value</ans1:d>
+                  |   <ans1:foo ans1:b="b value">
+                  |     <ans1:a>1</ans1:a>
+                  |     <ans1:c>3.0</ans1:c>
+                  |   </ans1:foo>
+                  | </ans1:bar>
           """.stripMargin.minimized),
       )
     }
@@ -837,14 +838,14 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <bar e="e">
-            |   <d>d value</d>
-            |   <ans1:foo xmlns:ans1="example.org" b="b value">
-            |     <ans1:a>1</ans1:a>
-            |     <ans1:c>3.0</ans1:c>
-            |   </ans1:foo>
-            | </bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <bar e="e">
+                  |   <d>d value</d>
+                  |   <ans1:foo xmlns:ans1="example.org" b="b value">
+                  |     <ans1:a>1</ans1:a>
+                  |     <ans1:c>3.0</ans1:c>
+                  |   </ans1:foo>
+                  | </bar>
           """.stripMargin.minimized),
       )
     }
@@ -873,14 +874,14 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <ans1:bar xmlns:ans1="example.com" e="e">
-            |   <ans1:d>d value</ans1:d>
-            |   <ans2:foo xmlns:ans2="example.org" b="b value">
-            |     <ans2:a>1</ans2:a>
-            |     <ans2:c>3.0</ans2:c>
-            |   </ans2:foo>
-            | </ans1:bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <ans1:bar xmlns:ans1="example.com" e="e">
+                  |   <ans1:d>d value</ans1:d>
+                  |   <ans2:foo xmlns:ans2="example.org" b="b value">
+                  |     <ans2:a>1</ans2:a>
+                  |     <ans2:c>3.0</ans2:c>
+                  |   </ans2:foo>
+                  | </ans1:bar>
           """.stripMargin.minimized),
       )
     }
@@ -907,15 +908,15 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <ans1:Bar xmlns:ans1="example.org">
-            |   <ans1:SomeTopName>d value</ans1:SomeTopName>
-            |   <ans1:SomeFoo>
-            |     <ans1:SomeName>1</ans1:SomeName>
-            |     <ans1:SomeOtherName>b value</ans1:SomeOtherName>
-            |     <ans1:C>3.0</ans1:C>
-            |   </ans1:SomeFoo>
-            | </ans1:Bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <ans1:Bar xmlns:ans1="example.org">
+                  |   <ans1:SomeTopName>d value</ans1:SomeTopName>
+                  |   <ans1:SomeFoo>
+                  |     <ans1:SomeName>1</ans1:SomeName>
+                  |     <ans1:SomeOtherName>b value</ans1:SomeOtherName>
+                  |     <ans1:C>3.0</ans1:C>
+                  |   </ans1:SomeFoo>
+                  | </ans1:Bar>
           """.stripMargin.minimized),
       )
     }
@@ -942,15 +943,15 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <ans1:bar xmlns:ans1="example.org">
-            |   <ans1:some_top_name>d value</ans1:some_top_name>
-            |   <ans1:some_foo>
-            |     <ans1:some_name>1</ans1:some_name>
-            |     <ans1:some_other_name>b value</ans1:some_other_name>
-            |     <ans1:c>3.0</ans1:c>
-            |   </ans1:some_foo>
-            | </ans1:bar>
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <ans1:bar xmlns:ans1="example.org">
+                  |   <ans1:some_top_name>d value</ans1:some_top_name>
+                  |   <ans1:some_foo>
+                  |     <ans1:some_name>1</ans1:some_name>
+                  |     <ans1:some_other_name>b value</ans1:some_other_name>
+                  |     <ans1:c>3.0</ans1:c>
+                  |   </ans1:some_foo>
+                  | </ans1:bar>
           """.stripMargin.minimized),
       )
     }
@@ -969,11 +970,11 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <bar>
-            |   <some_top_name>d value</some_top_name>
-            |   <Me2 some_name="1" i-Have-priority="b value">3.0</Me2>
-            |   <e>e</e>
-            | </bar>
+                  | <bar>
+                  |   <some_top_name>d value</some_top_name>
+                  |   <Me2 some_name="1" i-Have-priority="b value">3.0</Me2>
+                  |   <e>e</e>
+                  | </bar>
           """.stripMargin.minimized),
       )
     }
@@ -996,14 +997,14 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-          | <ans1:bar xmlns:ans1="example.org" d="d value">
-          |   <ans1:foo>
-          |     <a>1</a>
-          |     <b>b value</b>
-          |     <c>3.0</c>
-          |   </ans1:foo>
-          |  <ans1:e>e</ans1:e>
-          | </ans1:bar>
+                  | <ans1:bar xmlns:ans1="example.org" d="d value">
+                  |   <ans1:foo>
+                  |     <a>1</a>
+                  |     <b>b value</b>
+                  |     <c>3.0</c>
+                  |   </ans1:foo>
+                  |  <ans1:e>e</ans1:e>
+                  | </ans1:bar>
       """.stripMargin.minimized),
       )
     }
@@ -1028,14 +1029,14 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <ans1:bar xmlns:ans1="example.org" d="d value">
-            |   <ans2:foo xmlns:ans2="example.com">
-            |     <a>1</a>
-            |     <b>b value</b>
-            |     <c>3.0</c>
-            |   </ans2:foo>
-            |  <ans1:e>e</ans1:e>
-            | </ans1:bar>
+                  | <ans1:bar xmlns:ans1="example.org" d="d value">
+                  |   <ans2:foo xmlns:ans2="example.com">
+                  |     <a>1</a>
+                  |     <b>b value</b>
+                  |     <c>3.0</c>
+                  |   </ans2:foo>
+                  |  <ans1:e>e</ans1:e>
+                  | </ans1:bar>
       """.stripMargin.minimized),
       )
     }
@@ -1057,13 +1058,13 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <ans1:bar xmlns:ans1="example.org" ans1:d="d value" ans1:e="e">
-            |   <foo>
-            |     <a>1</a>
-            |     <b>b value</b>
-            |     <c>3.0</c>
-            |   </foo>
-            | </ans1:bar>
+                  | <ans1:bar xmlns:ans1="example.org" ans1:d="d value" ans1:e="e">
+                  |   <foo>
+                  |     <a>1</a>
+                  |     <b>b value</b>
+                  |     <c>3.0</c>
+                  |   </foo>
+                  | </ans1:bar>
       """.stripMargin.minimized),
       )
     }
@@ -1088,13 +1089,13 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <ans1:bar xmlns:ans1="example.org" ans1:d="d value" xmlns:ans2="example.com" ans2:e="e">
-            |   <foo>
-            |     <a>1</a>
-            |     <b>b value</b>
-            |     <c>3.0</c>
-            |   </foo>
-            | </ans1:bar>
+                  | <ans1:bar xmlns:ans1="example.org" ans1:d="d value" xmlns:ans2="example.com" ans2:e="e">
+                  |   <foo>
+                  |     <a>1</a>
+                  |     <b>b value</b>
+                  |     <c>3.0</c>
+                  |   </foo>
+                  | </ans1:bar>
       """.stripMargin.minimized),
       )
     }
@@ -1122,11 +1123,11 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <foo xmlns:ans1="example.com" xmlns:ans2="example.org">
-            |   <ans1:a>1</ans1:a>
-            |   <ans1:b>b value</ans1:b>
-            |   <ans1:c>3.0</ans1:c>
-            | </foo>
+                  | <foo xmlns:ans1="example.com" xmlns:ans2="example.org">
+                  |   <ans1:a>1</ans1:a>
+                  |   <ans1:b>b value</ans1:b>
+                  |   <ans1:c>3.0</ans1:c>
+                  | </foo>
       """.stripMargin.minimized),
       )
     }
@@ -1161,15 +1162,15 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-          | <ans1:bar xmlns:ans1="example.org">
-          |   <ans2:foo xmlns:ans2="example.com" xmlns:ans3="example.com/3" xmlns:ans4="example.com/4" 
-          |             xmlns:ans5="example.com/5" xmlns:ans6="example.com/6" xmlns:ans7="example.com/7" 
-          |             xmlns:ans8="example.com/8" xmlns:ans9="example.com/9" xmlns:ans10="example.com/10">
-          |     <a>1</a>
-          |     <b>b value</b>
-          |     <c>3.0</c>
-          |   </ans2:foo>
-          | </ans1:bar>
+                  | <ans1:bar xmlns:ans1="example.org">
+                  |   <ans2:foo xmlns:ans2="example.com" xmlns:ans3="example.com/3" xmlns:ans4="example.com/4" 
+                  |             xmlns:ans5="example.com/5" xmlns:ans6="example.com/6" xmlns:ans7="example.com/7" 
+                  |             xmlns:ans8="example.com/8" xmlns:ans9="example.com/9" xmlns:ans10="example.com/10">
+                  |     <a>1</a>
+                  |     <b>b value</b>
+                  |     <c>3.0</c>
+                  |   </ans2:foo>
+                  | </ans1:bar>
       """.stripMargin.minimized),
       )
     }
@@ -1200,13 +1201,13 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <ans1:bar xmlns:ans1="example.org">
-            |   <foo xmlns:ans2="example.com">
-            |     <a>1</a>
-            |     <b>b value</b>
-            |     <c>3.0</c>
-            |   </foo>
-            | </ans1:bar>
+                  | <ans1:bar xmlns:ans1="example.org">
+                  |   <foo xmlns:ans2="example.com">
+                  |     <a>1</a>
+                  |     <b>b value</b>
+                  |     <c>3.0</c>
+                  |   </foo>
+                  | </ans1:bar>
       """.stripMargin.minimized),
       )
     }
@@ -1311,11 +1312,11 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <foo xmlns:com="example.com" xmlns:org="example.org">
-            |   <com:a>1</com:a>
-            |   <com:b>b value</com:b>
-            |   <com:c>3.0</com:c>
-            | </foo>
+                  | <foo xmlns:com="example.com" xmlns:org="example.org">
+                  |   <com:a>1</com:a>
+                  |   <com:b>b value</com:b>
+                  |   <com:c>3.0</com:c>
+                  | </foo>
      """.stripMargin.minimized),
       )
     }
@@ -1347,25 +1348,25 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-          | <bar xmlns="example.org">
-          |   <ans1:a xmlns:ans1="example.com">123</ans1:a>
-          |   <b>b value</b>
-          |   <c>1.234</c>
-          |   <foo>
-          |     <d>321</d>
-          |     <ans2:e xmlns:ans2="example.com">e value</ans2:e>
-          |     <f>4.321</f>
-          |     <qux>
-          |       <g>g value 1</g>
-          |       <h>1</h>
-          |     </qux>
-          |     <qux>
-          |       <g>g value 2</g>
-          |       <h>2</h>
-          |     </qux>
-          |   </foo>
-          | </bar>
-          |""".stripMargin.minimized),
+                  | <bar xmlns="example.org">
+                  |   <ans1:a xmlns:ans1="example.com">123</ans1:a>
+                  |   <b>b value</b>
+                  |   <c>1.234</c>
+                  |   <foo>
+                  |     <d>321</d>
+                  |     <ans2:e xmlns:ans2="example.com">e value</ans2:e>
+                  |     <f>4.321</f>
+                  |     <qux>
+                  |       <g>g value 1</g>
+                  |       <h>1</h>
+                  |     </qux>
+                  |     <qux>
+                  |       <g>g value 2</g>
+                  |       <h>2</h>
+                  |     </qux>
+                  |   </foo>
+                  | </bar>
+                  |""".stripMargin.minimized),
       )
     }
 
@@ -1396,17 +1397,17 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <bar xmlns="example.org">
-            |   <ans1:a xmlns:ans1="example.com">123</ans1:a>
-            |   <b>b value</b>
-            |   <c>1.234</c>
-            |   <foo xmlns="example.org">
-            |     <d>321</d>
-            |     <ans2:e xmlns:ans2="example.com">e value</ans2:e>
-            |     <f>4.321</f>
-            |   </foo>
-            | </bar>
-            |""".stripMargin.minimized),
+                  | <bar xmlns="example.org">
+                  |   <ans1:a xmlns:ans1="example.com">123</ans1:a>
+                  |   <b>b value</b>
+                  |   <c>1.234</c>
+                  |   <foo xmlns="example.org">
+                  |     <d>321</d>
+                  |     <ans2:e xmlns:ans2="example.com">e value</ans2:e>
+                  |     <f>4.321</f>
+                  |   </foo>
+                  | </bar>
+                  |""".stripMargin.minimized),
       )
     }
   }

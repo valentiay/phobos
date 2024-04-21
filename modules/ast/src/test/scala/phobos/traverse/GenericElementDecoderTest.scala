@@ -1,13 +1,14 @@
 package phobos.traverse
 
+import phobos.ast.XmlLeaf
+import phobos.decoding.{DecodingError, ElementDecoder, XmlDecoder}
+
 import cats.syntax.either._
-import com.softwaremill.diffx.scalatest.DiffShouldMatcher
 import com.softwaremill.diffx.generic.auto._
+import com.softwaremill.diffx.scalatest.DiffShouldMatcher
 import org.scalatest.EitherValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import phobos.ast.XmlLeaf
-import phobos.decoding.{DecodingError, ElementDecoder, XmlDecoder}
 
 class GenericElementDecoderTest extends AnyWordSpec with Matchers with DiffShouldMatcher with EitherValues {
   import GenericElementDecoderTest._

@@ -1,15 +1,16 @@
 package phobos.monix
 
 import java.util.concurrent.Executors
-import monix.execution.Scheduler
-import monix.reactive.Observable
-import org.scalatest.wordspec.AsyncWordSpec
+import scala.annotation.nowarn
+
 import phobos.decoding.ElementDecoder
 import phobos.decoding.XmlDecoder
 import phobos.derivation.semiauto._
 import phobos.syntax.text
 
-import scala.annotation.nowarn
+import monix.execution.Scheduler
+import monix.reactive.Observable
+import org.scalatest.wordspec.AsyncWordSpec
 
 @nowarn("msg=is never used")
 class MonixTest extends AsyncWordSpec {
@@ -24,13 +25,13 @@ class MonixTest extends AsyncWordSpec {
       implicit val fooDecoder: XmlDecoder[Foo] = deriveXmlDecoder("foo")
 
       val xml = """
-        |<foo>
-        | <qux>1234</qux>
-        | <bars>2</bars>
-        | <maybeBar>1</maybeBar>
-        | <bars>3</bars>
-        |</foo>
-        |""".stripMargin
+                  |<foo>
+                  | <qux>1234</qux>
+                  | <bars>2</bars>
+                  | <maybeBar>1</maybeBar>
+                  | <bars>3</bars>
+                  |</foo>
+                  |""".stripMargin
 
       val foo        = Foo(1234, Some(Bar(1)), List(Bar(2), Bar(3)))
       val observable = Observable.fromIterable(xml.toList.map(x => Array(x.toByte)))

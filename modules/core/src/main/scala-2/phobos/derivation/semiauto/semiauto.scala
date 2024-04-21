@@ -1,8 +1,8 @@
 package phobos.derivation
 
+import phobos.configured._
 import phobos.decoding.{ElementDecoder, XmlDecoder}
 import phobos.encoding.{ElementEncoder, XmlEncoder}
-import phobos.configured._
 
 package object semiauto {
 

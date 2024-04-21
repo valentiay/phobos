@@ -1,12 +1,12 @@
 package phobos.derivation
 
+import scala.collection.mutable.ListBuffer
+import scala.reflect.macros.blackbox
+
 import phobos.Namespace
 import phobos.configured.ElementCodecConfig
 import phobos.derivation.CompileTimeState.{CoproductType, ProductType, Stack}
 import phobos.encoding.{AttributeEncoder, ElementEncoder, TextEncoder}
-
-import scala.collection.mutable.ListBuffer
-import scala.reflect.macros.blackbox
 
 class EncoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
 

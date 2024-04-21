@@ -1,8 +1,8 @@
 package phobos
 
-import com.fasterxml.aalto.{AsyncByteArrayFeeder, AsyncXMLStreamReader}
-
 import scala.util.{Failure, Success, Try}
+
+import com.fasterxml.aalto.{AsyncByteArrayFeeder, AsyncXMLStreamReader}
 
 package object decoding {
   type XmlStreamReader = AsyncXMLStreamReader[AsyncByteArrayFeeder]

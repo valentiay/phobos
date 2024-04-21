@@ -1,8 +1,9 @@
 package phobos.enumeratum
 
-import enumeratum.{Enum, EnumEntry}
 import phobos.decoding.{AttributeDecoder, DecodingError, ElementDecoder, TextDecoder}
 import phobos.encoding.{AttributeEncoder, ElementEncoder, TextEncoder}
+
+import enumeratum.{Enum, EnumEntry}
 
 trait XmlEnum[A <: EnumEntry] { this: Enum[A] =>
   implicit val enumElementEncoder: ElementEncoder[A]     = ElementEncoder.stringEncoder.contramap(a => a.entryName)

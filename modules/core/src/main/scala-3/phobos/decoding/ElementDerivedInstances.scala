@@ -1,9 +1,10 @@
 package phobos.decoding
 
-import phobos.configured.ElementCodecConfig
-import phobos.derivation.decoder
-import phobos.derivation.LazySummon
 import scala.deriving.Mirror
+
+import phobos.configured.ElementCodecConfig
+import phobos.derivation.LazySummon
+import phobos.derivation.decoder
 
 private[decoding] trait ElementDerivedInstances {
   inline def derived[T]: ElementDecoder[T] =

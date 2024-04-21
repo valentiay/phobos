@@ -1,13 +1,15 @@
 package phobos
 
-import cats.{Contravariant, Foldable, Functor}
-import cats.data.{Chain, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector}
 import javax.xml.stream.XMLStreamConstants
+
 import phobos.decoding.ElementDecoder.{listDecoder, vectorDecoder}
 import phobos.decoding.XmlDecoder.createStreamReader
 import phobos.decoding._
 import phobos.encoding.ElementEncoder.{iteratorEncoder, listEncoder, setEncoder, vectorEncoder}
 import phobos.encoding.{AttributeEncoder, ElementEncoder, TextEncoder}
+
+import cats.data.{Chain, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector}
+import cats.{Contravariant, Foldable, Functor}
 
 object catsInstances {
   implicit val attributeEncoderContravariant: Contravariant[AttributeEncoder] =

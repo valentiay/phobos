@@ -1,8 +1,9 @@
 package phobos.encoding
 
 import java.time._
-import java.util.{Base64, UUID}
 import java.time.format.DateTimeFormatter
+import java.util.{Base64, UUID}
+
 import phobos.derivation.auto.ElementEncoderAutoInstances
 
 /** Warning! This is an internal API which may change in future. Do not implement or use this trait directly unless you

@@ -1,10 +1,12 @@
 package phobos.fs2
 
+import javax.xml.stream.XMLStreamConstants
+
+import phobos.decoding.{Cursor, ElementDecoder, XmlDecoder, XmlStreamReader}
+
 import cats.MonadError
 import cats.syntax.flatMap._
-import fs2.{Stream, Compiler}
-import javax.xml.stream.XMLStreamConstants
-import phobos.decoding.{Cursor, ElementDecoder, XmlDecoder, XmlStreamReader}
+import fs2.{Compiler, Stream}
 
 trait Fs2Ops {
   implicit def decoderOps[A](xmlDecoder: XmlDecoder[A]): DecoderOps[A] = new DecoderOps[A](xmlDecoder)
