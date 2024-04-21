@@ -1,18 +1,19 @@
 package phobos.refined
 
+import scala.annotation.nowarn
+
+import phobos.annotations.{ElementCodec, XmlCodec}
+import phobos.decoding.XmlDecoder
+import phobos.syntax.{attr, text}
+import phobos.testString._
+
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.refineMV
 import eu.timepit.refined.string.MatchesRegex
 import eu.timepit.refined.types.numeric.NonNegLong
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import phobos.annotations.{XmlCodec, ElementCodec}
-import phobos.decoding.XmlDecoder
-import phobos.syntax.{text, attr}
-import phobos.testString._
 import shapeless.{Witness => W}
-
-import scala.annotation.nowarn
 
 @nowarn("msg=is never used")
 class RefinedDecodersTest extends AnyWordSpec with Matchers {
@@ -24,10 +25,10 @@ class RefinedDecodersTest extends AnyWordSpec with Matchers {
       case class Test(x: Int, @attr y: Refined[String, NumericAtLeastTwo])
 
       val sampleXml = """
-         | <?xml version='1.0' encoding='UTF-8'?>
-         | <test y="123">
-         |   <x>2</x>
-         | </test>
+                        | <?xml version='1.0' encoding='UTF-8'?>
+                        | <test y="123">
+                        |   <x>2</x>
+                        | </test>
        """.stripMargin.minimized
 
       val expectedResult = Test(2, refineMV[NumericAtLeastTwo]("123"))
@@ -41,11 +42,11 @@ class RefinedDecodersTest extends AnyWordSpec with Matchers {
       case class Test(x: Int, y: Refined[String, NumericAtLeastTwo])
 
       val sampleXml = """
-         | <?xml version='1.0' encoding='UTF-8'?>
-         | <test>
-         |   <x>2</x>
-         |   <y>123</y>
-         | </test>
+                        | <?xml version='1.0' encoding='UTF-8'?>
+                        | <test>
+                        |   <x>2</x>
+                        |   <y>123</y>
+                        | </test>
        """.stripMargin.minimized
 
       val expectedResult = Test(2, refineMV[NumericAtLeastTwo]("123"))
@@ -83,11 +84,11 @@ class RefinedDecodersTest extends AnyWordSpec with Matchers {
       case class Qux2(str: String, foo: Foo2)
 
       val sampleXml0 = """
-           | <?xml version='1.0' encoding='UTF-8'?>
-           | <test>
-           |   <x>2</x>
-           |   <y>1</y>
-           | </test>
+                         | <?xml version='1.0' encoding='UTF-8'?>
+                         | <test>
+                         |   <x>2</x>
+                         |   <y>1</y>
+                         | </test>
          """.stripMargin.minimized
 
       XmlDecoder[Test2]

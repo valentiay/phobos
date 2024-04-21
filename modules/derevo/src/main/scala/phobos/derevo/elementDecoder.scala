@@ -1,7 +1,8 @@
 package phobos.derevo
 
-import derevo.{Derevo, Derivation, delegating}
 import phobos.decoding.ElementDecoder
+
+import derevo.{Derevo, Derivation, delegating}
 
 @delegating("phobos.derivation.semiauto.deriveElementDecoder")
 object elementDecoder extends Derivation[ElementDecoder] {

@@ -1,11 +1,13 @@
 package phobos.decoding
 
 import javax.xml.stream.XMLStreamConstants
+
+import phobos.Namespace
+import phobos.decoding.XmlDecoder.createStreamReader
+
 import com.fasterxml.aalto.AsyncByteArrayFeeder
 import com.fasterxml.aalto.async.{AsyncByteArrayScanner, AsyncStreamReaderImpl}
 import com.fasterxml.aalto.stax.InputFactoryImpl
-import phobos.Namespace
-import phobos.decoding.XmlDecoder.createStreamReader
 
 /** Typeclass for decoding XML document to an A value.
   *

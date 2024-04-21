@@ -1,8 +1,9 @@
 package phobos
 
 import phobos.testString._
-import org.scalatest.wordspec.AnyWordSpec
+
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 class AutoDerivationTest extends AnyWordSpec with Matchers {
   "Automatic derivation" should {
@@ -61,14 +62,14 @@ class AutoDerivationTest extends AnyWordSpec with Matchers {
       )
       val bazXml =
         """<?xml version='1.0' encoding='UTF-8'?>
-       | <baz>
-       |     <foo bar="42" baz="144.12">keke</foo>
-       |     <bars><foo>1.0</foo></bars>
-       |     <bars><foo>2.0</foo></bars>
-       |     <bars><foo>3.0</foo></bars>
-       |     <maybebar><foo>4.0</foo></maybebar>
-       | </baz>
-       |""".stripMargin
+          | <baz>
+          |     <foo bar="42" baz="144.12">keke</foo>
+          |     <bars><foo>1.0</foo></bars>
+          |     <bars><foo>2.0</foo></bars>
+          |     <bars><foo>3.0</foo></bars>
+          |     <maybebar><foo>4.0</foo></maybebar>
+          | </baz>
+          |""".stripMargin
 
       implicitly[Auto[ElementEncoder[Foo]]]
       implicitly[Auto[ElementEncoder[Baz]]]

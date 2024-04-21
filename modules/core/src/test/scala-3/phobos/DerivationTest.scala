@@ -1,22 +1,24 @@
 package phobos
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import scala.annotation.nowarn
+import scala.deriving.Mirror
+import scala.reflect.TypeTest
+
+import phobos.SealedClasses.Animal.animalDecoder
+import phobos.configured.ElementCodecConfig
 import phobos.decoding._
+import phobos.derivation.LazySummon
+import phobos.derivation.common.extractSumTypeChild
+import phobos.derivation.encoder.deriveElementEncoder
+import phobos.derivation.semiauto.deriveXmlEncoder
 import phobos.encoding._
-import phobos.testString._
+import phobos.syntax.attr
 import phobos.syntax.discriminator
 import phobos.syntax.text
-import phobos.syntax.attr
-import phobos.SealedClasses.Animal.animalDecoder
-import phobos.derivation.LazySummon
-import scala.reflect.TypeTest
-import phobos.configured.ElementCodecConfig
-import phobos.derivation.common.extractSumTypeChild
-import phobos.derivation.semiauto.deriveXmlEncoder
-import phobos.derivation.encoder.deriveElementEncoder
-import scala.deriving.Mirror
-import scala.annotation.nowarn
+import phobos.testString._
+
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 class DerivationTest extends AnyWordSpec with Matchers {
   import DerivationTest.*
@@ -44,26 +46,42 @@ class DerivationTest extends AnyWordSpec with Matchers {
 
     "derive for sealed traits" in {
       given XmlEncoder[Wild] = XmlEncoder.fromElementEncoder("Wild")
-      assert(XmlEncoder[Wild].encode(Wild.Tiger) == Right("""
-        | <?xml version='1.0' encoding='UTF-8'?>
-        | <Wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="cat"/>
-        """.stripMargin.minimized))
-      assert(XmlEncoder[Wild].encode(Wild.Wolf("Coyote")) == Right("""
-        | <?xml version='1.0' encoding='UTF-8'?>
-        | <Wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="dog">Coyote</Wild>
-        """.stripMargin.minimized))
+      assert(
+        XmlEncoder[Wild].encode(Wild.Tiger) == Right(
+          """
+            | <?xml version='1.0' encoding='UTF-8'?>
+            | <Wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="cat"/>
+        """.stripMargin.minimized,
+        ),
+      )
+      assert(
+        XmlEncoder[Wild].encode(Wild.Wolf("Coyote")) == Right(
+          """
+            | <?xml version='1.0' encoding='UTF-8'?>
+            | <Wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="dog">Coyote</Wild>
+        """.stripMargin.minimized,
+        ),
+      )
     }
 
     "derive for enums" in {
       given XmlEncoder[Domestic] = XmlEncoder.fromElementEncoder("Domestic")
-      assert(XmlEncoder[Domestic].encode(Domestic.Cat) == Right("""
-        | <?xml version='1.0' encoding='UTF-8'?>
-        | <Domestic xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="tiger"/>
-        """.stripMargin.minimized))
-      assert(XmlEncoder[Domestic].encode(Domestic.Dog("Pug")) == Right("""
-        | <?xml version='1.0' encoding='UTF-8'?>
-        | <Domestic xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="wolf">Pug</Domestic>
-        """.stripMargin.minimized))
+      assert(
+        XmlEncoder[Domestic].encode(Domestic.Cat) == Right(
+          """
+            | <?xml version='1.0' encoding='UTF-8'?>
+            | <Domestic xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="tiger"/>
+        """.stripMargin.minimized,
+        ),
+      )
+      assert(
+        XmlEncoder[Domestic].encode(Domestic.Dog("Pug")) == Right(
+          """
+            | <?xml version='1.0' encoding='UTF-8'?>
+            | <Domestic xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="wolf">Pug</Domestic>
+        """.stripMargin.minimized,
+        ),
+      )
     }
 
     "derive for products with sealed traits and enums" in {
@@ -73,11 +91,11 @@ class DerivationTest extends AnyWordSpec with Matchers {
       assert(
         res == Right(
           """
-          | <?xml version='1.0' encoding='UTF-8'?>
-          | <Nature>
-          |   <wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="cat"/>
-          |   <domestic xmlns:ans2="http://www.w3.org/2001/XMLSchema-instance" ans2:type="wolf">Pug</domestic>
-          | </Nature>
+            | <?xml version='1.0' encoding='UTF-8'?>
+            | <Nature>
+            |   <wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="cat"/>
+            |   <domestic xmlns:ans2="http://www.w3.org/2001/XMLSchema-instance" ans2:type="wolf">Pug</domestic>
+            | </Nature>
           """.stripMargin.minimized,
         ),
       )
@@ -112,11 +130,11 @@ class DerivationTest extends AnyWordSpec with Matchers {
       given XmlDecoder[Wild] = XmlDecoder.fromElementDecoder("Wild")
 
       val tigerString = """<?xml version='1.0' encoding='UTF-8'?>
-        | <Wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="cat"/>
+                          | <Wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="cat"/>
         """.stripMargin
 
       val wolfString = """<?xml version='1.0' encoding='UTF-8'?>
-          | <Wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="dog">Coyote</Wild>
+                         | <Wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="dog">Coyote</Wild>
           """.stripMargin
 
       assert(XmlDecoder[Wild].decode(tigerString) == Right(Wild.Tiger))
@@ -127,11 +145,12 @@ class DerivationTest extends AnyWordSpec with Matchers {
       given XmlDecoder[Domestic] = XmlDecoder.fromElementDecoder("Domestic")
 
       val catString = """<?xml version='1.0' encoding='UTF-8'?>
-      | <Domestic xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="tiger"/>
+                        | <Domestic xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="tiger"/>
       """.stripMargin
 
-      val dogString = """<?xml version='1.0' encoding='UTF-8'?>
-      | <Domestic xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="wolf">Pug</Domestic>
+      val dogString =
+        """<?xml version='1.0' encoding='UTF-8'?>
+          | <Domestic xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="wolf">Pug</Domestic>
       """.stripMargin
 
       assert(XmlDecoder[Domestic].decode(catString) == Right(Domestic.Cat))
@@ -141,7 +160,8 @@ class DerivationTest extends AnyWordSpec with Matchers {
     "derive for products with sealed traits and enums" in {
       given XmlDecoder[Nature] = XmlDecoder.fromElementDecoder("Nature")
 
-      val natureString = """
+      val natureString =
+        """
           | <?xml version='1.0' encoding='UTF-8'?>
           | <Nature>
           |   <wild xmlns:ans1="http://www.w3.org/2001/XMLSchema-instance" ans1:type="cat"/>

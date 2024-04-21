@@ -1,9 +1,10 @@
 package phobos
 
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers
 import phobos.derivation.semiauto.deriveXmlEncoder
 import phobos.encoding.XmlEncoder
+
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 class XmlEncoderTest extends AnyWordSpec with Matchers {
   "XmlEncoder with config" should {

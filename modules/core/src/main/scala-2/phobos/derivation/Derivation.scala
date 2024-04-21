@@ -1,14 +1,14 @@
 package phobos.derivation
 
+import scala.annotation.nowarn
+import scala.reflect.macros.blackbox
+
 import phobos.Namespace
 import phobos.configured.ElementCodecConfig
 import phobos.derivation.CompileTimeState.{ChainedImplicit, Stack}
 import phobos.derivation.Derivation.DirectlyReentrantException
-import phobos.syntax.{xmlns, default, attr, renamed, text, discriminator}
 import phobos.derivation.auto.Auto
-
-import scala.annotation.nowarn
-import scala.reflect.macros.blackbox
+import phobos.syntax.{attr, default, discriminator, renamed, text, xmlns}
 
 private[phobos] abstract class Derivation(val c: blackbox.Context) {
 

@@ -1,11 +1,12 @@
 package phobos.akka_stream
 
-import akka.NotUsed
-import akka.stream.scaladsl.{Flow, Keep, Sink}
-import phobos.decoding._
-
 import javax.xml.stream.XMLStreamConstants
 import scala.concurrent.Future
+
+import phobos.decoding._
+
+import akka.NotUsed
+import akka.stream.scaladsl.{Flow, Keep, Sink}
 
 private[phobos] trait AkkaStreamOps {
 

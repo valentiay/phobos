@@ -1,6 +1,12 @@
 package phobos.derivation
 
-import com.fasterxml.aalto.AsyncXMLStreamReader
+import scala.annotation.nowarn
+import scala.annotation.tailrec
+import scala.collection.mutable
+import scala.compiletime.*
+import scala.deriving.Mirror
+import scala.quoted.*
+
 import phobos.Namespace
 import phobos.configured.ElementCodecConfig
 import phobos.decoding.*
@@ -9,12 +15,7 @@ import phobos.derivation.common.*
 import phobos.derivation.decoder.DecoderState.IgnoringElement
 import phobos.syntax.*
 
-import scala.annotation.nowarn
-import scala.annotation.tailrec
-import scala.collection.mutable
-import scala.compiletime.*
-import scala.quoted.*
-import scala.deriving.Mirror
+import com.fasterxml.aalto.AsyncXMLStreamReader
 
 @nowarn("msg=Use errorAndAbort")
 @nowarn("msg=Use methodMember")

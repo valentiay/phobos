@@ -1,13 +1,14 @@
 package phobos.ast
 
+import phobos.Namespace
+import phobos.decoding.{DecodingError, XmlDecoder}
+
+import cats.syntax.either._
 import com.softwaremill.diffx.generic.auto._
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher
 import org.scalatest.EitherValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import phobos.Namespace
-import phobos.decoding.{DecodingError, XmlDecoder}
-import cats.syntax.either._
 
 class XmlEntryElementDecoderTest extends AnyWordSpec with Matchers with DiffShouldMatcher with EitherValues {
 

@@ -1,4 +1,5 @@
 package phobos
+
 import scala.annotation.StaticAnnotation
 
 /** Syntax annotations for case class params. See phobos.derivation.semiato docs for more explanation.

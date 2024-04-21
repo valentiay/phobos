@@ -1,10 +1,11 @@
 package phobos
 
-import org.scalatest.wordspec.AnyWordSpec
 import phobos.annotations.XmlCodec
 import phobos.encoding.XmlEncoder
 import phobos.syntax.{attr, text}
 import phobos.testString._
+
+import org.scalatest.wordspec.AnyWordSpec
 
 class LiteralEncodingTest extends AnyWordSpec {
   "Literal encoders" should {
@@ -16,7 +17,7 @@ class LiteralEncodingTest extends AnyWordSpec {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <foo status="Ok"/>
+                  | <foo status="Ok"/>
           """.stripMargin.minimized),
       )
     }
@@ -29,7 +30,7 @@ class LiteralEncodingTest extends AnyWordSpec {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <foo><status>Ok</status></foo>
+                  | <foo><status>Ok</status></foo>
           """.stripMargin.minimized),
       )
     }
@@ -42,7 +43,7 @@ class LiteralEncodingTest extends AnyWordSpec {
       assert(
         string ==
           Right("""<?xml version='1.0' encoding='UTF-8'?>
-            | <foo>Ok</foo>
+                  | <foo>Ok</foo>
           """.stripMargin.minimized),
       )
     }

@@ -1,14 +1,16 @@
 package phobos.traverse
 
-import cats.syntax.traverse._
-import cats.instances.either._
-import cats.instances.list._
-import com.fasterxml.aalto.AsyncXMLStreamReader
-import phobos.ast._
-import phobos.decoding.{Cursor, DecodingError, ElementDecoder, TextDecoder}
 import scala.annotation.tailrec
 import scala.util.Try
+
+import phobos.ast._
+import phobos.decoding.{Cursor, DecodingError, ElementDecoder, TextDecoder}
+
 import GenericElementDecoder.DecoderState
+import cats.instances.either._
+import cats.instances.list._
+import cats.syntax.traverse._
+import com.fasterxml.aalto.AsyncXMLStreamReader
 
 /** An encoder allowing to arbitrarily encode a XML element with provided traversal logic.
   *

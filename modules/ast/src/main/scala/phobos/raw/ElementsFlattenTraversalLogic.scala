@@ -1,9 +1,10 @@
 package phobos.raw
 
+import scala.collection.mutable.ListBuffer
+
 import phobos.ast.XmlLeaf
 import phobos.raw.ElementsFlattenTraversalLogic.Accumulator
 import phobos.traverse.DecodingTraversalLogic
-import scala.collection.mutable.ListBuffer
 
 class ElementsFlattenTraversalLogic private () extends DecodingTraversalLogic[Accumulator, ElementsFlatten] {
   override def newAcc(): Accumulator = Accumulator()

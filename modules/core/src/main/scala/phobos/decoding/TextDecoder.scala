@@ -1,12 +1,12 @@
 package phobos.decoding
 
 import java.time._
+import java.time.format.DateTimeFormatter
 import java.util.{Base64, UUID}
 import javax.xml.stream.XMLStreamConstants
-import phobos.decoding.TextDecoder.{EMappedDecoder, MappedDecoder}
-
-import java.time.format.DateTimeFormatter
 import scala.annotation.tailrec
+
+import phobos.decoding.TextDecoder.{EMappedDecoder, MappedDecoder}
 
 /** Warning! This is a complicated internal API which may change in future. Do not implement or use this trait directly
   * unless you know what you are doing.

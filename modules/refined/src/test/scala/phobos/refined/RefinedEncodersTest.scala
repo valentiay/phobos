@@ -1,16 +1,17 @@
 package phobos.refined
 
-import eu.timepit.refined.api.Refined
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 import phobos.annotations.{ElementCodec, XmlCodec}
+import phobos.encoding.XmlEncoder
+import phobos.syntax.{attr, text}
+import phobos.testString._
+
+import eu.timepit.refined.api.Refined
 import eu.timepit.refined.refineMV
 import eu.timepit.refined.string.MatchesRegex
 import eu.timepit.refined.types.numeric.NonNegLong
-import phobos.encoding.XmlEncoder
-import phobos.syntax.{attr, text}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import shapeless.{Witness => W}
-import phobos.testString._
 
 class RefinedEncodersTest extends AnyWordSpec with Matchers {
   type NumericAtLeastTwo = MatchesRegex[W.`"[0-9]{2,}"`.T]
@@ -24,10 +25,10 @@ class RefinedEncodersTest extends AnyWordSpec with Matchers {
       val value = Test(2, refineMV[NumericAtLeastTwo]("123"))
 
       val expectedResult = """
-         | <?xml version='1.0' encoding='UTF-8'?>
-         | <test y="123">
-         |   <x>2</x>
-         | </test>
+                             | <?xml version='1.0' encoding='UTF-8'?>
+                             | <test y="123">
+                             |   <x>2</x>
+                             | </test>
        """.stripMargin.minimized
 
       XmlEncoder[Test].encode(value) shouldEqual Right(expectedResult)
@@ -40,11 +41,11 @@ class RefinedEncodersTest extends AnyWordSpec with Matchers {
       val value = Test(2, refineMV[NumericAtLeastTwo]("123"))
 
       val expectedResult = """
-         | <?xml version='1.0' encoding='UTF-8'?>
-         | <test>
-         |   <x>2</x>
-         |   <y>123</y>
-         | </test>
+                             | <?xml version='1.0' encoding='UTF-8'?>
+                             | <test>
+                             |   <x>2</x>
+                             |   <y>123</y>
+                             | </test>
         """.stripMargin.minimized
 
       XmlEncoder[Test].encode(value) shouldEqual Right(expectedResult)
@@ -60,11 +61,11 @@ class RefinedEncodersTest extends AnyWordSpec with Matchers {
       val xml = XmlEncoder[Qux].encode(qux)
       val string =
         """
-            | <?xml version='1.0' encoding='UTF-8'?>
-            | <qux>
-            |   <str>42</str>
-            |   <foo bar="42">1000</foo>
-            | </qux>
+          | <?xml version='1.0' encoding='UTF-8'?>
+          | <qux>
+          |   <str>42</str>
+          |   <foo bar="42">1000</foo>
+          | </qux>
           """.stripMargin.minimized
       assert(xml == Right(string))
     }

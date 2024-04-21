@@ -2,9 +2,9 @@ package phobos.decoding
 
 import java.io.Writer
 import java.math.{BigDecimal, BigInteger}
-
 import javax.xml.namespace.{NamespaceContext, QName}
 import javax.xml.stream.{Location, XMLStreamConstants}
+
 import org.codehaus.stax2.typed.{Base64Variant, TypedArrayDecoder, TypedValueDecoder}
 import org.codehaus.stax2.{AttributeInfo, LocationInfo}
 

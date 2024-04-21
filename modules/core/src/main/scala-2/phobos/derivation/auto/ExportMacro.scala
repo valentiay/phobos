@@ -1,9 +1,9 @@
 package phobos.derivation.auto
 
+import scala.reflect.macros.blackbox
+
 import phobos.decoding.ElementDecoder
 import phobos.encoding.ElementEncoder
-
-import scala.reflect.macros.blackbox
 
 class AutoMacro(val c: blackbox.Context) {
   import c.universe._

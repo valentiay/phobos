@@ -1,11 +1,12 @@
 package phobos.decoding
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import java.time.OffsetDateTime
+
 import phobos.derivation.semiauto._
 import phobos.syntax.attr
 
-import java.time.OffsetDateTime
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 class AttributeDecoderTest extends AnyWordSpec with Matchers {
   "AttributeDecoder instance" should {

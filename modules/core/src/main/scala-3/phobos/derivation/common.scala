@@ -1,14 +1,14 @@
 package phobos.derivation
 
+import scala.annotation.nowarn
+import scala.compiletime.*
+import scala.deriving.Mirror
+import scala.quoted.*
+import scala.reflect.TypeTest
+
 import phobos.Namespace
 import phobos.configured.ElementCodecConfig
 import phobos.syntax.*
-
-import scala.quoted.*
-import scala.compiletime.*
-import scala.annotation.nowarn
-import scala.deriving.Mirror
-import scala.reflect.TypeTest
 
 @nowarn("msg=Use errorAndAbort")
 object common {

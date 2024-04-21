@@ -1,10 +1,11 @@
 package phobos.ast
 
+import phobos.Namespace
+import phobos.encoding.XmlEncoder
+
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import phobos.Namespace
-import phobos.encoding.XmlEncoder
 
 class XmlEntryElementEncoderTest extends AnyWordSpec with DiffShouldMatcher with Matchers {
   "XmlEntry encoder" should {

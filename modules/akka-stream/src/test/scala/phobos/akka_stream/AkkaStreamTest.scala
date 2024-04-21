@@ -1,19 +1,20 @@
 package phobos.akka_stream
 
-import akka.actor.ActorSystem
-import akka.stream.scaladsl.{Sink, Source}
-import akka.stream.{SystemMaterializer, Materializer}
-import akka.testkit.TestKit
-import org.scalatest.BeforeAndAfterAll
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.wordspec.AsyncWordSpecLike
+import scala.concurrent.duration._
+
 import phobos.decoding.ElementDecoder
 import phobos.decoding.XmlDecoder
 import phobos.derivation.semiauto.deriveElementDecoder
 import phobos.derivation.semiauto.deriveXmlDecoder
 import phobos.syntax.text
 
-import scala.concurrent.duration._
+import akka.actor.ActorSystem
+import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.{Materializer, SystemMaterializer}
+import akka.testkit.TestKit
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.wordspec.AsyncWordSpecLike
 
 class AkkaStreamTest
     extends TestKit(ActorSystem("akka-stream-test")) with AsyncWordSpecLike with ScalaFutures with BeforeAndAfterAll {
