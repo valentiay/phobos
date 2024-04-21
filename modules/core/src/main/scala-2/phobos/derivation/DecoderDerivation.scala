@@ -57,6 +57,7 @@ class DecoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
           localName: $javaPkg.String,
           namespaceUri: $scalaPkg.Option[$javaPkg.String],
         ): $decodingPkg.ElementDecoder[$classType] = {
+          $config.removeNamespaces.foreach(cursor.setRemoveNamespaces)
           if (cursor.getEventType == _root_.com.fasterxml.aalto.AsyncXMLStreamReader.EVENT_INCOMPLETE) {
             this
           } else {
@@ -291,6 +292,7 @@ class DecoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
                     if (cursor.getScopeDefaultNamespace == namespaceUri) $config.scopeDefaultNamespace
                     else $config.scopeDefaultNamespace.orElse(namespaceUri)
                   $config.scopeDefaultNamespace.foreach(cursor.setScopeDefaultNamespace)
+                  $config.removeNamespaces.foreach(cursor.setRemoveNamespaces)
                   $decodingPkg.ElementDecoder
                     .errorIfWrongName[$classType](cursor, localName, newNamespaceUri.orElse(cursor.getScopeDefaultNamespace)) match {
                       case $scalaPkg.Some(error) => error
@@ -327,6 +329,7 @@ class DecoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
                         case $scalaPkg.Right(result) =>
                           cursor.next()
                           $config.scopeDefaultNamespace.foreach(_ => cursor.unsetScopeDefaultNamespace())
+                          $config.scopeDefaultNamespace.foreach(_ => cursor.unsetRemoveNamespaces())
                           new $decodingPkg.ElementDecoder.ConstDecoder[$classType](result)
 
                         case $scalaPkg.Left(error) =>

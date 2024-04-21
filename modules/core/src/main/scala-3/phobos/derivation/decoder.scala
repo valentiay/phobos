@@ -281,6 +281,7 @@ object decoder {
             result => {
               $c.next()
               $config.scopeDefaultNamespace.foreach(_ => $c.unsetScopeDefaultNamespace())
+              $config.removeNamespaces.foreach(_ => $c.unsetRemoveNamespaces())
               new ConstDecoder[T](result)
             },
           )
@@ -397,6 +398,7 @@ object decoder {
                       if (c.getScopeDefaultNamespace == namespaceUri) $config.scopeDefaultNamespace
                       else $config.scopeDefaultNamespace.orElse(namespaceUri)
                     $config.scopeDefaultNamespace.foreach(c.setScopeDefaultNamespace)
+                    $config.removeNamespaces.foreach(c.setRemoveNamespaces)
                     ElementDecoder
                       .errorIfWrongName[T](c, localName, newNamespaceUri.orElse(c.getScopeDefaultNamespace)) match {
                       case None =>
@@ -440,6 +442,7 @@ object decoder {
   ): ElementDecoder[T] = {
     new ElementDecoder[T] {
       def decodeAsElement(c: Cursor, localName: String, namespaceUri: Option[String]): ElementDecoder[T] = {
+        config.removeNamespaces.foreach(c.setRemoveNamespaces)
         if (c.getEventType == AsyncXMLStreamReader.EVENT_INCOMPLETE) {
           this
         } else {
