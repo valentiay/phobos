@@ -127,7 +127,7 @@ lazy val `enumeratum` =
         "com.beachape" %% "enumeratum" % "1.7.3",
       ),
     )
-    .jvmPlatform(scala2Versions)
+    .jvmPlatform(scala3Versions)
     .dependsOn(core % "compile->compile;test->test")
 
 lazy val `fs2` =

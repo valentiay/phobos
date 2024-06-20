@@ -1,7 +1,7 @@
 package phobos.enumeratum
 
-import phobos.annotations.XmlCodec
 import phobos.decoding.XmlDecoder
+import phobos.derivation.semiauto._
 import phobos.encoding.XmlEncoder
 import phobos.syntax._
 import phobos.testString._
@@ -23,10 +23,16 @@ class EnumeratumTest extends AnyWordSpec with Matchers {
         case object Foo3 extends Foo
       }
       import Foo._
-      @XmlCodec("bar")
       case class Bar(d: String, foo: Foo, e: Char)
-      @XmlCodec("baz")
+      object Bar {
+        implicit lazy val xmlEncoder: XmlEncoder[Bar] = deriveXmlEncoder[Bar]("bar")
+        implicit lazy val xmlDecoder: XmlDecoder[Bar] = deriveXmlDecoder[Bar]("bar")
+      }
       case class Baz(@attr f: Foo, @text text: Foo)
+      object Baz {
+        implicit lazy val xmlEncoder: XmlEncoder[Baz] = deriveXmlEncoder[Baz]("baz")
+        implicit lazy val xmlDecoder: XmlDecoder[Baz] = deriveXmlDecoder[Baz]("baz")
+      }
       val bar1 = Bar("d value", Foo1, 'e')
       val bar2 = Bar("d value", Foo2, 'e')
       val bar3 = Bar("another one value", Foo3, 'v')
@@ -100,10 +106,16 @@ class EnumeratumTest extends AnyWordSpec with Matchers {
 
       }
       import Foo._
-      @XmlCodec("bar")
       case class Bar(d: String, foo: Foo, e: Char)
-      @XmlCodec("baz")
+      object Bar {
+        implicit lazy val xmlEncoder: XmlEncoder[Bar] = deriveXmlEncoder[Bar]("bar")
+        implicit lazy val xmlDecoder: XmlDecoder[Bar] = deriveXmlDecoder[Bar]("bar")
+      }
       case class Baz(@attr f: Foo, @text text: Foo)
+      object Baz {
+        implicit lazy val xmlEncoder: XmlEncoder[Baz] = deriveXmlEncoder[Baz]("baz")
+        implicit lazy val xmlDecoder: XmlDecoder[Baz] = deriveXmlDecoder[Baz]("baz")
+      }
       val bar1 = Bar("d value", Foo1, 'e')
       val bar2 = Bar("d value", Foo2, 'e')
       val bar3 = Bar("another one value", Foo3, 'v')
