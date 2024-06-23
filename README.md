@@ -97,7 +97,7 @@ Detailed information about supported Scala versions is in the table below. Avail
 | ast         |  ✓   |  ✓   |   |
 | cats        |  ✓   |  ✓   | ✓ |
 | derevo      |  ✓   |  ✓   |   |
-| enumeratum  |  ✓   |  ✓   |   |
+| enumeratum  |  ✓   |  ✓   | ✓ |
 | fs2         |  ✓   |  ✓   | ✓ |
 | fs2-ce2     |  ✓   |  ✓   | ✓ |
 | monix       |  ✓   |  ✓   | ✓ |

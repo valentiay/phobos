@@ -2,7 +2,7 @@
 
 ThisBuild / name := "phobos"
 
-ThisBuild / scalaVersion := "3.4.1"
+ThisBuild / scalaVersion := "3.3.3"
 
 lazy val commonDependencies =
   libraryDependencies ++=
@@ -45,7 +45,7 @@ def commonSettings(id: String) =
   )
 
 lazy val scala2Versions = List("2.12.19", "2.13.13")
-lazy val scala3Versions = List("2.12.19", "2.13.13", "3.4.1")
+lazy val scala3Versions = List("2.12.19", "2.13.13", "3.3.3")
 
 lazy val `core` =
   (projectMatrix in file(s"modules/core"))
@@ -85,9 +85,9 @@ lazy val `ast` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "org.scalacheck"         %% "scalacheck"             % "1.17.1" % "test",
+        "org.scalacheck"         %% "scalacheck"             % "1.18.0" % "test",
         "com.softwaremill.diffx" %% "diffx-scalatest-should" % "0.9.0"  % "test",
-        "org.typelevel"          %% "cats-core"              % "2.10.0",
+        "org.typelevel"          %% "cats-core"              % "2.12.0",
       ),
       Test / testOptions += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "3"),
     )
@@ -100,7 +100,7 @@ lazy val `cats` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "org.typelevel" %% "cats-core" % "2.10.0",
+        "org.typelevel" %% "cats-core" % "2.12.0",
       ),
     )
     .jvmPlatform(scala3Versions)
@@ -175,7 +175,7 @@ lazy val `refined` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "eu.timepit" %% "refined" % "0.11.1",
+        "eu.timepit" %% "refined" % "0.11.2",
       ),
     )
     .jvmPlatform(scala2Versions)
