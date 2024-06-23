@@ -8,7 +8,8 @@ package phobos
   *
   * Value getPreferredPrefix is an optional preferred prefix to associate with this namespace. Prefix MUST contain only
   * letters, digits and '_', '-' characters, otherwise encoding may fail with an error. If preferred prefix is declared
-  * via mkInstance, illegal characters are filtered out.
+  * via mkInstance, illegal characters are filtered out. The prefix MUST NOT be empty. Empty prefixes may lead to invalid
+  * XML documents being generated.
   *
   * If there are several prefixes for one namespace URI, namespaces may be declared twice.
   *
@@ -26,10 +27,12 @@ trait Namespace[T] {
 }
 
 object Namespace {
+
+  /** See documentation for trait [[Namespace]] */
   def mkInstance[T](uri: String, preferredPrefix: Option[String] = None): Namespace[T] = new Namespace[T] {
     val getNamespace: String = uri
     val getPreferredPrefix: Option[String] =
-      preferredPrefix.map(_.filter(c => c.isLetter || c.isDigit || c == '_' || c == '-'))
+      preferredPrefix.map(_.filter(c => c.isLetter || c.isDigit || c == '_' || c == '-')).filter(_.nonEmpty)
   }
 
   def apply[T](implicit instance: Namespace[T]): Namespace[T] = instance
