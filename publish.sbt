@@ -2,6 +2,7 @@ import Publish._
 //import xerial.sbt.Sonatype.sonatypeCentralHost
 
 publishVersion := "0.23.0"
+ThisBuild / versionScheme := Some("early-semver")
 
 ThisBuild / organization := "dev.valentiay"
 ThisBuild / version := {
