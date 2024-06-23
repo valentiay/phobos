@@ -43,7 +43,10 @@ import phobos.Namespace
   *   "http://www.w3.org/2001/XMLSchema-instance", as defined in https://www.w3.org/TR/xmlschema-1/#xsi_type
   * @param useElementNameAsDiscriminator
   *   Forces codecs to use element name as sealed trait discriminator, instead of special attribute. This setting
-  *   overrides [[discriminatorLocalName]] and [[discriminatorNamespace]]. Default value is "false".
+  *   overrides [[discriminatorLocalName]] and [[discriminatorNamespace]]. Default value is "false". Warning: You must
+  *   use the "@default" annotation (see [[phobos.syntax.default]]) to fields with type for which
+  *   [[useElementNameAsDiscriminator]] set as "true". See
+  *   [[https://github.com/valentiay/phobos/blob/master/modules/core/src/main/scala/phobos/configured/ElementCodecConfig.scala#L44 issue]]
   * @param transformConstructorNames
   *   Function to transform constructor names, that are used as sealed trait discriminator. No transformation is applied
   *   by default.
