@@ -1,7 +1,7 @@
 import Publish._
 //import xerial.sbt.Sonatype.sonatypeCentralHost
 
-publishVersion := "0.22.0"
+publishVersion := "0.23.0"
 
 ThisBuild / organization := "dev.valentiay"
 ThisBuild / version := {
