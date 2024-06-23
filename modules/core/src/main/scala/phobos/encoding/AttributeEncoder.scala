@@ -41,6 +41,7 @@ object AttributeEncoder extends AttributeLiteralInstances {
       def encodeAsAttribute(a: Unit, sw: PhobosStreamWriter, localName: String, namespaceUri: Option[String]): Unit = ()
     }
 
+  implicit val nothingEncoder: AttributeEncoder[Nothing]                     = unitEncoder.contramap[Nothing](_ => ())
   implicit val booleanEncoder: AttributeEncoder[Boolean]                     = stringEncoder.contramap(_.toString)
   implicit val javaBooleanEncoder: AttributeEncoder[java.lang.Boolean]       = booleanEncoder.contramap(_.booleanValue())
   implicit val charEncoder: AttributeEncoder[Char]                           = stringEncoder.contramap(_.toString)

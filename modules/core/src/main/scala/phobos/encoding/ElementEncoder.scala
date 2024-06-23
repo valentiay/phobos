@@ -79,6 +79,7 @@ object ElementEncoder extends ElementLiteralInstances with ElementDerivedInstanc
         )
     }
 
+  implicit val nothingEncoder: ElementEncoder[Nothing]                     = unitEncoder.contramap[Nothing](_ => ())
   implicit val booleanEncoder: ElementEncoder[Boolean]                     = stringEncoder.contramap(_.toString)
   implicit val javaBooleanEncoder: ElementEncoder[java.lang.Boolean]       = booleanEncoder.contramap(_.booleanValue())
   implicit val charEncoder: ElementEncoder[Char]                           = stringEncoder.contramap(_.toString)
