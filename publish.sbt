@@ -1,7 +1,7 @@
 import Publish._
 import xerial.sbt.Sonatype.sonatypeCentralHost
 
-publishVersion := "0.24.0"
+publishVersion            := "0.24.0"
 ThisBuild / versionScheme := Some("early-semver")
 
 ThisBuild / organization := "dev.valentiay"
@@ -11,7 +11,7 @@ ThisBuild / version := {
   else s"${publishVersion.value}-$branch-SNAPSHOT".replace("/", "_")
 }
 
-ThisBuild / publishMavenStyle := true
+ThisBuild / publishMavenStyle      := true
 ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 ThisBuild / publishTo :=
   (if (!isSnapshot.value) {
@@ -37,7 +37,7 @@ ThisBuild / developers := List(
 )
 
 ThisBuild / description := "Fast xml data binding library"
-ThisBuild / licenses    := List("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt"))
+ThisBuild / licenses    := List("Apache 2" -> new URI("http://www.apache.org/licenses/LICENSE-2.0.txt").toURL)
 ThisBuild / homepage    := Some(url("https://github.com/valentiay/phobos"))
 
 // Remove all additional repository other than Maven Central from POM
