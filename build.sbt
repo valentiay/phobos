@@ -2,7 +2,7 @@
 
 ThisBuild / name := "phobos"
 
-ThisBuild / scalaVersion := "3.3.3"
+ThisBuild / scalaVersion := "3.3.4"
 
 lazy val commonDependencies =
   libraryDependencies ++=
