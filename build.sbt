@@ -8,8 +8,8 @@ lazy val commonDependencies =
   libraryDependencies ++=
     List(
       "com.fasterxml"  % "aalto-xml" % "1.3.2",
-      "org.scalatest" %% "scalatest" % "3.2.18" % "test",
-      "org.scalactic" %% "scalactic" % "3.2.18" % "test",
+      "org.scalatest" %% "scalatest" % "3.2.19" % "test",
+      "org.scalactic" %% "scalactic" % "3.2.19" % "test",
     ) ++
       (CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, 12)) => List(
@@ -59,7 +59,7 @@ lazy val `akka-http` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "com.typesafe.akka" %% "akka-stream" % "2.8.5" % "provided",
+        "com.typesafe.akka" %% "akka-stream" % "2.8.6" % "provided",
         "com.typesafe.akka" %% "akka-http"   % "10.5.3",
       )
     )
@@ -72,8 +72,8 @@ lazy val `akka-stream`   =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "com.typesafe.akka" %% "akka-stream"  % "2.8.5",
-        "com.typesafe.akka" %% "akka-testkit" % "2.8.5" % Test,
+        "com.typesafe.akka" %% "akka-stream"  % "2.8.6",
+        "com.typesafe.akka" %% "akka-testkit" % "2.8.6" % Test,
       )
     )
     .jvmPlatform(scala3Versions)
