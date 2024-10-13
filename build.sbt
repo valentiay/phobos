@@ -123,8 +123,12 @@ lazy val `enumeratum` =
     .settings(commonSettings("enumeratum"))
     .settings(
       commonDependencies,
+      scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((3, _))  => List( "-Yretain-trees")
+        case _ => Nil
+      }),
       libraryDependencies ++= Seq(
-        "com.beachape" %% "enumeratum" % "1.7.3",
+        "com.beachape" %% "enumeratum" % "1.7.5",
       ),
     )
     .jvmPlatform(scala3Versions)
