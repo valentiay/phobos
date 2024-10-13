@@ -1,7 +1,7 @@
 import Publish._
-//import xerial.sbt.Sonatype.sonatypeCentralHost
+import xerial.sbt.Sonatype.sonatypeCentralHost
 
-publishVersion := "0.23.0"
+publishVersion := "0.24.0"
 ThisBuild / versionScheme := Some("early-semver")
 
 ThisBuild / organization := "dev.valentiay"
@@ -12,7 +12,7 @@ ThisBuild / version := {
 }
 
 ThisBuild / publishMavenStyle := true
-//ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
+ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 ThisBuild / publishTo :=
   (if (!isSnapshot.value) {
      sonatypePublishToBundle.value
