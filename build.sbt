@@ -2,12 +2,12 @@
 
 ThisBuild / name := "phobos"
 
-ThisBuild / scalaVersion := "3.3.4"
+ThisBuild / scalaVersion := "3.3.5"
 
 lazy val commonDependencies =
   libraryDependencies ++=
     List(
-      "com.fasterxml"  % "aalto-xml" % "1.3.2",
+      "com.fasterxml"  % "aalto-xml" % "1.3.3",
       "org.scalatest" %% "scalatest" % "3.2.19" % "test",
       "org.scalactic" %% "scalactic" % "3.2.19" % "test",
     ) ++
@@ -44,8 +44,8 @@ def commonSettings(id: String) =
     )
   )
 
-lazy val scala2Versions = List("2.12.20", "2.13.15")
-lazy val scala3Versions = scala2Versions :+ "3.3.4"
+lazy val scala2Versions = List("2.12.20", "2.13.16")
+lazy val scala3Versions = scala2Versions :+ "3.3.5"
 
 lazy val `core` =
   (projectMatrix in file(s"modules/core"))
@@ -85,9 +85,9 @@ lazy val `ast` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "org.scalacheck"         %% "scalacheck"             % "1.18.0" % "test",
+        "org.scalacheck"         %% "scalacheck"             % "1.18.1" % "test",
         "com.softwaremill.diffx" %% "diffx-scalatest-should" % "0.9.0"  % "test",
-        "org.typelevel"          %% "cats-core"              % "2.12.0",
+        "org.typelevel"          %% "cats-core"              % "2.13.0",
       ),
       Test / testOptions += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "3"),
     )
@@ -100,7 +100,7 @@ lazy val `cats` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "org.typelevel" %% "cats-core" % "2.12.0",
+        "org.typelevel" %% "cats-core" % "2.13.0",
       ),
     )
     .jvmPlatform(scala3Versions)
@@ -112,7 +112,7 @@ lazy val `derevo` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "tf.tofu" %% "derevo-core" % "0.13.0",
+        "tf.tofu" %% "derevo-core" % "0.14.0",
       ),
     )
     .jvmPlatform(scala2Versions)
@@ -128,7 +128,7 @@ lazy val `enumeratum` =
         case _ => Nil
       }),
       libraryDependencies ++= Seq(
-        "com.beachape" %% "enumeratum" % "1.7.5",
+        "com.beachape" %% "enumeratum" % "1.7.6",
       ),
     )
     .jvmPlatform(scala3Versions)
@@ -140,8 +140,8 @@ lazy val `fs2` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "co.fs2" %% "fs2-core" % "3.10.2",
-        "co.fs2" %% "fs2-io"   % "3.10.2" % "test",
+        "co.fs2" %% "fs2-core" % "3.12.0",
+        "co.fs2" %% "fs2-io"   % "3.12.0" % "test",
       ),
     )
     .jvmPlatform(scala3Versions)
@@ -179,7 +179,7 @@ lazy val `refined` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "eu.timepit" %% "refined" % "0.11.2",
+        "eu.timepit" %% "refined" % "0.11.3",
       ),
     )
     .jvmPlatform(scala2Versions)

@@ -12,7 +12,7 @@ Scala 2.12, 2.13 and 3 are supported. See [Supported Scala versions](#supported-
 Add phobos-core to your dependencies:
 
 ```
-libraryDependencies += "dev.valentiay" %% "phobos-core" % "0.24.0"
+libraryDependencies += "dev.valentiay" %% "phobos-core" % "0.25.0"
 ```
 
 Then try this code out in `sbt console` or in a separate source file:
@@ -65,7 +65,7 @@ Performance details can be found out in [phobos-benchmark repository](https://gi
 There are several additional modules for some specific cases. 
 These modules could be added with command below:
 ```
-libraryDependencies += "dev.valentiay" %% "phobos-<module>" % "0.24.0"
+libraryDependencies += "dev.valentiay" %% "phobos-<module>" % "0.25.0"
 ```
 Where `<module>` is module name.
 
