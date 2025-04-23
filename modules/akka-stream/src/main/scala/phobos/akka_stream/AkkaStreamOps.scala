@@ -23,9 +23,7 @@ private[phobos] trait AkkaStreamOps {
         import state.{cursor, elementDecoder, xmlStreamReader}
         xmlStreamReader.getInputFeeder.feedInput(bytes, 0, bytes.length)
         cursor.next()
-        while (
-          cursor.getEventType == XMLStreamConstants.DTD || cursor.getEventType == XMLStreamConstants.START_DOCUMENT
-        ) {
+        while (XmlDecoder.isIgnorableEvent(cursor.getEventType)) {
           cursor.next()
         }
 
