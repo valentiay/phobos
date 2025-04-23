@@ -8,11 +8,13 @@ It depends only on [aalto-xml](https://github.com/FasterXML/aalto-xml/) for pars
 
 Scala 2.12, 2.13 and 3 are supported. See [Supported Scala versions](#supported-scala-versions) for more details.
 
+If you find Phobos useful, please consider giving it a star! ⭐
+
 ## QuickStart
 Add phobos-core to your dependencies:
 
 ```
-libraryDependencies += "dev.valentiay" %% "phobos-core" % "0.25.0"
+libraryDependencies += "dev.valentiay" %% "phobos-core" % "0.26.0"
 ```
 
 Then try this code out in `sbt console` or in a separate source file:
@@ -65,7 +67,7 @@ Performance details can be found out in [phobos-benchmark repository](https://gi
 There are several additional modules for some specific cases. 
 These modules could be added with command below:
 ```
-libraryDependencies += "dev.valentiay" %% "phobos-<module>" % "0.25.0"
+libraryDependencies += "dev.valentiay" %% "phobos-<module>" % "0.26.0"
 ```
 Where `<module>` is module name.
 
