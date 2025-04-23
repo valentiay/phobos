@@ -22,8 +22,9 @@ ThisBuild / publishTo :=
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
-    url("https://github.com/valentiay/phobos"),
-    "git@github.com:valentiay/phobos",
+    browseUrl = url("https://github.com/valentiay/phobos"),
+    connection = "scm:git:https://github.com/valentiay/phobos.git",
+    devConnection = "scm:git:git@github.com:valentiay/phobos.git",
   ),
 )
 
