@@ -35,9 +35,7 @@ trait XmlDecoder[A] extends XmlDecoderIterable[A] {
     val cursor = new Cursor(sr)
     try {
       cursor.next()
-      while (
-        cursor.getEventType == XMLStreamConstants.DTD || cursor.getEventType == XMLStreamConstants.START_DOCUMENT
-      ) {
+      while (cursor.getEventType != XMLStreamConstants.START_ELEMENT) {
         cursor.next()
       }
       elementdecoder
@@ -85,4 +83,8 @@ object XmlDecoder {
       localName: String,
   )(implicit elementDecoder: ElementDecoder[A], namespace: Namespace[NS]): XmlDecoder[A] =
     fromElementDecoder(localName, Some(namespace.getNamespace))
+
+  private[phobos] def isIgnorableEvent(event: Int): Boolean =
+    event == XMLStreamConstants.DTD || event == XMLStreamConstants.START_DOCUMENT ||
+      event == XMLStreamConstants.SPACE || event == XMLStreamConstants.COMMENT
 }

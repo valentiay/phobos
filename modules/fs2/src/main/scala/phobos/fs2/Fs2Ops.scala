@@ -24,9 +24,7 @@ class DecoderOps[A](private val xmlDecoder: XmlDecoder[A]) extends AnyVal {
       .fold[ElementDecoder[A]](xmlDecoder.elementdecoder) { (decoder, bytes) =>
         sr.getInputFeeder.feedInput(bytes, 0, bytes.length)
         cursor.next()
-        while (
-          cursor.getEventType == XMLStreamConstants.DTD || cursor.getEventType == XMLStreamConstants.START_DOCUMENT
-        ) {
+        while (XmlDecoder.isIgnorableEvent(cursor.getEventType)) {
           cursor.next()
         }
 

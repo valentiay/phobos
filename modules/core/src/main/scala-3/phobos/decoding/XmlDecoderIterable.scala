@@ -16,7 +16,7 @@ trait XmlDecoderIterable[A] { xmlDecoder: XmlDecoder[A] =>
       sr.getInputFeeder.feedInput(bytes, 0, bytes.length)
       while {
         cursor.next()
-        cursor.getEventType == XMLStreamConstants.DTD || cursor.getEventType == XMLStreamConstants.START_DOCUMENT
+        XmlDecoder.isIgnorableEvent(cursor.getEventType)
       } do ()
 
       if (decoder.result(cursor.history).isRight) {
