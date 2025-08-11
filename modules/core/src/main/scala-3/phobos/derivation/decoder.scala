@@ -52,7 +52,7 @@ object decoder {
   private def decodeAttributes(using Quotes)(
       groups: Map[FieldCategory, List[ProductTypeField]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.AnyRefMap[String, Any]],
+      currentFieldStates: Expr[mutable.HashMap[String, Any]],
   ): Expr[List[Unit]] = {
     Expr.ofList(
       groups.getOrElse(FieldCategory.attribute, Nil).map { field =>
@@ -71,7 +71,7 @@ object decoder {
   private def decodeText(using Quotes)(
       groups: Map[FieldCategory, List[ProductTypeField]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.AnyRefMap[String, Any]],
+      currentFieldStates: Expr[mutable.HashMap[String, Any]],
   ): Expr[Unit] = {
     groups
       .get(FieldCategory.text)
@@ -96,7 +96,7 @@ object decoder {
       elements: List[ProductTypeField],
       go: Expr[DecoderState => ElementDecoder[T]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.AnyRefMap[String, Any]],
+      currentFieldStates: Expr[mutable.HashMap[String, Any]],
   ): List[quotes.reflect.CaseDef] = {
     import quotes.reflect.*
     elements.map { element =>
@@ -135,7 +135,7 @@ object decoder {
       groups: Map[FieldCategory, List[ProductTypeField]],
       go: Expr[DecoderState => ElementDecoder[T]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.AnyRefMap[String, Any]],
+      currentFieldStates: Expr[mutable.HashMap[String, Any]],
   ) = {
     import quotes.reflect.*
     val decodeElements = decodeElementCases[T](groups.getOrElse(FieldCategory.element, Nil), go, c, currentFieldStates)
@@ -190,7 +190,7 @@ object decoder {
       go: Expr[DecoderState => ElementDecoder[T]],
       c: Expr[Cursor],
       localName: Expr[String],
-      currentFieldStates: Expr[mutable.AnyRefMap[String, Any]],
+      currentFieldStates: Expr[mutable.HashMap[String, Any]],
       config: Expr[ElementCodecConfig],
   ) = {
     import quotes.reflect.*
@@ -297,7 +297,7 @@ object decoder {
       groups: Map[FieldCategory, List[ProductTypeField]],
       go: Expr[DecoderState => ElementDecoder[T]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.AnyRefMap[String, Any]],
+      currentFieldStates: Expr[mutable.HashMap[String, Any]],
       name: Expr[String],
   ) = {
     import quotes.reflect.*
@@ -325,7 +325,7 @@ object decoder {
       groups: Map[FieldCategory, List[ProductTypeField]],
       go: Expr[DecoderState => ElementDecoder[T]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.AnyRefMap[String, Any]],
+      currentFieldStates: Expr[mutable.HashMap[String, Any]],
       state: Expr[IgnoringElement],
   ) = {
     import quotes.reflect.*
@@ -385,7 +385,7 @@ object decoder {
       // Generate case class instead of untyped map?
       class TDecoder(state: DecoderState, fieldStates: Map[String, Any]) extends ElementDecoder[T] {
         def decodeAsElement(c: Cursor, localName: String, namespaceUri: Option[String]): ElementDecoder[T] = {
-          val currentFieldStates: mutable.AnyRefMap[String, Any] = mutable.AnyRefMap.from(fieldStates)
+          val currentFieldStates: mutable.HashMap[String, Any] = mutable.HashMap.from(fieldStates)
           @tailrec
           def go(currentState: DecoderState): ElementDecoder[T] = {
             if (c.getEventType == AsyncXMLStreamReader.EVENT_INCOMPLETE) {

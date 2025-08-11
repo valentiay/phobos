@@ -2,7 +2,7 @@
 
 ThisBuild / name := "phobos"
 
-ThisBuild / scalaVersion := "3.3.5"
+ThisBuild / scalaVersion := "3.3.6"
 
 lazy val commonDependencies =
   libraryDependencies ++=
@@ -45,7 +45,7 @@ def commonSettings(id: String) =
   )
 
 lazy val scala2Versions = List("2.12.20", "2.13.16")
-lazy val scala3Versions = scala2Versions :+ "3.3.5"
+lazy val scala3Versions = scala2Versions :+ "3.3.6"
 
 lazy val `core` =
   (projectMatrix in file(s"modules/core"))
@@ -128,7 +128,7 @@ lazy val `enumeratum` =
         case _ => Nil
       }),
       libraryDependencies ++= Seq(
-        "com.beachape" %% "enumeratum" % "1.7.6",
+        "com.beachape" %% "enumeratum" % "1.9.0",
       ),
     )
     .jvmPlatform(scala3Versions)

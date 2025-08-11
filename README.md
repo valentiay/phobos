@@ -14,7 +14,7 @@ If you find Phobos useful, please consider giving it a star! ⭐
 Add phobos-core to your dependencies:
 
 ```
-libraryDependencies += "dev.valentiay" %% "phobos-core" % "0.26.0"
+libraryDependencies += "dev.valentiay" %% "phobos-core" % "0.27.0"
 ```
 
 Then try this code out in `sbt console` or in a separate source file:
@@ -67,7 +67,7 @@ Performance details can be found out in [phobos-benchmark repository](https://gi
 There are several additional modules for some specific cases. 
 These modules could be added with command below:
 ```
-libraryDependencies += "dev.valentiay" %% "phobos-<module>" % "0.26.0"
+libraryDependencies += "dev.valentiay" %% "phobos-<module>" % "0.27.0"
 ```
 Where `<module>` is module name.
 

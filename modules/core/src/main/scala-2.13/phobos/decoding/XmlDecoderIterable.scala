@@ -1,7 +1,5 @@
 package phobos.decoding
 
-import javax.xml.stream.XMLStreamConstants
-
 import phobos.decoding.XmlDecoder.createStreamReader
 
 trait XmlDecoderIterable[A] { xmlDecoder: XmlDecoder[A] =>
