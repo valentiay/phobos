@@ -156,6 +156,12 @@ final case class ElementCodecConfig(
 
   def withRemoveNamespaces: ElementCodecConfig =
     copy(removeNamespaces = Some(true))
+    
+  private[phobos] val attributesDefaultNamespaceInstance: Option[Namespace[Any]] =
+    attributesDefaultNamespace.map(Namespace.mkInstance(_, None))
+    
+  private[phobos] val elementsDefaultNamespaceInstance: Option[Namespace[Any]] =
+    elementsDefaultNamespace.map(Namespace.mkInstance(_, None))
 }
 
 object ElementCodecConfig {

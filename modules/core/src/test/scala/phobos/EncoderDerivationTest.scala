@@ -1410,6 +1410,36 @@ class EncoderDerivationTest extends AnyWordSpec with Matchers {
                   |""".stripMargin.minimized),
       )
     }
+
+    "respect preferred namespace prefixes" in {
+      case object org
+      implicit val orgNs: Namespace[org.type] = Namespace.mkInstance("example.org", preferredPrefix = Some("org"))
+      case class Foo(
+          @xmlns(org) a: Int,
+          @xmlns(org) b: String,
+          @xmlns(org) c: Double,
+      )
+      case class Bar(@xmlns(org) foo: Foo)
+
+      implicit val fooEncoder: ElementEncoder[Foo] = deriveElementEncoder
+      implicit val xmlEncoder: XmlEncoder[Bar]     = deriveXmlEncoder("bar")
+
+      val bar    = Bar(Foo(1, "b value", 3.0))
+      val string = XmlEncoder[Bar].encode(bar)
+      assert(
+        string ==
+          Right("""
+                  | <?xml version='1.0' encoding='UTF-8'?>
+                  | <bar>
+                  |   <org:foo xmlns:org="example.org">
+                  |     <org:a>1</org:a>
+                  |     <org:b>b value</org:b>
+                  |     <org:c>3.0</org:c>
+                  |   </org:foo>
+                  | </bar>
+      """.stripMargin.minimized),
+      )
+    }
   }
 
   "Encoder derivation compilation" should {

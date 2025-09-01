@@ -51,7 +51,7 @@ object encoder {
               ${ Select(a.asTerm, classSymbol.declaredField(field.localName)).asExprOf[t] },
               $sw,
               ${ field.xmlName },
-              ${ field.namespaceUri },
+              ${ field.namespace }.map(_.getNamespace),
             )
           }
       }
@@ -95,7 +95,8 @@ object encoder {
               ${ Select(a.asTerm, classSymbol.declaredField(field.localName)).asExprOf[t] },
               $sw,
               ${ field.xmlName },
-              ${ field.namespaceUri },
+              ${ field.namespace }.map(_.getNamespace),
+              ${ field.namespace }.flatMap(_.getPreferredPrefix),
             )
           }
       }
