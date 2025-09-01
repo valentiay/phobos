@@ -96,20 +96,22 @@ trait XmlEncoder[A] {
     * .encodeWithConfig
     */
   def encodePrettyWithConfigUnsafe(a: A, config: XmlEncoderConfig, ident: Int = 2): String =
-    beautifyXml(encodeWithConfigUnsafe(a, config), ident)
+    beautifyXml(encodeWithConfigUnsafe(a, config), ident, Some(config))
 
   /** Warning: Use .encodePretty only for debugging, as it is less performant. For production use .encode
     */
   def encodePrettyUnsafe(a: A, charset: String = "UTF-8", ident: Int = 2): String =
-    beautifyXml(encodeUnsafe(a, charset), ident)
+    beautifyXml(encodeUnsafe(a, charset), ident, None)
 
   private def wrapXmlException[B](xml: => B): Either[EncodingError, B] =
     try { Right(xml) }
     catch { case e: Throwable => Left(EncodingError(Option(e.getMessage).getOrElse("No message provided"), Some(e))) }
 
-  private def beautifyXml(xml: String, ident: Int): String = {
+  private def beautifyXml(xml: String, ident: Int, config: Option[XmlEncoderConfig]): String = {
     val t = XmlEncoder.transformerFactory.newTransformer()
     t.setOutputProperty(OutputKeys.INDENT, "yes")
+    if (config.exists(c => !c.writeProlog)) t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes")
+    else t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no")
     t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", ident.toString)
     val out = new StringWriter()
     t.transform(new StreamSource(new StringReader(xml)), new StreamResult(out))
