@@ -25,7 +25,7 @@ object common {
   private[derivation] final class ProductTypeField(using val quotes: Quotes)(
       val localName: String,
       val xmlName: Expr[String], // Name of element or attribute
-      val namespaceUri: Expr[Option[String]],
+      val namespace: Expr[Option[Namespace[Any]]],
       val typeRepr: quotes.reflect.TypeRepr,
       val category: FieldCategory,
   )
@@ -56,7 +56,7 @@ object common {
       val fieldAnnotations = constructorFieldSymbol.annotations.map(_.asExpr)
       val fieldCategory    = extractFieldCategory(classSymbol, fieldSymbol, fieldAnnotations)
       val fieldXmlName     = extractFieldXmlName(config, classSymbol, fieldSymbol, fieldAnnotations, fieldCategory)
-      val fieldNamespace   = extractFeildNamespace(config, classSymbol, fieldSymbol, fieldAnnotations, fieldCategory)
+      val fieldNamespace   = extractFieldNamespace(config, classSymbol, fieldSymbol, fieldAnnotations, fieldCategory)
       ProductTypeField(using quotes)(
         fieldSymbol.name,
         fieldXmlName,
@@ -170,21 +170,21 @@ object common {
     })
   }
 
-  private def extractFeildNamespace(using Quotes)(
+  private def extractFieldNamespace(using Quotes)(
       config: Expr[ElementCodecConfig],
       classSymbol: quotes.reflect.Symbol,
       fieldSymbol: quotes.reflect.Symbol,
       fieldAnnotations: List[Expr[Any]],
       fieldCategory: FieldCategory,
-  ): Expr[Option[String]] = {
+  ): Expr[Option[Namespace[Any]]] = {
     import quotes.reflect.*
     fieldAnnotations.collect { case '{ xmlns($namespace: b) } =>
-      '{ Some(summonInline[Namespace[b]].getNamespace) }
+      '{ Some(summonInline[Namespace[b]].asInstanceOf[Namespace[Any]]) }
     } match {
       case Nil =>
         fieldCategory match {
-          case FieldCategory.element   => '{ ${ config }.elementsDefaultNamespace }
-          case FieldCategory.attribute => '{ ${ config }.attributesDefaultNamespace }
+          case FieldCategory.element   => '{ ${ config }.elementsDefaultNamespaceInstance }
+          case FieldCategory.attribute => '{ ${ config }.attributesDefaultNamespaceInstance }
           case _                       => '{ None }
         }
       case List(namespace) => namespace

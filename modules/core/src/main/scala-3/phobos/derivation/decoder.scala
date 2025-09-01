@@ -60,7 +60,7 @@ object decoder {
           case '[t] =>
             '{
               val attribute = summonInline[AttributeDecoder[t]]
-                .decodeAsAttribute($c, ${ field.xmlName }, ${ field.namespaceUri })
+                .decodeAsAttribute($c, ${ field.xmlName }, ${ field.namespace }.map(_.getNamespace))
               ${ currentFieldStates }.update(${ Expr(field.localName) }, attribute)
             }
         }
@@ -114,7 +114,7 @@ object decoder {
                 .decodeAsElement(
                   $c,
                   ${ element.xmlName },
-                  ${ element.namespaceUri }.orElse($c.getScopeDefaultNamespace),
+                  ${ element.namespace }.map(_.getNamespace).orElse($c.getScopeDefaultNamespace),
                 )
               ${ currentFieldStates }.update(${ Expr(element.localName) }, res)
               if (res.isCompleted) {
