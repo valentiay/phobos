@@ -35,7 +35,7 @@ trait XmlDecoder[A] extends XmlDecoderIterable[A] {
     val cursor = new Cursor(sr)
     try {
       cursor.next()
-      while (cursor.getEventType != XMLStreamConstants.START_ELEMENT) {
+      while (XmlDecoder.isIgnorableEvent(cursor.getEventType)) {
         cursor.next()
       }
       elementdecoder
