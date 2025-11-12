@@ -4,7 +4,6 @@ import scala.annotation.nowarn
 import scala.compiletime.*
 import scala.deriving.Mirror
 import scala.quoted.*
-import scala.reflect.TypeTest
 
 import phobos.Namespace
 import phobos.configured.ElementCodecConfig
@@ -32,14 +31,10 @@ object common {
 
   private[derivation] final class SumTypeChild[TC[_], Base](
       val xmlName: String,
-      val lazyTC: LazySummon[TC, Base],
-      val typeTest: TypeTest[Base, ?],
+      val tc: TC[Base],
   )
 
   extension [TC[_], Base](children: List[SumTypeChild[TC, Base]])
-    def byInstance[T](i: Base): Option[SumTypeChild[TC, Base]] =
-      children.find(_.typeTest.unapply(i).isDefined)
-
     def byXmlName(n: String): Option[SumTypeChild[TC, Base]] = children.find(_.xmlName == n)
 
   private[derivation] def extractProductTypeFields[T: Type](
@@ -84,18 +79,15 @@ object common {
     fields
   }
 
-  inline def extractSumTypeChild[TC[_], T](
+  private[derivation] inline def extractSumTypeChild[TC[_], T](
       inline config: ElementCodecConfig,
   )(using m: Mirror.SumOf[T]): List[SumTypeChild[TC, T]] = {
     type Children = m.MirroredElemTypes
-    val typeTests = summonAll[Tuple.Map[Children, [t] =>> TypeTest[T, t]]].toList.map(_.asInstanceOf[TypeTest[T, ?]])
-    val lazyTCs =
-      summonAll[Tuple.Map[Children, [t] =>> LazySummon[TC, t]]].toList.map(_.asInstanceOf[LazySummon[TC, T]])
-    val xmlNames = extractSumXmlNames[T](config)
 
-    typeTests.zip(lazyTCs).zip(xmlNames).map { case ((typeTest, lazyTC), xmlName) =>
-      new SumTypeChild(xmlName, lazyTC, typeTest)
-    }
+    val xmlNames = extractSumXmlNames[T](config)
+    val tcs      = summonAll[Tuple.Map[Children, [t] =>> TC[t]]].toList.asInstanceOf[List[TC[T]]]
+
+    tcs.zip(xmlNames).map { case (tc, xmlName) => new SumTypeChild(xmlName, tc) }
   }
 
   private[derivation] inline def extractSumXmlNames[T](inline config: ElementCodecConfig): List[String] =

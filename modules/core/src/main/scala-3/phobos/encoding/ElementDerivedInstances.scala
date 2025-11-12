@@ -4,12 +4,12 @@ import scala.deriving.Mirror
 
 import phobos.configured.ElementCodecConfig
 import phobos.derivation.auto.Auto
-import phobos.derivation.{LazySummon, encoder}
+import phobos.derivation.encoder
 
 private[encoding] trait ElementDerivedInstances {
   inline def derived[T]: ElementEncoder[T] =
     encoder.deriveElementEncoder[T](ElementCodecConfig.default)
 
-  inline given [T](using mirror: Mirror.Of[T]): LazySummon[ElementEncoder, T] = new:
-    def instance = encoder.deriveElementEncoder[T](ElementCodecConfig.default)
+  inline given [T <: reflect.Enum]: ElementEncoder[T] =
+    encoder.deriveElementEncoder[T](ElementCodecConfig.default)
 }

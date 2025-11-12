@@ -19,9 +19,9 @@ object encoder {
   ): ElementEncoder[T] =
     summonFrom {
       case _: Mirror.ProductOf[T] => deriveProduct(config)
-      case _: Mirror.SumOf[T] =>
+      case s: Mirror.SumOf[T] =>
         val childInfos = extractSumTypeChild[ElementEncoder, T](config)
-        deriveSum(config, childInfos)
+        deriveSum(config, childInfos)(s)
       case _ => error(s"${showType[T]} is not a sum type or product type")
     }
 
@@ -153,7 +153,7 @@ object encoder {
   inline def deriveSum[T](
       inline config: ElementCodecConfig,
       inline childInfos: List[SumTypeChild[ElementEncoder, T]],
-  ): ElementEncoder[T] = {
+  )(m: Mirror.SumOf[T]): ElementEncoder[T] = {
     new ElementEncoder[T] {
       def encodeAsElement(
           t: T,
@@ -162,9 +162,7 @@ object encoder {
           namespaceUri: Option[String],
           preferredNamespacePrefix: Option[String],
       ): Unit = {
-        val childInfo = childInfos
-          .byInstance(t)
-          .getOrElse(throw EncodingError(s"Looks like an error in derivation: no TypeTest was positive for $t"))
+        val childInfo = childInfos(m.ordinal(t))
         val discr =
           if (config.useElementNameAsDiscriminator) childInfo.xmlName
           else {
@@ -176,9 +174,7 @@ object encoder {
             localName
           }
 
-        childInfo.lazyTC.instance
-          .asInstanceOf[ElementEncoder[T]]
-          .encodeAsElement(t, sw, discr, namespaceUri, preferredNamespacePrefix)
+        childInfo.tc.encodeAsElement(t, sw, discr, namespaceUri, preferredNamespacePrefix)
       }
     }
   }

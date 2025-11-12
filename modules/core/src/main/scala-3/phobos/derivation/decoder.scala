@@ -484,7 +484,7 @@ object decoder {
             d => {
               childInfos.byXmlName(d) match {
                 case Some(childInfo) =>
-                  childInfo.lazyTC.instance.decodeAsElement(
+                  childInfo.tc.decodeAsElement(
                     c,
                     c.getLocalName,
                     Option(c.getNamespaceURI).filter(_.nonEmpty).orElse(c.getScopeDefaultNamespace),
