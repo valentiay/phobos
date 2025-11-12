@@ -25,7 +25,7 @@ object decoder {
       inline config: ElementCodecConfig,
   ): ElementDecoder[T] =
     summonFrom {
-      case _: Mirror.ProductOf[T] => deriveProduct(config)
+      case m: Mirror.ProductOf[T] => deriveProduct(config, m)
       case _: Mirror.SumOf[T] =>
         val childInfos = extractSumTypeChild[ElementDecoder, T](config)
         deriveSum(config, childInfos)
@@ -192,6 +192,7 @@ object decoder {
       localName: Expr[String],
       currentFieldStates: Expr[mutable.HashMap[String, Any]],
       config: Expr[ElementCodecConfig],
+      productMirror: Expr[Mirror.ProductOf[T]],
   ) = {
     import quotes.reflect.*
 
@@ -200,15 +201,19 @@ object decoder {
         case name if name == $localName =>
           val decodingResult: Either[DecodingError, T] = ${
             def appliedConstructor(constructorParams: List[Term]): Term = {
-              val classTypeRepr      = TypeRepr.of[T]
-              val primaryConstructor = Select(New(TypeTree.of[T]), classTypeRepr.typeSymbol.primaryConstructor)
-              classTypeRepr match {
-                case AppliedType(_, params) =>
-                  Apply(TypeApply(primaryConstructor, params.map(Inferred.apply)), constructorParams)
-                case TermRef(typeRepr, name) =>
-                  Ref(classTypeRepr.termSymbol)
-                case _ =>
-                  Apply(primaryConstructor, constructorParams)
+              if (constructorParams.isEmpty) { // handle case object
+                '{ $productMirror.fromProduct(EmptyTuple) }.asTerm
+              } else {
+                val classTypeRepr      = TypeRepr.of[T]
+                val primaryConstructor = Select(New(TypeTree.of[T]), classTypeRepr.typeSymbol.primaryConstructor)
+                classTypeRepr match {
+                  case AppliedType(_, params) =>
+                    Apply(TypeApply(primaryConstructor, params.map(Inferred.apply)), constructorParams)
+                  case TermRef(typeRepr, name) =>
+                    Ref(classTypeRepr.termSymbol)
+                  case _ =>
+                    Apply(primaryConstructor, constructorParams)
+                }
               }
             }
 
@@ -372,15 +377,20 @@ object decoder {
       }
   }
 
-  private inline def deriveProduct[T](inline config: ElementCodecConfig): ElementDecoder[T] =
-    ${ deriveProductImpl[T]('config) }
+  private inline def deriveProduct[T](
+      inline config: ElementCodecConfig,
+      productMirror: Mirror.ProductOf[T],
+  ): ElementDecoder[T] =
+    ${ deriveProductImpl[T]('config, 'productMirror) }
 
-  private def deriveProductImpl[T: Type](config: Expr[ElementCodecConfig])(using Quotes): Expr[ElementDecoder[T]] = {
+  private def deriveProductImpl[T: Type](
+      config: Expr[ElementCodecConfig],
+      productMirror: Expr[Mirror.ProductOf[T]],
+  )(using Quotes): Expr[ElementDecoder[T]] = {
     import quotes.reflect.*
-    val classTypeRepr = TypeRepr.of[T]
-    val classSymbol   = classTypeRepr.typeSymbol
-    val fields        = extractProductTypeFields[T](config)
-    val groups        = fields.groupBy(_.category)
+    val fields = extractProductTypeFields[T](config)
+    val groups = fields.groupBy(_.category)
+
     '{
       // Generate case class instead of untyped map?
       class TDecoder(state: DecoderState, fieldStates: Map[String, Any]) extends ElementDecoder[T] {
@@ -416,7 +426,7 @@ object decoder {
                   if (c.isStartElement) {
                     ${ decodeStartElement[T](groups, 'go, 'c, 'currentFieldStates) }
                   } else if (c.isEndElement) {
-                    ${ decodeEndElement[T](fields, 'go, 'c, 'localName, 'currentFieldStates, config) }
+                    ${ decodeEndElement[T](fields, 'go, 'c, 'localName, 'currentFieldStates, config, productMirror) }
                   } else {
                     c.next()
                     go(DecoderState.DecodingSelf)
