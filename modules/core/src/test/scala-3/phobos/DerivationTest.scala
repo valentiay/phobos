@@ -172,6 +172,16 @@ class DerivationTest extends AnyWordSpec with Matchers {
       val nature = Nature(Wild.Tiger, Domestic.Dog("Pug"))
       assert(XmlDecoder[Nature].decode(natureString) == Right(nature))
     }
+
+    "handle case objects properly" in {
+      case object Foo derives ElementDecoder
+      val string = """<?xml version='1.0' encoding='UTF-8'?>
+                     | <Foo/>
+                   """.stripMargin.minimized
+
+      given XmlDecoder[Foo.type] = XmlDecoder.fromElementDecoder("Foo")
+      assert(XmlDecoder[Foo.type].decode(string) == Right(Foo))
+    }
   }
 }
 
