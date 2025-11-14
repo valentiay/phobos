@@ -7,7 +7,6 @@ import scala.reflect.TypeTest
 import phobos.SealedClasses.Animal.animalDecoder
 import phobos.configured.ElementCodecConfig
 import phobos.decoding._
-import phobos.derivation.common.extractSumTypeChild
 import phobos.derivation.encoder.deriveElementEncoder
 import phobos.derivation.semiauto.deriveXmlEncoder
 import phobos.encoding._

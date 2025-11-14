@@ -79,15 +79,11 @@ object common {
     fields
   }
 
-  private[derivation] inline def extractSumTypeChild[TC[_], T](
-      inline config: ElementCodecConfig,
-  )(using m: Mirror.SumOf[T]): List[SumTypeChild[TC, T]] = {
-    type Children = m.MirroredElemTypes
-
-    val xmlNames = extractSumXmlNames[T](config)
-    val tcs      = summonAll[Tuple.Map[Children, [t] =>> TC[t]]].toList.asInstanceOf[List[TC[T]]]
-
-    tcs.zip(xmlNames).map { case (tc, xmlName) => new SumTypeChild(xmlName, tc) }
+  private[derivation] inline def isEnum[T]: Boolean = {
+    inline erasedValue[T] match {
+      case _: reflect.Enum => true
+      case _               => false
+    }
   }
 
   private[derivation] inline def extractSumXmlNames[T](inline config: ElementCodecConfig): List[String] =

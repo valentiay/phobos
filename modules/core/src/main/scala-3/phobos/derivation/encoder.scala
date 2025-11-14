@@ -19,10 +19,8 @@ object encoder {
   ): ElementEncoder[T] =
     summonFrom {
       case _: Mirror.ProductOf[T] => deriveProduct(config)
-      case s: Mirror.SumOf[T] =>
-        val childInfos = extractSumTypeChild[ElementEncoder, T](config)
-        deriveSum(config, childInfos)(s)
-      case _ => error(s"${showType[T]} is not a sum type or product type")
+      case m: Mirror.SumOf[T]     => deriveSum(config, m)
+      case _                      => error(s"${showType[T]} is not a sum type or product type")
     }
 
   inline def deriveXmlEncoder[T](
@@ -152,8 +150,17 @@ object encoder {
 
   inline def deriveSum[T](
       inline config: ElementCodecConfig,
-      inline childInfos: List[SumTypeChild[ElementEncoder, T]],
-  )(m: Mirror.SumOf[T]): ElementEncoder[T] = {
+      m: Mirror.SumOf[T],
+  ): ElementEncoder[T] = {
+    type Children = m.MirroredElemTypes
+
+    val childEncoders =
+      inline if (isEnum[T]) autoDeriveEnumChildren[Children, T]
+      else summonAll[Tuple.Map[Children, [t] =>> ElementEncoder[t]]].toList.asInstanceOf[List[ElementEncoder[T]]]
+
+    val xmlNames   = extractSumXmlNames[T](config)
+    val childInfos = xmlNames.zip(childEncoders).map(SumTypeChild(_, _))
+
     new ElementEncoder[T] {
       def encodeAsElement(
           t: T,
@@ -176,6 +183,15 @@ object encoder {
 
         childInfo.tc.encodeAsElement(t, sw, discr, namespaceUri, preferredNamespacePrefix)
       }
+    }
+  }
+
+  private inline def autoDeriveEnumChildren[T <: Tuple, Base]: List[ElementEncoder[Base]] = {
+    inline erasedValue[T] match {
+      case _: EmptyTuple => Nil
+      case _: (t *: ts) =>
+        deriveElementEncoder[t](ElementCodecConfig.default).asInstanceOf[ElementEncoder[Base]] ::
+          autoDeriveEnumChildren[ts, Base]
     }
   }
 }
