@@ -16,7 +16,7 @@ class EnumeratumTest extends AnyWordSpec with Matchers {
     "encode enums" in {
       sealed trait Foo extends EnumEntry with Product with Serializable
       object Foo extends XmlEnum[Foo] with Enum[Foo] {
-        val values = findValues
+        lazy val values = findValues
 
         case object Foo1 extends Foo
         case object Foo2 extends Foo
@@ -96,7 +96,7 @@ class EnumeratumTest extends AnyWordSpec with Matchers {
     def decodeEnums(toList: String => List[Array[Byte]]): Assertion = {
       sealed trait Foo extends EnumEntry with Product with Serializable
       object Foo extends XmlEnum[Foo] with Enum[Foo] {
-        val values = findValues
+        lazy val values = findValues
 
         case object Foo1 extends Foo
 

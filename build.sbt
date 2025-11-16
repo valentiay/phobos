@@ -2,12 +2,12 @@
 
 ThisBuild / name := "phobos"
 
-ThisBuild / scalaVersion := "3.3.6"
+ThisBuild / scalaVersion := "3.3.7"
 
 lazy val commonDependencies =
   libraryDependencies ++=
     List(
-      "com.fasterxml"  % "aalto-xml" % "1.3.3",
+      "com.fasterxml"  % "aalto-xml" % "1.3.4",
       "org.scalatest" %% "scalatest" % "3.2.19" % "test",
       "org.scalactic" %% "scalactic" % "3.2.19" % "test",
     ) ++
@@ -44,8 +44,8 @@ def commonSettings(id: String) =
     )
   )
 
-lazy val scala2Versions = List("2.12.20", "2.13.16")
-lazy val scala3Versions = scala2Versions :+ "3.3.6"
+lazy val scala2Versions = List("2.12.20", "2.13.17")
+lazy val scala3Versions = scala2Versions :+ "3.3.7"
 
 lazy val `core` =
   (projectMatrix in file(s"modules/core"))
@@ -59,7 +59,7 @@ lazy val `akka-http` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "com.typesafe.akka" %% "akka-stream" % "2.8.6" % "provided",
+        "com.typesafe.akka" %% "akka-stream" % "2.8.8" % "provided",
         "com.typesafe.akka" %% "akka-http"   % "10.5.3",
       )
     )
@@ -72,8 +72,8 @@ lazy val `akka-stream`   =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "com.typesafe.akka" %% "akka-stream"  % "2.8.6",
-        "com.typesafe.akka" %% "akka-testkit" % "2.8.6" % Test,
+        "com.typesafe.akka" %% "akka-stream"  % "2.8.8",
+        "com.typesafe.akka" %% "akka-testkit" % "2.8.8" % Test,
       )
     )
     .jvmPlatform(scala3Versions)
@@ -140,8 +140,8 @@ lazy val `fs2` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "co.fs2" %% "fs2-core" % "3.12.0",
-        "co.fs2" %% "fs2-io"   % "3.12.0" % "test",
+        "co.fs2" %% "fs2-core" % "3.12.2",
+        "co.fs2" %% "fs2-io"   % "3.12.2" % "test",
       ),
     )
     .jvmPlatform(scala3Versions)
@@ -206,6 +206,6 @@ lazy val phobos = project
     moduleName         := "phobos",
     publish / skip     := true,
   )
-  .aggregate(modules: _*)
+  .aggregate(modules *)
 
 Global / excludeLintKeys := Set(name, pomIncludeRepository, publishMavenStyle)
