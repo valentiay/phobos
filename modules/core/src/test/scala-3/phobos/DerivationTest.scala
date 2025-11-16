@@ -7,8 +7,6 @@ import scala.reflect.TypeTest
 import phobos.SealedClasses.Animal.animalDecoder
 import phobos.configured.ElementCodecConfig
 import phobos.decoding._
-import phobos.derivation.LazySummon
-import phobos.derivation.common.extractSumTypeChild
 import phobos.derivation.encoder.deriveElementEncoder
 import phobos.derivation.semiauto.deriveXmlEncoder
 import phobos.encoding._
@@ -64,6 +62,34 @@ class DerivationTest extends AnyWordSpec with Matchers {
       )
     }
 
+    "derive for sealed traits summons children definitions" in {
+      import phobos.configured.naming.{snakeCase, upperSnakeCase}
+      import phobos.derivation.semiauto.deriveElementEncoderConfigured
+
+      sealed trait Foo
+      case class Bar(shouldBeSnakeCase: String) extends Foo
+      case class Qux(shouldBeScreaming: String) extends Foo
+
+      given ElementEncoder[Bar] = deriveElementEncoderConfigured(
+        ElementCodecConfig.default.withElementNamesTransformed(snakeCase),
+      )
+      given ElementEncoder[Qux] = deriveElementEncoderConfigured(
+        ElementCodecConfig.default.withElementNamesTransformed(upperSnakeCase),
+      )
+      given ElementEncoder[Foo] = deriveElementEncoderConfigured(
+        ElementCodecConfig.default.usingElementNamesAsDiscriminator,
+      )
+      given XmlEncoder[Foo] = XmlEncoder.fromElementEncoder("foo")
+
+      val expectedBar =
+        "<?xml version='1.0' encoding='UTF-8'?><Bar><should_be_snake_case>bar</should_be_snake_case></Bar>"
+      val expectedQux =
+        "<?xml version='1.0' encoding='UTF-8'?><Qux><SHOULD_BE_SCREAMING>qux</SHOULD_BE_SCREAMING></Qux>"
+
+      assert(XmlEncoder[Foo].encode(Bar("bar")) == Right(expectedBar))
+      assert(XmlEncoder[Foo].encode(Qux("qux")) == Right(expectedQux))
+    }
+
     "derive for enums" in {
       given XmlEncoder[Domestic] = XmlEncoder.fromElementEncoder("Domestic")
       assert(
@@ -101,9 +127,6 @@ class DerivationTest extends AnyWordSpec with Matchers {
       )
     }
   }
-
-  import scala.compiletime.*
-  import scala.deriving.*
 
   "ElementDecoder.derived" should {
     "derive for products" in {
@@ -191,8 +214,8 @@ object DerivationTest {
 
   sealed trait Wild derives ElementEncoder, ElementDecoder
   object Wild {
-    @discriminator("cat") case object Tiger                    extends Wild
-    @discriminator("dog") case class Wolf(@text breed: String) extends Wild
+    @discriminator("cat") case object Tiger                    extends Wild derives ElementEncoder, ElementDecoder
+    @discriminator("dog") case class Wolf(@text breed: String) extends Wild derives ElementEncoder, ElementDecoder
   }
 
   enum Domestic derives ElementEncoder, ElementDecoder {

@@ -26,10 +26,8 @@ object decoder {
   ): ElementDecoder[T] =
     summonFrom {
       case m: Mirror.ProductOf[T] => deriveProduct(config, m)
-      case _: Mirror.SumOf[T] =>
-        val childInfos = extractSumTypeChild[ElementDecoder, T](config)
-        deriveSum(config, childInfos)
-      case _ => error(s"${showType[T]} is not a sum type or product type")
+      case m: Mirror.SumOf[T]     => deriveSum(config, m)
+      case _                      => error(s"${showType[T]} is not a sum type or product type")
     }
 
   inline def deriveXmlDecoder[T](
@@ -449,8 +447,17 @@ object decoder {
 
   private inline def deriveSum[T](
       inline config: ElementCodecConfig,
-      inline childInfos: List[SumTypeChild[ElementDecoder, T]],
+      m: Mirror.SumOf[T],
   ): ElementDecoder[T] = {
+    type Children = m.MirroredElemTypes
+
+    val childDecoders =
+      inline if (isEnum[T]) autoDeriveEnumChildren[Children, T]
+      else summonAll[Tuple.Map[Children, [t] =>> ElementDecoder[t]]].toList.asInstanceOf[List[ElementDecoder[T]]]
+
+    val xmlNames   = extractSumXmlNames[T](config)
+    val childInfos = xmlNames.zip(childDecoders).map(SumTypeChild(_, _))
+
     new ElementDecoder[T] {
       def decodeAsElement(c: Cursor, localName: String, namespaceUri: Option[String]): ElementDecoder[T] = {
         config.removeNamespaces.foreach(c.setRemoveNamespaces)
@@ -484,7 +491,7 @@ object decoder {
             d => {
               childInfos.byXmlName(d) match {
                 case Some(childInfo) =>
-                  childInfo.lazyTC.instance.decodeAsElement(
+                  childInfo.tc.decodeAsElement(
                     c,
                     c.getLocalName,
                     Option(c.getNamespaceURI).filter(_.nonEmpty).orElse(c.getScopeDefaultNamespace),
@@ -501,6 +508,15 @@ object decoder {
 
       def result(history: => List[String]): Either[DecodingError, T] =
         Left(ElementDecoder.decodingNotCompleteError(history))
+    }
+  }
+
+  private inline def autoDeriveEnumChildren[T <: Tuple, Base]: List[ElementDecoder[Base]] = {
+    inline erasedValue[T] match {
+      case _: EmptyTuple => Nil
+      case _: (t *: ts) =>
+        deriveElementDecoder[t](ElementCodecConfig.default).asInstanceOf[ElementDecoder[Base]] ::
+          autoDeriveEnumChildren[ts, Base]
     }
   }
 }
