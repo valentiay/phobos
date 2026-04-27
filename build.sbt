@@ -182,7 +182,7 @@ lazy val `refined` =
         "eu.timepit" %% "refined" % "0.11.3",
       ),
     )
-    .jvmPlatform(scala2Versions)
+    .jvmPlatform(scala3Versions)
     .dependsOn(core % "compile->compile;test->test")
 
 lazy val modules: Seq[ProjectReference] =
