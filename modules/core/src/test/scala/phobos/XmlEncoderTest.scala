@@ -32,5 +32,21 @@ class XmlEncoderTest extends AnyWordSpec with Matchers {
         .encodeWithConfig(Foo(1, "abc", 1.0), XmlEncoder.XmlEncoderConfig("UTF-16", "1.1", writeProlog = true)) shouldBe
         Right("<?xml version='1.1' encoding='UTF-16'?><Foo><a>1</a><b>abc</b><c>1.0</c></Foo>")
     }
+
+    "preserve XML 1.0 whitespace characters (\\t, \\n, \\r) in element text" in {
+      // Real-world freeform XML element text — multi-line property descriptions,
+      // postal addresses, customer messages — routinely contains `\n` and `\t`
+      // characters. XML 1.0 §2.2 admits #x9, #xA, #xD as legal characters; before
+      // this fix `filterXmlText` silently stripped them, mangling the text on the
+      // wire (downstream consumers reported multi-paragraph descriptions arriving
+      // as a single line of run-on text).
+      final case class Listing(description: String)
+      implicit val listingEncoder: XmlEncoder[Listing] = deriveXmlEncoder("Listing")
+
+      val description = "Charming 2-bedroom cottage.\n\nFeatures:\n\tStone fireplace\n\tPrivate dock"
+
+      XmlEncoder[Listing].encodeWithConfig(Listing(description), XmlEncoder.defaultConfig.withoutProlog) shouldBe
+        Right(s"<Listing><description>$description</description></Listing>")
+    }
   }
 }

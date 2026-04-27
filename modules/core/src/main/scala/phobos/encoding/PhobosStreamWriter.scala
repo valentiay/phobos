@@ -326,7 +326,7 @@ object PhobosStreamWriter {
   val prefixBase = "ans"
 
   def isValidXmlCharacter(char: Char): Boolean =
-    !(char < ' '
+    !(char < ' ' && char != 0x9 && char != 0xA && char != 0xD
       || 0xd800 <= char && char <= 0xdfff
       || char == 0xfffe || char == 0xffff)
 }
