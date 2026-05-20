@@ -7,9 +7,9 @@ ThisBuild / scalaVersion := "3.3.7"
 lazy val commonDependencies =
   libraryDependencies ++=
     List(
-      "com.fasterxml"  % "aalto-xml" % "1.3.4",
-      "org.scalatest" %% "scalatest" % "3.2.19" % "test",
-      "org.scalactic" %% "scalactic" % "3.2.19" % "test",
+      "com.fasterxml"  % "aalto-xml" % "1.4.0",
+      "org.scalatest" %% "scalatest" % "3.2.20" % "test",
+      "org.scalactic" %% "scalactic" % "3.2.20" % "test",
     ) ++
       (CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, 12)) => List(
@@ -44,7 +44,7 @@ def commonSettings(id: String) =
     )
   )
 
-lazy val scala2Versions = List("2.12.20", "2.13.17")
+lazy val scala2Versions = List("2.12.21", "2.13.18")
 lazy val scala3Versions = scala2Versions :+ "3.3.7"
 
 lazy val `core` =
@@ -128,7 +128,7 @@ lazy val `enumeratum` =
         case _ => Nil
       }),
       libraryDependencies ++= Seq(
-        "com.beachape" %% "enumeratum" % "1.9.0",
+        "com.beachape" %% "enumeratum" % "1.9.7",
       ),
     )
     .jvmPlatform(scala3Versions)
@@ -140,8 +140,8 @@ lazy val `fs2` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "co.fs2" %% "fs2-core" % "3.12.2",
-        "co.fs2" %% "fs2-io"   % "3.12.2" % "test",
+        "co.fs2" %% "fs2-core" % "3.13.0",
+        "co.fs2" %% "fs2-io"   % "3.13.0" % "test",
       ),
     )
     .jvmPlatform(scala3Versions)
