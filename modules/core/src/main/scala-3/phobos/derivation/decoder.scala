@@ -283,8 +283,14 @@ object decoder {
             new FailedDecoder[T](_),
             result => {
               $c.next()
-              $config.scopeDefaultNamespace.foreach(_ => $c.unsetScopeDefaultNamespace())
-              $config.removeNamespaces.foreach(_ => $c.unsetRemoveNamespaces())
+              $config.scopeDefaultNamespace match {
+                case Some(_) => $c.unsetScopeDefaultNamespace()
+                case None    => ()
+              }
+              $config.removeNamespaces match {
+                case Some(_) => $c.unsetRemoveNamespaces()
+                case None    => ()
+              }
               new ConstDecoder[T](result)
             },
           )
@@ -407,8 +413,14 @@ object decoder {
                     val newNamespaceUri =
                       if (c.getScopeDefaultNamespace == namespaceUri) $config.scopeDefaultNamespace
                       else $config.scopeDefaultNamespace.orElse(namespaceUri)
-                    $config.scopeDefaultNamespace.foreach(c.setScopeDefaultNamespace)
-                    $config.removeNamespaces.foreach(c.setRemoveNamespaces)
+                    $config.scopeDefaultNamespace match {
+                      case Some(uri) => c.setScopeDefaultNamespace(uri)
+                      case None      => ()
+                    }
+                    $config.removeNamespaces match {
+                      case Some(b) => c.setRemoveNamespaces(b)
+                      case None    => ()
+                    }
                     ElementDecoder
                       .errorIfWrongName[T](c, localName, newNamespaceUri.orElse(c.getScopeDefaultNamespace)) match {
                       case None =>

@@ -306,8 +306,14 @@ class DecoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
                   val newNamespaceUri =
                     if (cursor.getScopeDefaultNamespace == namespaceUri) $config.scopeDefaultNamespace
                     else $config.scopeDefaultNamespace.orElse(namespaceUri)
-                  $config.scopeDefaultNamespace.foreach(cursor.setScopeDefaultNamespace)
-                  $config.removeNamespaces.foreach(cursor.setRemoveNamespaces)
+                  $config.scopeDefaultNamespace match {
+                    case Some(uri) => cursor.setScopeDefaultNamespace(uri)
+                    case None => ()
+                  }
+                  $config.removeNamespaces match {
+                    case Some(b) => cursor.setRemoveNamespaces(b)
+                    case None => ()
+                  }
                   $decodingPkg.ElementDecoder
                     .errorIfWrongName[$classType](cursor, localName, newNamespaceUri.orElse(cursor.getScopeDefaultNamespace)) match {
                       case $scalaPkg.Some(error) => error
@@ -343,8 +349,14 @@ class DecoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
                       $classConstruction match {
                         case $scalaPkg.Right(result) =>
                           cursor.next()
-                          $config.scopeDefaultNamespace.foreach(_ => cursor.unsetScopeDefaultNamespace())
-                          $config.scopeDefaultNamespace.foreach(_ => cursor.unsetRemoveNamespaces())
+                          $config.scopeDefaultNamespace match {
+                            case Some(_) => cursor.unsetScopeDefaultNamespace()
+                            case None => ()
+                          }
+                          $config.removeNamespaces match {
+                            case Some(_) => cursor.unsetRemoveNamespaces()
+                            case None => ()
+                          }
                           new $decodingPkg.ElementDecoder.ConstDecoder[$classType](result)
 
                         case $scalaPkg.Left(error) =>
