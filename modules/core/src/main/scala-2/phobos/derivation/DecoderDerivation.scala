@@ -161,20 +161,35 @@ class DecoderDerivation(ctx: blackbox.Context) extends Derivation(ctx) {
             ),
           )
 
-          decodeElements.append(
-            cq"""
-              `$xmlNameVal`  =>
-                $tempName = $tempName.decodeAsElement(cursor, $xmlNameVal, ${param.namespaceUri}.orElse(cursor.getScopeDefaultNamespace))
-                if ($tempName.isCompleted) {
-                  $tempName.result($xmlNameVal :: cursor.history) match {
-                    case $scalaPkg.Right(_) => go($decoderStateObj.DecodingSelf)
-                    case $scalaPkg.Left(error) => new $decodingPkg.ElementDecoder.FailedDecoder[$classType](error)
+          val elementCase = param.xmlName match {
+            case Literal(Constant(_: String)) =>
+              cq"""
+                ${param.xmlName} =>
+                  $tempName = $tempName.decodeAsElement(cursor, ${param.xmlName}, ${param.namespaceUri}.orElse(cursor.getScopeDefaultNamespace))
+                  if ($tempName.isCompleted) {
+                    $tempName.result(${param.xmlName} :: cursor.history) match {
+                      case $scalaPkg.Right(_) => go($decoderStateObj.DecodingSelf)
+                      case $scalaPkg.Left(error) => new $decodingPkg.ElementDecoder.FailedDecoder[$classType](error)
+                    }
+                  } else {
+                    go($decoderStateObj.DecodingElement(${param.xmlName}))
                   }
-                } else {
-                  go($decoderStateObj.DecodingElement($xmlNameVal))
-                }
-            """,
-          )
+              """
+            case _ =>
+              cq"""
+                `$xmlNameVal`  =>
+                  $tempName = $tempName.decodeAsElement(cursor, $xmlNameVal, ${param.namespaceUri}.orElse(cursor.getScopeDefaultNamespace))
+                  if ($tempName.isCompleted) {
+                    $tempName.result($xmlNameVal :: cursor.history) match {
+                      case $scalaPkg.Right(_) => go($decoderStateObj.DecodingSelf)
+                      case $scalaPkg.Left(error) => new $decodingPkg.ElementDecoder.FailedDecoder[$classType](error)
+                    }
+                  } else {
+                    go($decoderStateObj.DecodingElement($xmlNameVal))
+                  }
+              """
+          }
+          decodeElements.append(elementCase)
 
         case ParamCategory.attribute =>
           val attributeDecoder = appliedType(attributeDecoderType, param.paramType)

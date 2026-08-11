@@ -98,11 +98,10 @@ object decoder {
   ): List[quotes.reflect.CaseDef] = {
     import quotes.reflect.*
     elements.map { element =>
-      val symbol = Symbol.newBind(Symbol.spliceOwner, "x", Flags.EmptyFlags, TypeRepr.of[String])
-      val eq     = symbol.memberMethod("==").head
+      // case "xmlName" literal pattern.
       CaseDef(
-        Bind(symbol, Typed(Ref(symbol), TypeTree.of[String])),
-        Some(Apply(Select(Ref(symbol), eq), List(element.xmlName.asTerm))),
+        element.xmlName.asTerm,
+        None,
         (element.typeRepr.asType match {
           case '[t] =>
             '{
