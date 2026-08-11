@@ -113,14 +113,15 @@ object ElementDecoder extends ElementLiteralInstances with ElementDerivedInstanc
     */
   final class StringDecoder(string: String = "") extends ElementDecoder[String] {
     def decodeAsElement(c: Cursor, localName: String, namespaceUri: Option[String]): ElementDecoder[String] = {
-      val stringBuilder = new StringBuilder(string)
+      // Single-chunk fast path: when first text chunk -> end element, return
+      // c.getText directly. Skips StringBuilder + 2 byte[] copies (append, toString).
 
       @tailrec
-      def go(): ElementDecoder[String] = {
+      def goMulti(stringBuilder: StringBuilder): ElementDecoder[String] = {
         if (c.isCharacters || c.getEventType == XMLStreamConstants.CDATA) {
           stringBuilder.append(c.getText)
           c.next()
-          go()
+          goMulti(stringBuilder)
         } else if (c.isEndElement) {
           ElementDecoder.errorIfWrongName[String](c, localName, namespaceUri).getOrElse {
             c.next()
@@ -134,13 +135,26 @@ object ElementDecoder extends ElementLiteralInstances with ElementDerivedInstanc
         }
       }
 
-      if (c.isStartElement && stringBuilder.isEmpty) {
+      if (c.isStartElement) {
         ElementDecoder.errorIfWrongName[String](c, localName, namespaceUri).getOrElse {
           c.next()
-          go()
+          if (string.isEmpty && (c.isCharacters || c.getEventType == XMLStreamConstants.CDATA)) {
+            val text = c.getText
+            c.next()
+            if (c.isEndElement) {
+              ElementDecoder.errorIfWrongName[String](c, localName, namespaceUri).getOrElse {
+                c.next()
+                new ConstDecoder(text)
+              }
+            } else {
+              goMulti(new StringBuilder(text))
+            }
+          } else {
+            goMulti(new StringBuilder(string))
+          }
         }
       } else {
-        go()
+        goMulti(new StringBuilder(string))
       }
     }
 
