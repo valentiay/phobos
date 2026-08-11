@@ -124,11 +124,11 @@ object ElementDecoder extends ElementLiteralInstances with ElementDerivedInstanc
         } else if (c.isEndElement) {
           ElementDecoder.errorIfWrongName[String](c, localName, namespaceUri).getOrElse {
             c.next()
-            new ConstDecoder(stringBuilder.mkString)
+            new ConstDecoder(stringBuilder.toString)
           }
         } else if (c.getEventType == AsyncXMLStreamReader.EVENT_INCOMPLETE) {
           c.next()
-          new StringDecoder(stringBuilder.mkString)
+          new StringDecoder(stringBuilder.toString)
         } else {
           new FailedDecoder(c.error(s"Unexpected event: '${c.getEventType}'"))
         }

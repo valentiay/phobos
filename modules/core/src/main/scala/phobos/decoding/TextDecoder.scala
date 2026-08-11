@@ -90,7 +90,7 @@ object TextDecoder extends TextLiteralInstances {
           c.next()
           go()
         } else {
-          new StringDecoder(stringBuilder.mkString)
+          new StringDecoder(stringBuilder.toString)
         }
       }
       go()
