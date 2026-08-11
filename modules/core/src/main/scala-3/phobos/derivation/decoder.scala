@@ -393,7 +393,9 @@ object decoder {
       // Generate case class instead of untyped map?
       class TDecoder(state: DecoderState, fieldStates: Map[String, Any]) extends ElementDecoder[T] {
         def decodeAsElement(c: Cursor, localName: String, namespaceUri: Option[String]): ElementDecoder[T] = {
-          val currentFieldStates: mutable.HashMap[String, Any] = mutable.HashMap.from(fieldStates)
+          val currentFieldStates: mutable.HashMap[String, Any] =
+            if (fieldStates.isEmpty) mutable.HashMap.empty[String, Any]
+            else mutable.HashMap.from(fieldStates)
           @tailrec
           def go(currentState: DecoderState): ElementDecoder[T] = {
             if (c.getEventType == AsyncXMLStreamReader.EVENT_INCOMPLETE) {
