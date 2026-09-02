@@ -1,7 +1,5 @@
 package phobos.monix.ops
 
-import javax.xml.stream.XMLStreamConstants
-
 import phobos.decoding.{Cursor, ElementDecoder, XmlDecoder, XmlStreamReader}
 
 import monix.eval.Task

@@ -1,6 +1,5 @@
 package phobos.akka_stream
 
-import javax.xml.stream.XMLStreamConstants
 import scala.concurrent.Future
 
 import phobos.decoding._

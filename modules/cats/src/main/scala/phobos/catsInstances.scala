@@ -1,7 +1,5 @@
 package phobos
 
-import javax.xml.stream.XMLStreamConstants
-
 import phobos.decoding.ElementDecoder.{listDecoder, vectorDecoder}
 import phobos.decoding.XmlDecoder.createStreamReader
 import phobos.decoding._
