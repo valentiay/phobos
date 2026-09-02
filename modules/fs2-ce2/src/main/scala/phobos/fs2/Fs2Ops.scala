@@ -1,7 +1,5 @@
 package phobos.fs2
 
-import javax.xml.stream.XMLStreamConstants
-
 import phobos.decoding.{Cursor, ElementDecoder, XmlDecoder, XmlStreamReader}
 
 import cats.MonadError

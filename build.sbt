@@ -45,7 +45,7 @@ def commonSettings(id: String) =
   )
 
 lazy val scala2Versions = List("2.12.21", "2.13.18")
-lazy val scala3Versions = scala2Versions :+ "3.3.7"
+lazy val scala3Versions = scala2Versions :+ "3.3.8"
 
 lazy val `core` =
   (projectMatrix in file(s"modules/core"))
@@ -85,7 +85,7 @@ lazy val `ast` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "org.scalacheck"         %% "scalacheck"             % "1.19.0" % "test",
+        "org.scalacheck"         %% "scalacheck"             % "1.20.0" % "test",
         "com.softwaremill.diffx" %% "diffx-scalatest-should" % "0.9.0"  % "test",
         "org.typelevel"          %% "cats-core"              % "2.13.0",
       ),
@@ -128,7 +128,7 @@ lazy val `enumeratum` =
         case _ => Nil
       }),
       libraryDependencies ++= Seq(
-        "com.beachape" %% "enumeratum" % "1.9.7",
+        "com.beachape" %% "enumeratum" % "1.9.8",
       ),
     )
     .jvmPlatform(scala3Versions)
@@ -179,7 +179,7 @@ lazy val `refined` =
     .settings(
       commonDependencies,
       libraryDependencies ++= Seq(
-        "eu.timepit" %% "refined" % "0.11.3",
+        "eu.timepit" %% "refined" % "0.11.4",
       ),
     )
     .jvmPlatform(scala3Versions)
