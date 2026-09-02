@@ -2,7 +2,6 @@ package phobos.derivation
 
 import scala.annotation.nowarn
 import scala.annotation.tailrec
-import scala.collection.mutable
 import scala.compiletime.*
 import scala.deriving.Mirror
 import scala.quoted.*
@@ -50,16 +49,18 @@ object decoder {
   private def decodeAttributes(using Quotes)(
       groups: Map[FieldCategory, List[ProductTypeField]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.HashMap[String, Any]],
+      currentSlots: Expr[Array[AnyRef]],
+      slotIndices: Map[String, Int],
   ): Expr[List[Unit]] = {
     Expr.ofList(
       groups.getOrElse(FieldCategory.attribute, Nil).map { field =>
         field.typeRepr.asType match {
           case '[t] =>
+            val slotIdx = Expr(slotIndices(field.localName))
             '{
               val attribute = summonInline[AttributeDecoder[t]]
                 .decodeAsAttribute($c, ${ field.xmlName }, ${ field.namespace }.map(_.getNamespace))
-              ${ currentFieldStates }.update(${ Expr(field.localName) }, attribute)
+              ${ currentSlots }(${ slotIdx }) = attribute
             }
         }
       },
@@ -69,52 +70,55 @@ object decoder {
   private def decodeText(using Quotes)(
       groups: Map[FieldCategory, List[ProductTypeField]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.HashMap[String, Any]],
+      currentSlots: Expr[Array[AnyRef]],
+      slotIndices: Map[String, Int],
   ): Expr[Unit] = {
     groups
       .get(FieldCategory.text)
       .flatMap(_.headOption)
       .fold('{ () }) { text =>
+        val slotIdx = Expr(slotIndices(text.localName))
         text.typeRepr.asType match {
           case '[t] =>
             '{
-              val res = $currentFieldStates
-                .getOrElse(${ Expr(text.localName) }, summonInline[TextDecoder[t]])
-                .asInstanceOf[TextDecoder[t]]
-                .decodeAsText($c)
-              $currentFieldStates.update(${ Expr(text.localName) }, res)
+              val slot = ${ currentSlots }(${ slotIdx })
+              val initial =
+                if (slot eq null) summonInline[TextDecoder[t]]
+                else slot.asInstanceOf[TextDecoder[t]]
+              val res = initial.decodeAsText($c)
+              ${ currentSlots }(${ slotIdx }) = res
             }
         }
       }
   }
 
-  // Used twice. Should be used once?
-  // Replace `<name> match` with `<paramIdx> switch` ?
   private def decodeElementCases[T: Type](using Quotes)(
       elements: List[ProductTypeField],
       go: Expr[DecoderState => ElementDecoder[T]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.HashMap[String, Any]],
+      currentSlots: Expr[Array[AnyRef]],
+      slotIndices: Map[String, Int],
   ): List[quotes.reflect.CaseDef] = {
     import quotes.reflect.*
     elements.map { element =>
-      val symbol = Symbol.newBind(Symbol.spliceOwner, "x", Flags.EmptyFlags, TypeRepr.of[String])
-      val eq     = symbol.memberMethod("==").head
+      val slotIdx = Expr(slotIndices(element.localName))
+      // case "xmlName" literal pattern.
       CaseDef(
-        Bind(symbol, Typed(Ref(symbol), TypeTree.of[String])),
-        Some(Apply(Select(Ref(symbol), eq), List(element.xmlName.asTerm))),
+        element.xmlName.asTerm,
+        None,
         (element.typeRepr.asType match {
           case '[t] =>
             '{
-              val res = ${ currentFieldStates }
-                .getOrElse(${ Expr(element.localName) }, summonInline[ElementDecoder[t]])
-                .asInstanceOf[ElementDecoder[t]]
-                .decodeAsElement(
-                  $c,
-                  ${ element.xmlName },
-                  ${ element.namespace }.map(_.getNamespace).orElse($c.getScopeDefaultNamespace),
-                )
-              ${ currentFieldStates }.update(${ Expr(element.localName) }, res)
+              val slot = ${ currentSlots }(${ slotIdx })
+              val initial =
+                if (slot eq null) summonInline[ElementDecoder[t]]
+                else slot.asInstanceOf[ElementDecoder[t]]
+              val res = initial.decodeAsElement(
+                $c,
+                ${ element.xmlName },
+                ${ element.namespace }.map(_.getNamespace).orElse($c.getScopeDefaultNamespace),
+              )
+              ${ currentSlots }(${ slotIdx }) = res
               if (res.isCompleted) {
                 res.result(${ element.xmlName } :: $c.history) match {
                   case Right(_)    => $go(DecoderState.DecodingSelf)
@@ -133,10 +137,12 @@ object decoder {
       groups: Map[FieldCategory, List[ProductTypeField]],
       go: Expr[DecoderState => ElementDecoder[T]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.HashMap[String, Any]],
+      currentSlots: Expr[Array[AnyRef]],
+      slotIndices: Map[String, Int],
   ) = {
     import quotes.reflect.*
-    val decodeElements = decodeElementCases[T](groups.getOrElse(FieldCategory.element, Nil), go, c, currentFieldStates)
+    val decodeElements =
+      decodeElementCases[T](groups.getOrElse(FieldCategory.element, Nil), go, c, currentSlots, slotIndices)
     val decodeDefault =
       groups
         .get(FieldCategory.default)
@@ -154,7 +160,8 @@ object decoder {
             }).asTerm,
           )
         } { default =>
-          val symbol = Symbol.newBind(Symbol.spliceOwner, "_", Flags.EmptyFlags, TypeRepr.of[String])
+          val defaultSlotIdx = Expr(slotIndices(default.localName))
+          val symbol         = Symbol.newBind(Symbol.spliceOwner, "_", Flags.EmptyFlags, TypeRepr.of[String])
           CaseDef(
             Bind(symbol, Typed(Ref(symbol), TypeTree.of[String])),
             None,
@@ -163,11 +170,12 @@ object decoder {
                 '{
                   val name      = $c.getLocalName
                   val namespace = Option($c.getNamespaceURI)
-                  val res = $currentFieldStates
-                    .getOrElse(${ Expr(default.localName) }, summonInline[ElementDecoder[t]])
-                    .asInstanceOf[ElementDecoder[t]]
-                    .decodeAsElement($c, name, namespace.orElse($c.getScopeDefaultNamespace))
-                  $currentFieldStates.update(${ Expr(default.localName) }, res)
+                  val slot      = ${ currentSlots }(${ defaultSlotIdx })
+                  val initial =
+                    if (slot eq null) summonInline[ElementDecoder[t]]
+                    else slot.asInstanceOf[ElementDecoder[t]]
+                  val res = initial.decodeAsElement($c, name, namespace.orElse($c.getScopeDefaultNamespace))
+                  ${ currentSlots }(${ defaultSlotIdx }) = res
                   if (res.isCompleted) {
                     res.result(name :: $c.history) match {
                       case Right(_)    => $go(DecoderState.DecodingSelf)
@@ -188,7 +196,8 @@ object decoder {
       go: Expr[DecoderState => ElementDecoder[T]],
       c: Expr[Cursor],
       localName: Expr[String],
-      currentFieldStates: Expr[mutable.HashMap[String, Any]],
+      currentSlots: Expr[Array[AnyRef]],
+      slotIndices: Map[String, Int],
       config: Expr[ElementCodecConfig],
       productMirror: Expr[Mirror.ProductOf[T]],
   ) = {
@@ -240,41 +249,38 @@ object decoder {
                       ),
                       Closure(Ref(fSymbol), Some(TypeRepr.of[t => Either[DecodingError, T]])),
                     )
+                    val slotIdx = Expr(slotIndices(field.localName))
                     field.category match {
                       case FieldCategory.element | FieldCategory.default =>
                         '{
-                          $currentFieldStates
-                            .getOrElse(${ Expr(field.localName) }, summonInline[ElementDecoder[t]])
-                            .asInstanceOf[ElementDecoder[t]]
-                            .result($c.history)
-                            .flatMap { ${ f.asExprOf[t => Either[DecodingError, T]] } }
+                          val slot = ${ currentSlots }(${ slotIdx })
+                          val decoder =
+                            if (slot eq null) summonInline[ElementDecoder[t]]
+                            else slot.asInstanceOf[ElementDecoder[t]]
+                          decoder.result($c.history).flatMap { ${ f.asExprOf[t => Either[DecodingError, T]] } }
                         }
                       case FieldCategory.attribute =>
                         '{
-                          $currentFieldStates
-                            .getOrElse(
-                              ${ Expr(field.localName) },
+                          val slot = ${ currentSlots }(${ slotIdx })
+                          val value: Either[DecodingError, t] =
+                            if (slot eq null)
                               Left(
                                 DecodingError(
                                   s"Attribute '${${ field.xmlName }}' is missing or invalid",
                                   $c.history,
                                   None,
                                 ),
-                              ),
-                            )
-                            .asInstanceOf[Either[DecodingError, t]]
-                            .flatMap { ${ f.asExprOf[t => Either[DecodingError, T]] } }
+                              )
+                            else slot.asInstanceOf[Either[DecodingError, t]]
+                          value.flatMap { ${ f.asExprOf[t => Either[DecodingError, T]] } }
                         }
                       case FieldCategory.text =>
                         '{
-                          $currentFieldStates
-                            .getOrElse(
-                              ${ Expr(field.localName) },
-                              summonInline[TextDecoder[t]],
-                            )
-                            .asInstanceOf[TextDecoder[t]]
-                            .result($c.history)
-                            .flatMap { ${ f.asExprOf[t => Either[DecodingError, T]] } }
+                          val slot = ${ currentSlots }(${ slotIdx })
+                          val decoder =
+                            if (slot eq null) summonInline[TextDecoder[t]]
+                            else slot.asInstanceOf[TextDecoder[t]]
+                          decoder.result($c.history).flatMap { ${ f.asExprOf[t => Either[DecodingError, T]] } }
                         }
                     }
                 }
@@ -284,8 +290,14 @@ object decoder {
             new FailedDecoder[T](_),
             result => {
               $c.next()
-              $config.scopeDefaultNamespace.foreach(_ => $c.unsetScopeDefaultNamespace())
-              $config.removeNamespaces.foreach(_ => $c.unsetRemoveNamespaces())
+              $config.scopeDefaultNamespace match {
+                case Some(_) => $c.unsetScopeDefaultNamespace()
+                case None    => ()
+              }
+              $config.removeNamespaces match {
+                case Some(_) => $c.unsetRemoveNamespaces()
+                case None    => ()
+              }
               new ConstDecoder[T](result)
             },
           )
@@ -300,7 +312,8 @@ object decoder {
       groups: Map[FieldCategory, List[ProductTypeField]],
       go: Expr[DecoderState => ElementDecoder[T]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.HashMap[String, Any]],
+      currentSlots: Expr[Array[AnyRef]],
+      slotIndices: Map[String, Int],
       name: Expr[String],
   ) = {
     import quotes.reflect.*
@@ -320,7 +333,7 @@ object decoder {
     }
     Match(
       name.asTerm,
-      decodeElementCases[T](groups.getOrElse(FieldCategory.element, Nil), go, c, currentFieldStates) :+ default,
+      decodeElementCases[T](groups.getOrElse(FieldCategory.element, Nil), go, c, currentSlots, slotIndices) :+ default,
     ).asExprOf[ElementDecoder[T]]
   }
 
@@ -328,7 +341,8 @@ object decoder {
       groups: Map[FieldCategory, List[ProductTypeField]],
       go: Expr[DecoderState => ElementDecoder[T]],
       c: Expr[Cursor],
-      currentFieldStates: Expr[mutable.HashMap[String, Any]],
+      currentSlots: Expr[Array[AnyRef]],
+      slotIndices: Map[String, Int],
       state: Expr[IgnoringElement],
   ) = {
     import quotes.reflect.*
@@ -353,15 +367,16 @@ object decoder {
           $go($state)
         }
       }) { default =>
-        // Looks similar with code in decodeStartElement
+        val defaultSlotIdx = Expr(slotIndices(default.localName))
         default.typeRepr.asType match {
           case '[t] =>
             '{
-              val res = $currentFieldStates
-                .getOrElse(${ Expr(default.localName) }, summonInline[ElementDecoder[t]])
-                .asInstanceOf[ElementDecoder[t]]
-                .decodeAsElement($c, $state.name, $state.namespace.orElse($c.getScopeDefaultNamespace))
-              $currentFieldStates.update(${ Expr(default.localName) }, res)
+              val slot = ${ currentSlots }(${ defaultSlotIdx })
+              val initial =
+                if (slot eq null) summonInline[ElementDecoder[t]]
+                else slot.asInstanceOf[ElementDecoder[t]]
+              val res = initial.decodeAsElement($c, $state.name, $state.namespace.orElse($c.getScopeDefaultNamespace))
+              ${ currentSlots }(${ defaultSlotIdx }) = res
               if (res.isCompleted) {
                 res.result($state.name :: $c.history) match {
                   case Right(_)    => $go(DecoderState.DecodingSelf)
@@ -388,17 +403,21 @@ object decoder {
     import quotes.reflect.*
     val fields = extractProductTypeFields[T](config)
     val groups = fields.groupBy(_.category)
+    val slotIndices: Map[String, Int] =
+      fields.zipWithIndex.map { case (f, i) => f.localName -> i }.toMap
+    val slotCount = fields.length
 
     '{
-      // Generate case class instead of untyped map?
-      class TDecoder(state: DecoderState, fieldStates: Map[String, Any]) extends ElementDecoder[T] {
+      class TDecoder(state: DecoderState, slots: Array[AnyRef]) extends ElementDecoder[T] {
         def decodeAsElement(c: Cursor, localName: String, namespaceUri: Option[String]): ElementDecoder[T] = {
-          val currentFieldStates: mutable.HashMap[String, Any] = mutable.HashMap.from(fieldStates)
+          val currentSlots: Array[AnyRef] =
+            if (slots eq null) new Array[AnyRef](${ Expr(slotCount) })
+            else slots.clone()
           @tailrec
           def go(currentState: DecoderState): ElementDecoder[T] = {
             if (c.getEventType == AsyncXMLStreamReader.EVENT_INCOMPLETE) {
               c.next()
-              TDecoder(currentState, Map.from(currentFieldStates))
+              TDecoder(currentState, currentSlots.clone())
             } else
               currentState match {
                 case DecoderState.New =>
@@ -406,12 +425,18 @@ object decoder {
                     val newNamespaceUri =
                       if (c.getScopeDefaultNamespace == namespaceUri) $config.scopeDefaultNamespace
                       else $config.scopeDefaultNamespace.orElse(namespaceUri)
-                    $config.scopeDefaultNamespace.foreach(c.setScopeDefaultNamespace)
-                    $config.removeNamespaces.foreach(c.setRemoveNamespaces)
+                    $config.scopeDefaultNamespace match {
+                      case Some(uri) => c.setScopeDefaultNamespace(uri)
+                      case None      => ()
+                    }
+                    $config.removeNamespaces match {
+                      case Some(b) => c.setRemoveNamespaces(b)
+                      case None    => ()
+                    }
                     ElementDecoder
                       .errorIfWrongName[T](c, localName, newNamespaceUri.orElse(c.getScopeDefaultNamespace)) match {
                       case None =>
-                        ${ decodeAttributes(groups, 'c, 'currentFieldStates) }
+                        ${ decodeAttributes(groups, 'c, 'currentSlots, slotIndices) }
                         c.next()
                         go(DecoderState.DecodingSelf)
                       case Some(error) => error
@@ -420,19 +445,30 @@ object decoder {
                     ElementDecoder.FailedDecoder[T](c.error("Illegal state: not START_ELEMENT"))
                   }
                 case DecoderState.DecodingSelf =>
-                  ${ decodeText(groups, 'c, 'currentFieldStates) }
+                  ${ decodeText(groups, 'c, 'currentSlots, slotIndices) }
                   if (c.isStartElement) {
-                    ${ decodeStartElement[T](groups, 'go, 'c, 'currentFieldStates) }
+                    ${ decodeStartElement[T](groups, 'go, 'c, 'currentSlots, slotIndices) }
                   } else if (c.isEndElement) {
-                    ${ decodeEndElement[T](fields, 'go, 'c, 'localName, 'currentFieldStates, config, productMirror) }
+                    ${
+                      decodeEndElement[T](
+                        fields,
+                        'go,
+                        'c,
+                        'localName,
+                        'currentSlots,
+                        slotIndices,
+                        config,
+                        productMirror,
+                      )
+                    }
                   } else {
                     c.next()
                     go(DecoderState.DecodingSelf)
                   }
                 case DecoderState.DecodingElement(name) =>
-                  ${ decodingElement(groups, 'go, 'c, 'currentFieldStates, 'name) }
+                  ${ decodingElement(groups, 'go, 'c, 'currentSlots, slotIndices, 'name) }
                 case state: DecoderState.IgnoringElement =>
-                  ${ ignoringElement[T](groups, 'go, 'c, 'currentFieldStates, 'state) }
+                  ${ ignoringElement[T](groups, 'go, 'c, 'currentSlots, slotIndices, 'state) }
               }
           }
           go(state)
@@ -441,7 +477,7 @@ object decoder {
           Left(ElementDecoder.decodingNotCompleteError(history))
         val isCompleted: Boolean = false
       }
-      TDecoder(DecoderState.New, Map.empty)
+      TDecoder(DecoderState.New, null)
     }
   }
 
